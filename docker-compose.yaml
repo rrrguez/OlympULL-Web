@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: olympull_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3000
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    container_name: olympull_backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=olympull
+    depends_on:
+      - db
+
+  db:
+    build: ./db
+    container_name: olympull_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - olympull-data:/var/lib/postgresql/data
+
+volumes:
+  olympull-data:
