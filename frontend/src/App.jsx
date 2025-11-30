@@ -1,21 +1,53 @@
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
+import OrganizerHome from "./pages/OrganizerHome";
+import { getToken, getUserType } from "./services/authService";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import OlympiadsPage from "./pages/OlympiadsPage";
-import ItinerariesPage from "./pages/ItinerariesPage";
-import ExercisesPage from "./pages/ExercisesPage";
+function PrivateRoute({ children, type }) {
+  const token = getToken();
+  const userType = getUserType();
 
-function App() {
+  if (!token) return <Navigate to="/login" />;
+  if (type && userType !== type) return <Navigate to="/login" />;
+
+  return children;
+}
+
+export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
-        <Route path="/olympiads" element={<OlympiadsPage />} />
-        <Route path="/itineraries" element={<ItinerariesPage />} />
-        <Route path="/exercises" element={<ExercisesPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminHome />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/olympiads"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminOlympiadsPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/organizer"
+          element={
+            <PrivateRoute type="ORGANIZER">
+              <OrganizerHome />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
-export default App;
 

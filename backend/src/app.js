@@ -11,7 +11,7 @@ import adminOlympiadsRoutes from "./routes/admin/olympiads.js";
 import adminItinerariesRoutes from "./routes/admin/itineraries.js";
 import adminExercisesRoutes from "./routes/admin/exercises.js";
 
-import { isAdmin, isOrganizer } from "./middlewares/auth.js";
+import { isAdmin, isOrganizer, authenticateToken } from "./middlewares/auth.js";
 
 const app = express();
 
@@ -19,8 +19,8 @@ app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173" })); // Puerto React
 
 app.use("/api/auth", authRoutes);
-app.use("/api/admin/olympiads", isAdmin, adminOlympiadsRoutes);
-app.use("/api/admin/itineraries", isAdmin, adminItinerariesRoutes);
-app.use("/api/admin/exercises", isAdmin, adminExercisesRoutes);
+app.use("/api/admin/olympiads", authenticateToken, isAdmin, adminOlympiadsRoutes);
+app.use("/api/admin/itineraries", authenticateToken, isAdmin, adminItinerariesRoutes);
+app.use("/api/admin/exercises", authenticateToken, isAdmin, adminExercisesRoutes);
 
 export default app;

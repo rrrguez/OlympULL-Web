@@ -29,6 +29,9 @@ export default function OlympiadsList() {
             <th>Título</th>
             <th>Descripción</th>
             <th>Año</th>
+            <th>Inicio</th>
+            <th>Final</th>
+            <th>Zona horaria</th>
           </tr>
         </thead>
         <tbody>
@@ -38,6 +41,9 @@ export default function OlympiadsList() {
               <td>{o.name}</td>
               <td>{o.description}</td>
               <td>{o.year}</td>
+              <td>{o.start}</td>
+              <td>{o.stop}</td>
+              <td>{o.timezone}</td>
               <td>
                 <Button
                   variant="warning"

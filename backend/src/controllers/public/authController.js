@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import Users from "../../models/usersModel.js";
 
 export async function login(req, res) {
+    console.log(process.env.JWT_SECRET);
     const { username, password } = req.body;
 
     const user = await Users.findOne({ username });
