@@ -1,5 +1,5 @@
 import express from "express";
-import itineraryController from "../controllers/itinerariesController.js";
+import itineraryController from "../../controllers/admin/itinerariesController.js";
 
 const router = express.Router();
 

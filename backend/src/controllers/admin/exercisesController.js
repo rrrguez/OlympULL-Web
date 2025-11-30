@@ -1,6 +1,6 @@
-import * as model from "../models/itinerariesModel.js";
+import * as model from "../../models/exercisesModel.js";
 
-// GET: obtener todas
+// GET: obtener todos
 export const getAll = async (req, res) => {
   try {
     const result = await model.getAll();
@@ -10,14 +10,14 @@ export const getAll = async (req, res) => {
   }
 };
 
-// GET: obtener una por código
+// GET: obtener uno por código
 export const getOne = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await model.getByid(id);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Itinerario no encontrado"});
+      return res.status(404).json({ message: "Ejercicio no encontrado" });
     }
 
     res.json(result.rows[0]);
@@ -26,7 +26,7 @@ export const getOne = async (req, res) => {
   }
 };
 
-// POST: crear nueva
+// POST: crear nuevo
 export const create = async (req, res) => {
   try {
     const data = await model.create(req.body);
