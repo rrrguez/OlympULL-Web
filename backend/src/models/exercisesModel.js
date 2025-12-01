@@ -1,17 +1,128 @@
 import pool from "../db.js";
 
-export const getAll = () => pool.query("SELECT * FROM t_exercises");
-export const getByid = (id) =>
+// EJERCICIOS DESENCHUFADOS
+
+// Obtener todos
+export const getAllUnplugged = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id;");
+
+// Obtener uno por ID - ARREGLAR
+export const getUnpluggedByid = (id) =>
   pool.query("SELECT * FROM t_exercises WHERE id = $1", [id]);
+
+// Crear uno nuevo
+export const createUnplugged = async (data) => {
+    // Hay que hacer una transacción ya que son necesarias inserciones en dos tablas distintas, y si no se hace bien, la BD queda inconsistente
+    const client = await pool.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      // 1. Insertar en T_EXERCISES
+      const exerciseRes = await client.query(
+        `INSERT INTO t_exercises (id, name, description, category, resources)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [data.id, data.name, data.description, data.category, data.resources]
+      );
+
+      // 2. Insertar en T_UNPLUGGED_EXERCISES
+      const unpluggedRes = await client.query(
+        `INSERT INTO t_unplugged_exercises (id, rubric)
+         VALUES ($1, $2)
+         RETURNING *`,
+        [exerciseRes.rows[0].id, data.rubric]
+      );
+
+      await client.query("COMMIT");
+
+      return {
+        ...exerciseRes.rows[0],
+        ...unpluggedRes.rows[0]
+      };
+
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+};
+
+/**
 export const create = (data) =>
   pool.query(
     "INSERT INTO t_exercises (id, name, description, category, resources) VALUES ($1, $2, $3, $4, $5) RETURNING *",
     [data.id, data.name, data.description, data.category, data.resources]
   );
-export const update = (data) =>
+  */
+
+// Actualizar un ejercicio - ARREGLAR
+export const updateUnplugged = (data) =>
   pool.query(
     "UPDATE t_exercises SET name=$1 WHERE id=$2 RETURNING *",
     [data.name, data.id]
   );
-export const remove = (id) =>
+
+// Eliminar uno - ARREGLAR
+export const removeUnplugged = (id) =>
   pool.query("DELETE FROM t_exercises WHERE id=$1", [id]);
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// EJERICIOS ENCHUFADOS
+
+// Obtener todos
+export const getAllPluggedIn = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id;");
+
+// Obtener uno por ID - ARREGLAR
+export const getPluggedInByid = (id) =>
+  pool.query("SELECT * FROM t_exercises WHERE id = $1", [id]);
+
+// Crear uno nuevo
+export const createPluggedIn = async (data) => {
+    const client = await pool.connect();
+
+    try {
+      await client.query("BEGIN");
+
+      // 1. Insertar en T_EXERCISES
+      const exerciseRes = await client.query(
+        `INSERT INTO t_exercises (id, name, description, category, resources)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [data.id, data.name, data.description, data.category, data.resources]
+      );
+
+      // 2. Insertar en T_PLUGGED_IN_EXERCISES
+      const PluggedInRes = await client.query(
+        `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value)
+         VALUES ($1, $2, $3, $4)
+         RETURNING *`,
+        [exerciseRes.rows[0].id, data.inputs, data.time_limit, data.testcase_value]
+      );
+
+      await client.query("COMMIT");
+
+      return {
+        ...exerciseRes.rows[0],
+        ...PluggedInRes.rows[0]
+      };
+
+    } catch (error) {
+      await client.query("ROLLBACK");
+      throw error;
+    } finally {
+      client.release();
+    }
+};
+
+// Actualizar un ejercicio - ARREGLAR
+export const updatePluggedIn = (data) =>
+  pool.query(
+    "UPDATE t_exercises SET name=$1 WHERE id=$2 RETURNING *",
+    [data.name, data.id]
+  );
+
+// Eliminar uno - ARREGLAR
+export const removePluggedIn = (id) =>
+  pool.query("DELETE FROM t_exercises WHERE id=$1", [id]);
+

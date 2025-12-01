@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoginPage from "./pages/LoginPage";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
+import AdminNewOlympiadPage from "./pages/admin/AdminNewOlympiadPage";
 import OrganizerHome from "./pages/OrganizerHome";
 import { getToken, getUserType } from "./services/authService";
 
@@ -33,6 +34,15 @@ export default function App() {
           element={
             <PrivateRoute type="ADMIN">
               <AdminOlympiadsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/olympiads/new"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminNewOlympiadPage />
             </PrivateRoute>
           }
         />

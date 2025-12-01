@@ -21,7 +21,6 @@ export default function OlympiadsList() {
 
   return (
     <Container className="mt-4">
-      <h2>Olimpiadas</h2>
       <Table striped bordered hover>
         <thead>
           <tr>

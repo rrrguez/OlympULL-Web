@@ -1,9 +1,10 @@
 import * as model from "../../models/exercisesModel.js";
 
+// DESENCHUFADOS
 // GET: obtener todos
-export const getAll = async (req, res) => {
+export const getAllUnplugged = async (req, res) => {
   try {
-    const result = await model.getAll();
+    const result = await model.getAllUnplugged();
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -11,10 +12,10 @@ export const getAll = async (req, res) => {
 };
 
 // GET: obtener uno por código
-export const getOne = async (req, res) => {
+export const getOneUnplugged = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getUnpluggedByid(id);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Ejercicio no encontrado" });
@@ -27,9 +28,9 @@ export const getOne = async (req, res) => {
 };
 
 // POST: crear nuevo
-export const create = async (req, res) => {
+export const createUnplugged = async (req, res) => {
   try {
-    const data = await model.create(req.body);
+    const data = await model.createUnplugged(req.body);
     res.status(201).json(data.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -37,10 +38,10 @@ export const create = async (req, res) => {
 };
 
 // PUT: actualizar
-export const update = async (req, res) => {
+export const updateUnplugged = async (req, res) => {
   try {
     const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
+    const data = await model.updateUnplugged({ id, ...req.body });
     res.json(data.rows[0]);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -48,20 +49,87 @@ export const update = async (req, res) => {
 };
 
 // DELETE
-export const remove = async (req, res) => {
+export const removeUnplugged = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.deleteUnplugged(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// ENCHUFADOS
+// GET: obtener todos
+export const getAllPluggedIn = async (req, res) => {
+    try {
+      const result = await model.getAllPluggedIn();
+      res.json(result.rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+  // GET: obtener uno por código
+  export const getOnePluggedIn = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const result = await model.getPluggedInByid(id);
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Ejercicio no encontrado" });
+      }
+
+      res.json(result.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+  // POST: crear nuevo
+  export const createPluggedIn = async (req, res) => {
+    try {
+      const data = await model.createPluggedIn(req.body);
+      res.status(201).json(data.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+  // PUT: actualizar
+  export const updatePluggedIn = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = await model.updatePluggedIn({ id, ...req.body });
+      res.json(data.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+  // DELETE
+  export const removePluggedIn = async (req, res) => {
+    try {
+      const { id } = req.params;
+      await model.deletePluggedIn(id);
+      res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
 export default {
-    getAll,
-    getOne,
-    create,
-    update,
-    remove,
+    // DESENCHUFADOS
+    getAllUnplugged,
+    getOneUnplugged,
+    createUnplugged,
+    updateUnplugged,
+    removeUnplugged,
+
+    // ENCHUFADOS
+    getAllPluggedIn,
+    getOnePluggedIn,
+    createPluggedIn,
+    updatePluggedIn,
+    removePluggedIn,
 };
