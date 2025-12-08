@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminHome() {
+    const navigate = useNavigate();
     const username = localStorage.getItem("username");
     console.log(username);
     return (
@@ -9,17 +11,41 @@ export default function AdminHome() {
         <p>Panel de administrador</p>
         <div className="mt-4 d-flex flex-column gap-3">
 
-        <Link to="/admin/olympiads" className="btn btn-primary btn-lg">
-          Gestión de olimpiadas
-        </Link>
+        <Button
+            variant="link"
+            size="lg"
+            className="me-2"
+            onClick={() => navigate("/admin/olympiads")}
+        >
+            Gestión de olimpiadas
+        </Button>
 
-        <Link to="/admin/itineraries" className="btn btn-secondary btn-lg">
-          Gestión de itinerarios
-        </Link>
+        <Button
+            variant="link"
+            size="lg"
+            className="me-2"
+            onClick={() => navigate("/admin/itineraries")}
+        >
+            Gestión de itinerarios
+        </Button>
 
-        <Link to="/admin/exercises" className="btn btn-success btn-lg">
-          Gestión de ejercicios
-        </Link>
+        <Button
+            variant="link"
+            size="lg"
+            className="me-2"
+            onClick={() => navigate("/admin/exercises")}
+        >
+            Gestión de ejercicios
+        </Button>
+
+        <Button
+            variant="link"
+            size="lg"
+            className="me-2"
+            onClick={() => navigate("/admin/rubrics")}
+        >
+            Gestión de rúbricas
+        </Button>
 
       </div>
       </div>

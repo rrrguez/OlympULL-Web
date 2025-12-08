@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Table } from "react-bootstrap";
-import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
+import { getAllRubrics, deleteRubric } from "../../api/rubricsApi";
+import { Table, Button, Container } from "react-bootstrap";
 
-export default function UnpluggedExercisesList() {
+export default function RubricList() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -10,27 +10,26 @@ export default function UnpluggedExercisesList() {
   }, []);
 
   const load = async () => {
-    const res = await getAllUnpluggedExercises();
+    const res = await getAllRubrics();
     setData(res.data);
   };
 
   const remove = async (id) => {
-    await deleteUnpluggedExercise(id);
+    await deleteRubric(id);
     load();
   };
 
   return (
     <Container className="mt-4">
-      <h2>Ejercicios desenchufados</h2>
+      <h2>Rúbricas</h2>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>Código</th>
-            <th>Título</th>
+            <th>Nombre</th>
             <th>Descripción</th>
-            <th>Categoría</th>
-            <th>Recursos</th>
-            <th>Rúbrica</th>
+            <th>Puntos</th>
+            <th>Etiquetas</th>
           </tr>
         </thead>
         <tbody>
@@ -39,9 +38,8 @@ export default function UnpluggedExercisesList() {
               <td>{o.id}</td>
               <td>{o.name}</td>
               <td>{o.description}</td>
-              <td>{o.category}</td>
-              <td>{o.resources}</td>
-              <td>{o.rubric}</td>
+              <td>{o.points}</td>
+              <td>{o.labels}</td>
               <td>
                 <Button
                   variant="warning"
@@ -57,7 +55,7 @@ export default function UnpluggedExercisesList() {
                   size="sm"
                   onClick={() => remove(o.id)}
                 >
-                  Borrar
+                  Eliminar
                 </Button>
               </td>
             </tr>

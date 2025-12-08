@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAllPluggedInExercises, deletePluggedInExercise } from "../../api/exercisesApi";
-import { Table, Button, Container } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
+import { deletePluggedInExercise, getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 
 export default function PluggedInExercisesList() {
     const [data, setData] = useState([]);
@@ -21,7 +21,7 @@ export default function PluggedInExercisesList() {
 
     return (
       <Container className="mt-4">
-        <h2>Ejercicios</h2>
+        <h2>Ejercicios enchufados</h2>
         <Table striped bordered hover>
           <thead>
             <tr>

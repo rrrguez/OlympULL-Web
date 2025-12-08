@@ -1,28 +1,26 @@
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import UnpluggedExercisesList from "../../components/Exercises/UnpluggedList";
-import PluggedInExercisesList from "../../components/Exercises/PluggedInList";
+import RubricsList from "../../components/Exercises/RubricList";
 
-export default function ExercisesPage() {
+export default function RubricsPage() {
     const navigate = useNavigate();
     return (
         <Container>
             <div style={{display: "flex"}}>
-                <h2> Gestión de ejercicios </h2>
+                <h2> Gestión de rúbricas </h2>
 
                 <Button
                     variant="link"
                     size="lg"
                     className="me-2"
-                    onClick={() => navigate("/admin/exercises/new")}
+                    onClick={() => navigate("/admin/rubrics/new")}
                 >
-                    Nuevo ejercicio
+                    Nueva rúbrica
                 </Button>
 
             </div>
 
-            <UnpluggedExercisesList/>
-            <PluggedInExercisesList/>
+            <RubricsList/>
         </Container>
 
     );

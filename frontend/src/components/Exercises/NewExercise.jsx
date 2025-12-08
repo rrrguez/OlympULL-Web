@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { createUnpluggedExercise, createPluggedInExercise } from "../../api/exercisesApi";
+import { useNavigate } from "react-router-dom";
+import { createUnpluggedExercise } from "../../api/unpluggedExercisesApi";
+import { createPluggedInExercise } from "../../api/pluggedInExercisesApi";
 
 export default function NewExercise() {
   const navigate = useNavigate();
@@ -14,9 +12,8 @@ export default function NewExercise() {
     description: "",
     category: "",
     resources: "",
-    // Campos propios de desenchufados
+    type: "",
     rubric: "",
-    // Campos propios de enchufados
     inputs: "",
     time_limit: "",
     testcase_value: "",
@@ -38,33 +35,58 @@ export default function NewExercise() {
     setLoading(true);
 
     try {
-      await createOlympiad(formData);
-      navigate("/admin/exercises"); // redirige a la lista cuando termine
+        console.log(formData.category);
+        if(formData.type === "DESENCHUFADO") {
+            await createUnpluggedExercise(formData);
+            navigate("/admin/exercises");
+        } else {
+        console.log("prueba")
+            await createPluggedInExercise(formData);
+            navigate("/admin/exercises");
+        }
+
     } catch (err) {
-      setError(err.response?.data?.error || "Error al crear el ejercicio");
-    } finally {
-      setLoading(false);
-    }
+        if (err.response) {
+          console.error("⚠️ Error del servidor:", err.response.data);
+        } else if (err.request) {
+          console.error("❌ No hubo respuesta del servidor:", err.request);
+        } else {
+          console.error("🚫 Error en la configuración de la petición:", err.message);
+        }
+
+        console.error("🔍 Error completo:", err);
+        setError(err.response?.data?.error || "Error al crear el ejercicio");
+        
+      }
   }
 
   return (
     <div className="container mt-4">
-      <h1>Crear nueva Olimpiada</h1>
+      <h1>Nuevo ejercicio</h1>
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="mt-3" style={{ maxWidth: "500px" }}>
-      <div className="mb-3">
+      <form onSubmit={handleSubmit} style={{ maxWidth: "500px" }}>
+
+        {/* Tipo de ejercicio */}
+        <div className="mb-3">
           <label className="form-label">Tipo de ejercicio</label>
-          <input
-            type="combo"
+          <select
             name="type"
             className="form-control"
+            value={formData.type}
             onChange={handleChange}
             required
-          />
+            id="ex_type"
+          >
+            <option value="">-- Seleccionar --</option>
+            <option value="ENCHUFADO">Enchufado</option>
+            <option value="DESENCHUFADO">Desenchufado</option>
+          </select>
         </div>
-      <div className="mb-3">
+
+        {/* Campos comunes */}
+        <div className="mb-3">
           <label className="form-label">Código</label>
           <input
             type="text"
@@ -75,6 +97,7 @@ export default function NewExercise() {
             required
           />
         </div>
+
         <div className="mb-3">
           <label className="form-label">Título</label>
           <input
@@ -94,25 +117,40 @@ export default function NewExercise() {
             className="form-control"
             value={formData.description}
             onChange={handleChange}
-          ></textarea>
+          />
         </div>
 
         <div className="mb-3">
           <label className="form-label">Categoría</label>
-          <input
-            type="combo"
+          <select
             name="category"
             className="form-control"
             value={formData.category}
             onChange={handleChange}
             required
-          />
+            id="category"
+          >
+            <option value="">-- Seleccionar --</option>
+            <option value="ABSTRACTION">Abstracción</option>
+            <option value="ALGORITHMS">Algoritmos</option>
+            <option value="LOOPS">Bucles</option>
+            <option value="CONDITIONALS">Condicionales</option>
+            <option value="COMPOSITION">Composición</option>
+            <option value="FUNCTIONS">Funciones</option>
+            <option value="AI">Inteligencia artificial</option>
+            <option value="PATTERNS RECOGNITION">Reconocimiento de patrones</option>
+            <option value="SEQUENCES">Secuencias</option>
+            <option value="LOOPS AND SEQUENCES">Secuencias y bucles</option>
+            <option value="VARIABLES">Variables</option>
+            <option value="VARIABLES AND FUNCTIONS">Variables y funciones</option>
+            <option value="OTHER">Otro</option>
+          </select>
         </div>
 
         <div className="mb-3">
           <label className="form-label">Recursos</label>
           <input
-            type="string"
+            type="text"
             name="resources"
             className="form-control"
             value={formData.resources}
@@ -120,52 +158,61 @@ export default function NewExercise() {
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Rúbrica</label>
-          <input
-            type="string"
-            name="rubric"
-            className="form-control"
-            value={formData.rubric}
-            onChange={handleChange}
-          />
-        </div>
+        {/* Si es DESENCHUFADO → mostrar RÚBRICA */}
+        {formData.type === "DESENCHUFADO" && (
+          <div className="mb-3">
+            <label className="form-label">Rúbrica</label>
+            <input
+              type="text"
+              name="rubric"
+              className="form-control"
+              value={formData.rubric}
+              onChange={handleChange}
+            />
+          </div>
+        )}
 
-        <div className="mb-3">
-          <label className="form-label">Número de inputs</label>
-          <input
-            type="text"
-            name="inputs"
-            className="form-control"
-            value={formData.inputs}
-            onChange={handleChange}
-          />
-        </div>
+        {/* Si es ENCHUFADO → mostrar Inputs, Time Limit, Testcase Value */}
+        {formData.type === "ENCHUFADO" && (
+          <>
+            <div className="mb-3">
+              <label className="form-label">Número de inputs</label>
+              <input
+                type="number"
+                name="inputs"
+                className="form-control"
+                value={formData.inputs}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="mb-3">
-          <label className="form-label">Límite de tiempo (segundos) </label>
-          <input
-            type="int"
-            name="time_limit"
-            className="form-control"
-            value={formData.time_limit}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="mb-3">
+              <label className="form-label">Límite de tiempo (segundos)</label>
+              <input
+                type="number"
+                name="time_limit"
+                className="form-control"
+                value={formData.time_limit}
+                onChange={handleChange}
+              />
+            </div>
 
-        <div className="mb-3">
-          <label className="form-label"> Valor de los testcases </label>
-          <input
-            type="decimal"
-            name="testcase_value"
-            className="form-control"
-            value={formData.testcase_value}
-            onChange={handleChange}
-          />
-        </div>
+            <div className="mb-3">
+              <label className="form-label">Valor de testcases</label>
+              <input
+                type="number"
+                step="0.01"
+                name="testcase_value"
+                className="form-control"
+                value={formData.testcase_value}
+                onChange={handleChange}
+              />
+            </div>
+          </>
+        )}
 
         <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Creando..." : "Crear olimpiada"}
+          {loading ? "Creando..." : "Crear ejercicio"}
         </button>
       </form>
     </div>
