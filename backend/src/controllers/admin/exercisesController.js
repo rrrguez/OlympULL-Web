@@ -31,7 +31,7 @@ export const getOneUnplugged = async (req, res) => {
 export const createUnplugged = async (req, res) => {
   try {
     const data = await model.createUnplugged(req.body);
-    res.status(201).json(data.rows[0]);
+    res.status(201).json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -90,7 +90,7 @@ export const getAllPluggedIn = async (req, res) => {
   export const createPluggedIn = async (req, res) => {
     try {
       const data = await model.createPluggedIn(req.body);
-      res.status(201).json(data.rows[0]);
+      res.status(201).json(data);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }

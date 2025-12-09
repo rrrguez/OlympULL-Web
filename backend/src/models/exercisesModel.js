@@ -48,14 +48,6 @@ export const createUnplugged = async (data) => {
     }
 };
 
-/**
-export const create = (data) =>
-  pool.query(
-    "INSERT INTO t_exercises (id, name, description, category, resources) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [data.id, data.name, data.description, data.category, data.resources]
-  );
-  */
-
 // Actualizar un ejercicio - ARREGLAR
 export const updateUnplugged = (data) =>
   pool.query(
@@ -80,6 +72,9 @@ export const getPluggedInByid = (id) =>
 // Crear uno nuevo
 export const createPluggedIn = async (data) => {
     const client = await pool.connect();
+    const inputs = data.inputs ? Number(data.inputs) : null;
+    const timeLimit = data.time_limit ? Number(data.time_limit) : null;
+    const value = data.testcase_value ? Number(data.testcase_value) : null;
 
     try {
       await client.query("BEGIN");
@@ -97,7 +92,7 @@ export const createPluggedIn = async (data) => {
         `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value)
          VALUES ($1, $2, $3, $4)
          RETURNING *`,
-        [exerciseRes.rows[0].id, data.inputs, data.time_limit, data.testcase_value]
+        [exerciseRes.rows[0].id, inputs, timeLimit, value]
       );
 
       await client.query("COMMIT");

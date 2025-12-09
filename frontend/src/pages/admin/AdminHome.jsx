@@ -47,6 +47,15 @@ export default function AdminHome() {
             Gestión de rúbricas
         </Button>
 
+        <Button
+            variant="link"
+            size="lg"
+            className="me-2"
+            onClick={() => navigate("/admin/assignations")}
+        >
+            Asignación de ejercicios a olimpiadas
+        </Button>
+
       </div>
       </div>
     );

@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUnpluggedExercise } from "../../api/unpluggedExercisesApi";
 import { createPluggedInExercise } from "../../api/pluggedInExercisesApi";
+import { getAllRubrics } from "../../api/rubricsApi";
 
 export default function NewExercise() {
   const navigate = useNavigate();
@@ -13,12 +14,13 @@ export default function NewExercise() {
     category: "",
     resources: "",
     type: "",
-    rubric: "",
-    inputs: "",
-    time_limit: "",
-    testcase_value: "",
+    rubric: null,
+    inputs: null,
+    time_limit: null,
+    testcase_value: null,
   });
 
+  const [rubrics, setRubrics] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,6 +30,19 @@ export default function NewExercise() {
       [e.target.name]: e.target.value
     });
   }
+
+  useEffect(() => {
+    async function loadRubrics() {
+      try {
+        const data = await getAllRubrics();
+        setRubrics(data.data);
+      } catch (err) {
+        console.error("Error cargando rúbricas", err);
+        setError("No se pudieron cargar las rúbricas");
+      }
+    }
+    loadRubrics();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -56,7 +71,6 @@ export default function NewExercise() {
 
         console.error("🔍 Error completo:", err);
         setError(err.response?.data?.error || "Error al crear el ejercicio");
-        
       }
   }
 
@@ -160,16 +174,23 @@ export default function NewExercise() {
 
         {/* Si es DESENCHUFADO → mostrar RÚBRICA */}
         {formData.type === "DESENCHUFADO" && (
-          <div className="mb-3">
-            <label className="form-label">Rúbrica</label>
-            <input
-              type="text"
-              name="rubric"
-              className="form-control"
-              value={formData.rubric}
-              onChange={handleChange}
-            />
-          </div>
+            <div className="mb-3">
+                <label className="form-label">Rúbrica</label>
+                <select
+                name="rubric"
+                className="form-control"
+                value={formData.rubric}
+                onChange={handleChange}
+                required
+                >
+                <option value="">-- Seleccione una rúbrica --</option>
+                {rubrics.map((o) => (
+                    <option key={o.id} value={o.id}>
+                    {o.id} - {o.name}
+                    </option>
+                ))}
+                </select>
+            </div>
         )}
 
         {/* Si es ENCHUFADO → mostrar Inputs, Time Limit, Testcase Value */}

@@ -4,10 +4,14 @@ import LoginPage from "./pages/LoginPage";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
 import AdminNewOlympiadPage from "./pages/admin/AdminNewOlympiadPage";
+import AdminItinerariesPage from "./pages/admin/AdminItinerariesPage";
+import AdminNewItineraryPage from "./pages/admin/AdminNewItineraryPage";
 import AdminExercisesPage from "./pages/admin/AdminExercisesPage";
 import AdminNewExercisePage from "./pages/admin/AdminNewExercisePage";
 import AdminRubricsPage from "./pages/admin/AdminRubricsPage";
 import AdminNewRubricPage from "./pages/admin/AdminNewRubricPage";
+import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
+import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
 import OrganizerHome from "./pages/OrganizerHome";
 import { getToken, getUserType } from "./services/authService";
 
@@ -54,6 +58,24 @@ export default function App() {
         />
 
         <Route
+          path="/admin/itineraries"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminItinerariesPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/itineraries/new"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminNewItineraryPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
           path="/admin/exercises"
           element={
             <PrivateRoute type="ADMIN">
@@ -90,6 +112,33 @@ export default function App() {
         />
 
         <Route
+          path="/admin/assignations"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminAssignationsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/assignations"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminAssignationsPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/admin/assignations/new"
+          element={
+            <PrivateRoute type="ADMIN">
+              <AdminNewAssignationPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
           path="/organizer"
           element={
             <PrivateRoute type="ORGANIZER">
@@ -97,6 +146,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </Router>
