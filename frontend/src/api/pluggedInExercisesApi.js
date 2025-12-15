@@ -4,7 +4,6 @@ const API = "http://localhost:3000/api/admin/plugged-in-exercises";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
-    console.log(token);
     return {
         headers: { Authorization: `Bearer ${token}` }
     };

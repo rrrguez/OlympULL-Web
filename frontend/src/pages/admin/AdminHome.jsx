@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 export default function AdminHome() {
     const navigate = useNavigate();
     const username = localStorage.getItem("username");
-    console.log(username);
     return (
       <div className="container mt-5">
         <h1>¡Bienvenido, {username}!</h1>

@@ -4,6 +4,7 @@ import itineraryController from "../../controllers/admin/itinerariesController.j
 const router = express.Router();
 
 router.get("/", itineraryController.getAll);
+router.get("/olympiad/:olympiadId", itineraryController.getByOlympiad);
 router.get("/:id", itineraryController.getOne);
 router.post("/", itineraryController.create);
 router.put("/:id", itineraryController.update);

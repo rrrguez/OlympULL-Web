@@ -4,7 +4,8 @@ const API = "http://localhost:3000/api/admin/olympiads";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
-    console.log(token);
+    console.log("TOKEN EN API:", token);
+
     return {
         headers: { Authorization: `Bearer ${token}` }
     };

@@ -30,6 +30,7 @@ export default function LoginPage() {
   };
 
   return (
+
     <div className="container mt-5" style={{ maxWidth: "400px" }}>
       <h2 className="mb-4">Iniciar sesión</h2>
       {error && <div className="alert alert-danger">{error}</div>}

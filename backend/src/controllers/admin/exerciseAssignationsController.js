@@ -10,22 +10,6 @@ export const getAll = async (req, res) => {
   }
 };
 
-// GET: obtener uno por código
-export const getOne = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getByid(id);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "No encontrado" });
-    }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
 // POST: crear nuevo
 export const create = async (req, res) => {
   try {
@@ -36,24 +20,19 @@ export const create = async (req, res) => {
   }
 };
 
-// PUT: actualizar
-export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.delete(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+      const { exercise, olympiad, itinerary } = req.body;
+      await model.remove({ exercise, olympiad, itinerary });
+      res.json({ message: "Asignación eliminada" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
+export default {
+    getAll,
+    create,
+    remove
 };

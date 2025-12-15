@@ -1,4 +1,4 @@
-import { getAllAssignations, getAssignationById, updateAssignation } from "../../api/assignationsApi";
+import { getAllAssignations } from "../../api/assignationsApi";
 import { useEffect, useState } from "react";
 import { Container, Button, Table } from "react-bootstrap";
 
@@ -33,15 +33,6 @@ export default function AssignationsList() {
                 <td>{o.olympiad}</td>
                 <td>{o.itinerary}</td>
                 <td>
-                  <Button
-                    variant="warning"
-                    size="sm"
-                    className="me-2"
-                    onClick={() => console.log("Editar", o.id)}
-                  >
-                    Editar
-                  </Button>
-
                   <Button
                     variant="danger"
                     size="sm"

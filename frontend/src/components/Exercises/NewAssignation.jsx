@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createAssignation } from "../../api/assignationsApi";
+import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
-import { getUnpluggedExercise } from "../../api/unpluggedExercisesApi";
+import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 
 export default function NewAssignation() {
   const navigate = useNavigate();
@@ -14,8 +16,15 @@ export default function NewAssignation() {
   });
 
   const [exercises, setExercises] = useState([]);
+  const [olympiads, setOlympiads] = useState([]);
+  const [itineraries, setItineraries] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const [loadingItineraries, setLoadingItineraries] = useState(false);
+
+  const itineraryDisabled =
+  !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
   function handleChange(e) {
     setFormData({
@@ -27,17 +36,54 @@ export default function NewAssignation() {
   useEffect(() => {
     async function loadExercises() {
       try {
-        const data = await getAllPluggedInExercises();
-        setExercises(data.data);
-        const data2 = await getAllPluggedInExercises();
-        setExercises(data2.data);
+        const dataPluggedIn = await getAllPluggedInExercises();
+        const dataUnplugged = await getAllUnpluggedExercises();
+        setExercises([
+            ...dataUnplugged.data,
+            ...dataPluggedIn.data
+          ]);
       } catch (err) {
-        console.error("Error cargando rúbricas", err);
-        setError("No se pudieron cargar las rúbricas");
+        console.error("Error cargando ejercicios", err);
+        setError("No se pudieron cargar los ejercicios");
       }
     }
-    loadRubrics();
+    loadExercises();
+
+    async function loadOlympiads() {
+        try {
+          const data = await getAllOlympiads();
+          setOlympiads(data.data);
+        } catch (err) {
+          console.error("Error cargando olimpiadas", err);
+          setError("No se pudieron cargar las olimpiadas");
+        }
+      }
+      loadOlympiads();
   }, []);
+
+  async function loadItineraries(olympiadId) {
+    try {
+      setLoadingItineraries(true);
+
+      const res = await getItineraryByOlympiad(olympiadId);
+
+      setItineraries(res.data);
+    } catch (err) {
+      console.error("Error cargando itinerarios", err);
+      setError("No se pudieron cargar los itinerarios");
+    } finally {
+      setLoadingItineraries(false);
+    }
+  }
+
+  useEffect(() => {
+    if (formData.olympiad) {
+      loadItineraries(formData.olympiad);
+      setFormData(prev => ({ ...prev, itinerary: "" }));
+    } else {
+      setItineraries([]);
+    }
+  }, [formData.olympiad]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -71,12 +117,12 @@ export default function NewAssignation() {
                 required
                 >
                 <option value="">-- Seleccione un ejercicio --</option>
-                {assignations.map((o) => (
-                    <option key={o.exercise}>
-                    {o.exercise}
+                {exercises.map((o) => (
+                    <option key={o.id} value={o.id}>
+                    {o.id} - {o.name}
                     </option>
                 ))}
-                </select>
+            </select>
         </div>
         <div className="mb-3">
           <label className="form-label">Olimpiada</label>
@@ -88,9 +134,9 @@ export default function NewAssignation() {
                 required
                 >
                 <option value="">-- Seleccione una olimpiada --</option>
-                {assignations.map((o) => (
-                    <option key={o.olympiad}>
-                    {o.olympiad}
+                {olympiads.map((o) => (
+                    <option key={o.id} value={o.id}>
+                    {o.id} - {o.name}
                     </option>
                 ))}
             </select>
@@ -98,12 +144,30 @@ export default function NewAssignation() {
 
         <div className="mb-3">
           <label className="form-label">Itinerario</label>
-          <textarea
-            name="description"
+          <select
+            name="itinerary"
             className="form-control"
-            value={formData.description}
+            value={formData.itinerary}
             onChange={handleChange}
-          ></textarea>
+            disabled={itineraryDisabled}
+            required
+            >
+            <option value="">
+                {loadingItineraries
+                ? "Cargando itinerarios..."
+                : !formData.olympiad
+                ? "-- Seleccione primero una olimpiada --"
+                : itineraries.length === 0
+                ? "No hay itinerarios disponibles"
+                : "-- Seleccione un itinerario --"}
+            </option>
+
+            {itineraries.map((i) => (
+                <option key={i.id} value={i.id}>
+                {i.id} - {i.name}
+                </option>
+            ))}
+            </select>
         </div>
 
         <button type="submit" className="btn btn-primary" disabled={loading}>

@@ -14,6 +14,7 @@ import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
 import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
 import OrganizerHome from "./pages/OrganizerHome";
 import { getToken, getUserType } from "./services/authService";
+import MainLayout from "./components/layouts/MainLayout";
 
 function PrivateRoute({ children, type }) {
   const token = getToken();
@@ -29,125 +30,127 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/404" element={<NotFoundPage />} />
-        <Route
-          path="/admin"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminHome />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/admin/olympiads"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminOlympiadsPage />
-            </PrivateRoute>
-          }
-        />
+        <Route element={<MainLayout />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/404" element={<NotFoundPage />} />
+            <Route
+            path="/admin"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminHome />
+                </PrivateRoute>
+            }
+            />
+            <Route
+            path="/admin/olympiads"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminOlympiadsPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/olympiads/new"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminNewOlympiadPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/olympiads/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminNewOlympiadPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/itineraries"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminItinerariesPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/itineraries"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminItinerariesPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/itineraries/new"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminNewItineraryPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/itineraries/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminNewItineraryPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/exercises"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminExercisesPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/exercises"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminExercisesPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/exercises/new"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminNewExercisePage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/exercises/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminNewExercisePage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/rubrics"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminRubricsPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/rubrics"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminRubricsPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/rubrics/new"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminNewRubricPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/rubrics/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminNewRubricPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/assignations"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminAssignationsPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/assignations"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminAssignationsPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/assignations"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminAssignationsPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/assignations"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminAssignationsPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/admin/assignations/new"
-          element={
-            <PrivateRoute type="ADMIN">
-              <AdminNewAssignationPage />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/admin/assignations/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                <AdminNewAssignationPage />
+                </PrivateRoute>
+            }
+            />
 
-        <Route
-          path="/organizer"
-          element={
-            <PrivateRoute type="ORGANIZER">
-              <OrganizerHome />
-            </PrivateRoute>
-          }
-        />
+            <Route
+            path="/organizer"
+            element={
+                <PrivateRoute type="ORGANIZER">
+                <OrganizerHome />
+                </PrivateRoute>
+            }
+            />
 
-        <Route path="*" element={<Navigate to="/404" />} />
+            <Route path="*" element={<Navigate to="/404" />} />
+        </Route>
       </Routes>
     </Router>
   );

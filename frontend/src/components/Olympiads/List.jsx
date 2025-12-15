@@ -5,8 +5,11 @@ import { Table, Button, Container } from "react-bootstrap";
 export default function OlympiadsList() {
   const [data, setData] = useState([]);
 
+  console.log("Componente renderizado");
+
   useEffect(() => {
     load();
+    console.log("useEffect ejecutado");
   }, []);
 
   const load = async () => {

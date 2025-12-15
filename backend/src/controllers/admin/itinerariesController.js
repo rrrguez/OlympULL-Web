@@ -26,6 +26,17 @@ export const getOne = async (req, res) => {
   }
 };
 
+// GET: obtener uno por olimpiada
+export const getByOlympiad = async (req, res) => {
+    try {
+      const { olympiadId } = req.params;
+      const data = await model.getByOlympiad(olympiadId);
+      res.json(data.rows);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
 // POST: crear nuevo
 export const create = async (req, res) => {
   try {
@@ -61,6 +72,7 @@ export const remove = async (req, res) => {
 export default {
     getAll,
     getOne,
+    getByOlympiad,
     create,
     update,
     remove,
