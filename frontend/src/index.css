@@ -1,7 +1,17 @@
+@font-face {
+    font-family: "Argentum Sans";
+    src: url("./assets/fonts/hinted-ArgentumSans-Light.ttf") format("ttf");
+  }
+
+@font-face {
+    font-family: "Argentum Sans";
+    src: url("./assets/fonts/hinted-ArgentumSans-SemiBold.ttf") format("ttf");
+  }
+
 * {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: bolder;
-    background-color: #ffffff;
+    font-family: 'Argentum Sans', sans-serif;
+    font-weight: SemiBold;
+    width: 100%;
 }
 
 :root {
@@ -9,7 +19,7 @@
 
   color-scheme: light dark;
   color: #5c068c;
-  background-color: #5c068c;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -39,6 +49,7 @@ h1 {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
+  width: 65%;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-family: inherit;
@@ -67,8 +78,60 @@ button:focus-visible {
   }
 }
 
+.app-container {
+    background-color: #ffffff;
+    width: 100%;
+    align-items: center;
+}
+
 .app-header {
     background-color: #5c068c;
-    padding: 5%;
+    height: 70px;
+    width: 90%;
+    align-items: flex-start;
+    align-content: center;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.app-footer {
+    background-color: #c1c1c1;
+    height: 35px;
+    align-content: center;
+    justify-items: center;
+
+    color: #414141;
+    position: fixed;
+    bottom: 0;
     width: 100%;
+
+    text-align-last: center;
+}
+
+.app-header h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.grid-admin {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 33% 33% 33%;
+    row-gap: 15%;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+}
+
+.logo {
+    height: 90%;
+    width: auto;
+}
+
+.content {
+    width: 80%;
+    padding-left: 10%;
+    padding-right: 10%;
 }

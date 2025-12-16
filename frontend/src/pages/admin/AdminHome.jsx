@@ -8,7 +8,7 @@ export default function AdminHome() {
       <div className="container mt-5">
         <h1>¡Bienvenido, {username}!</h1>
         <p>Panel de administrador</p>
-        <div className="mt-4 d-flex flex-column gap-3">
+        <div className="grid-admin">
 
         <Button
             variant="link"
