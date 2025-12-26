@@ -30,9 +30,10 @@ export default function LoginPage() {
   };
 
   return (
+    <div>
+    <h1 className="mb-4">Inicio de sesión</h1>
 
-    <div className="container mt-5" style={{ maxWidth: "400px" }}>
-      <h2 className="mb-4">Iniciar sesión</h2>
+    <div className="login-container mt-5" style={{ maxWidth: "400px" }}>
       {error && <div className="alert alert-danger">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -57,10 +58,11 @@ export default function LoginPage() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary w-100">
+        <button type="submit" className="btn btn-primary">
           Entrar
         </button>
       </form>
     </div>
+</div>
   );
 }

@@ -30,6 +30,7 @@ export default function RubricList() {
             <th>Descripción</th>
             <th>Puntos</th>
             <th>Etiquetas</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -41,22 +42,25 @@ export default function RubricList() {
               <td>{o.points}</td>
               <td>{o.labels}</td>
               <td>
-                <Button
-                  variant="warning"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => console.log("Editar", o.id)}
-                >
-                  Editar
-                </Button>
+                <div className="table-button-container">
+                    <Button
+                    variant="warning"
+                    size="sm"
+                    className="table-button"
+                    onClick={() => console.log("Editar", o.id)}
+                    >
+                    Editar
+                    </Button>
 
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => remove(o.id)}
-                >
-                  Eliminar
-                </Button>
+                    <Button
+                    variant="danger"
+                    size="sm"
+                    className="table-button"
+                    onClick={() => remove(o.id)}
+                    >
+                    Borrar
+                    </Button>
+                </div>
               </td>
             </tr>
           ))}

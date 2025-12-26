@@ -24,6 +24,7 @@ export default function AssignationsList() {
               <th>Ejercicio</th>
               <th>Olympiada</th>
               <th>Itinerario</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -33,14 +34,26 @@ export default function AssignationsList() {
                 <td>{o.olympiad}</td>
                 <td>{o.itinerary}</td>
                 <td>
-                  <Button
+                <div className="table-button-container">
+                    <Button
+                    variant="warning"
+                    size="sm"
+                    className="table-button"
+                    onClick={() => console.log("Editar", o.id)}
+                    >
+                    Editar
+                    </Button>
+
+                    <Button
                     variant="danger"
                     size="sm"
-                    onClick={() => console.log("Eliminar asignación")}
-                  >
-                    Eliminar
-                  </Button>
-                </td>
+                    className="table-button"
+                    onClick={() => remove(o.id)}
+                    >
+                    Borrar
+                    </Button>
+                </div>
+              </td>
               </tr>
             ))}
           </tbody>

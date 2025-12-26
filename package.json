@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@fontsource/montserrat": "^5.2.8"
+    "@fontsource/montserrat": "^5.2.8",
+    "bootstrap-icons": "^1.13.1"
   }
 }

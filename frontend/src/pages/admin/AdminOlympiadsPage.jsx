@@ -17,10 +17,7 @@ export default function OlympiadsPage() {
                 >
                     Nueva olimpiada
                 </Button>
-
             </div>
-
-
             <OlympiadsList/>
         </Container>
 

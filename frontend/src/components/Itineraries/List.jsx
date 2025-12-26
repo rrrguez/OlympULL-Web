@@ -29,6 +29,7 @@ export default function ItinerariesList() {
             <th>Título</th>
             <th>Descripción</th>
             <th>Olimpiada</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -39,22 +40,25 @@ export default function ItinerariesList() {
               <td>{o.description}</td>
               <td>{o.olympiad}</td>
               <td>
-                <Button
-                  variant="warning"
-                  size="sm"
-                  className="me-2"
-                  onClick={() => console.log("Editar", o.id)}
-                >
-                  Editar
-                </Button>
+                <div className="table-button-container">
+                    <Button
+                    variant="warning"
+                    size="sm"
+                    className="table-button"
+                    onClick={() => console.log("Editar", o.id)}
+                    >
+                    Editar
+                    </Button>
 
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={() => remove(o.id)}
-                >
-                  Borrar
-                </Button>
+                    <Button
+                    variant="danger"
+                    size="sm"
+                    className="table-button"
+                    onClick={() => remove(o.id)}
+                    >
+                    Borrar
+                    </Button>
+                </div>
               </td>
             </tr>
           ))}

@@ -7,7 +7,7 @@ export default function AdminHome() {
     return (
       <div className="container mt-5">
         <h1>¡Bienvenido, {username}!</h1>
-        <p>Panel de administrador</p>
+        <h2>Gestión de olimpiadas</h2>
         <div className="grid-admin">
 
         <Button
@@ -32,18 +32,18 @@ export default function AdminHome() {
             variant="link"
             size="lg"
             className="me-2"
-            onClick={() => navigate("/admin/exercises")}
+            onClick={() => navigate("/admin/rubrics")}
         >
-            Gestión de ejercicios
+            Gestión de rúbricas
         </Button>
 
         <Button
             variant="link"
             size="lg"
             className="me-2"
-            onClick={() => navigate("/admin/rubrics")}
+            onClick={() => navigate("/admin/exercises")}
         >
-            Gestión de rúbricas
+            Gestión de ejercicios
         </Button>
 
         <Button
@@ -56,6 +56,8 @@ export default function AdminHome() {
         </Button>
 
       </div>
+
+      <h2>Gestión de usuarios</h2>
       </div>
     );
   }
