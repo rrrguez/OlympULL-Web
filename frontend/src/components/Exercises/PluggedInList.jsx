@@ -60,7 +60,7 @@ export default function PluggedInExercisesList() {
               <th>Descripción</th>
               <th>Categoría</th>
               <th>Recursos</th>
-              <th>Número de inputs</th>
+              <th>Nº de inputs</th>
               <th>Límite de tiempo</th>
               <th>Puntos por testcase</th>
               <th>Acciones</th>

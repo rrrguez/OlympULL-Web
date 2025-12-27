@@ -81,6 +81,7 @@ export default function UnpluggedExercisesList() {
                     className="table-button"
                     onClick={() => console.log("Editar", o.id)}
                     >
+                        <i class="fa-solid fa-pen-to-square"></i>
                     Editar
                     </Button>
 
@@ -90,6 +91,7 @@ export default function UnpluggedExercisesList() {
                     className="table-button"
                     onClick={() => remove(o.id)}
                     >
+                        <i class="fa-regular fa-trash-can"></i>
                     Borrar
                     </Button>
                 </div>

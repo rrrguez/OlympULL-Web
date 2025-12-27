@@ -238,3 +238,21 @@ button:focus-visible {
 .table tbody tr:hover {
     background-color: #dbdbdb !important;
   }
+
+.page-header-buttons {
+    display: grid;
+    grid-template-columns: 32% 32% 32%;
+    grid-gap: 2%;
+    font-size:small;
+    height: 90%;
+    align-self: center;
+}
+
+Button {
+    display: grid;
+    grid-template-columns: 15% 80%;
+    grid-gap: 5%;
+    align-items: center;
+    width: auto;
+    padding: 5%;
+}
