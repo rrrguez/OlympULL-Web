@@ -1,5 +1,7 @@
 import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import OlympULLButton from "../../components/buttons/OlympULLButton";
+import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 import UnpluggedExercisesList from "../../components/Exercises/UnpluggedList";
 import PluggedInExercisesList from "../../components/Exercises/PluggedInList";
 
@@ -10,31 +12,27 @@ export default function ExercisesPage() {
             <div style={{display: "flex"}}>
                 <h1> Gestión de ejercicios </h1>
                 <div className="page-header-buttons">
-                <Button
-                    variant="link"
-                    size="lg"
-                    className="me-2"
-                    onClick={() => navigate("/admin/exercises/new")}
-                >
-                    <i class="fa-solid fa-plus"></i>
-                    Nuevo ejercicio
-                </Button>
-                <Button
-                    variant="link"
-                    size="lg"
-                    className="me-2"
-                >
-                    <i class="fa-solid fa-file-arrow-down"></i>
-                    Importar ejercicios
-                </Button>
-                <Button
-                    variant="link"
-                    size="lg"
-                    className="me-2"
-                >
-                    <i class="fa-solid fa-file-arrow-up"></i>
-                    Exportar ejercicios
-                </Button>
+                <OlympULLIconButton
+                    text="Nuevo ejercicio"
+                    buttonSize="lg"
+                    buttonClass="me-2"
+                    route="/admin/exercises/new"
+                    icon="fa-solid fa-plus"
+                />
+                <OlympULLIconButton
+                    text="Importar ejercicios"
+                    buttonSize="lg"
+                    buttonClass="me-2"
+                    route="/admin/exercises/new"
+                    icon="fa-solid fa-file-arrow-down"
+                />
+                <OlympULLIconButton
+                    text="Exportar ejercicios"
+                    buttonSize="lg"
+                    buttonClass="me-2"
+                    route="/admin/exercises/new"
+                    icon="fa-solid fa-file-arrow-up"
+                />
                 </div>
             </div>
 

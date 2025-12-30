@@ -84,7 +84,6 @@ export default function OlympiadsList() {
               <td>
                 <div className="table-button-container">
                     <Button
-                    variant="warning"
                     size="sm"
                     className="table-button"
                     onClick={() => console.log("Editar", o.id)}
@@ -93,7 +92,6 @@ export default function OlympiadsList() {
                     </Button>
 
                     <Button
-                    variant="danger"
                     size="sm"
                     className="table-button"
                     onClick={() => remove(o.id)}

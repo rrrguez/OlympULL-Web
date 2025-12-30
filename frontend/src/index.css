@@ -247,12 +247,3 @@ button:focus-visible {
     height: 90%;
     align-self: center;
 }
-
-Button {
-    display: grid;
-    grid-template-columns: 15% 80%;
-    grid-gap: 5%;
-    align-items: center;
-    width: auto;
-    padding: 5%;
-}

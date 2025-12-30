@@ -1,5 +1,6 @@
-import { Button } from "react-bootstrap";
+import OlympULLButton from "../../components/buttons/OlympULLButton";
 import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 export default function AdminHome() {
     const navigate = useNavigate();
@@ -10,50 +11,35 @@ export default function AdminHome() {
         <h2>Gestión de olimpiadas</h2>
         <div className="grid-admin">
 
-        <Button
-            variant="link"
-            size="lg"
-            className="me-2"
-            onClick={() => navigate("/admin/olympiads")}
-        >
-            Gestión de olimpiadas
-        </Button>
+        <OlympULLButton
+            text="Gestión de olimpiadas"
+            buttonClass="me-2"
+            route="/admin/olympiads"
+        />
 
-        <Button
-            variant="link"
-            size="lg"
-            className="me-2"
-            onClick={() => navigate("/admin/itineraries")}
-        >
-            Gestión de itinerarios
-        </Button>
+        <OlympULLButton
+            text="Gestión de itinerarios"
+            buttonClass="me-2"
+            route="/admin/itineraries"
+        />
 
-        <Button
-            variant="link"
-            size="lg"
-            className="me-2"
-            onClick={() => navigate("/admin/rubrics")}
-        >
-            Gestión de rúbricas
-        </Button>
+        <OlympULLButton
+            text="Gestión de rúbricas"
+            buttonClass="me-2"
+            route="/admin/rubrics"
+        />
 
-        <Button
-            variant="link"
-            size="lg"
-            className="me-2"
-            onClick={() => navigate("/admin/exercises")}
-        >
-            Gestión de ejercicios
-        </Button>
+        <OlympULLButton
+            text="Gestión de ejercicios"
+            buttonClass="me-2"
+            route="/admin/exercises"
+        />
 
-        <Button
-            variant="link"
-            size="lg"
-            className="me-2"
-            onClick={() => navigate("/admin/assignations")}
-        >
-            Asignación de ejercicios a olimpiadas
-        </Button>
+        <OlympULLButton
+            text="Asignación de ejercicios a olimpiadas"
+            buttonClass="me-2"
+            route="/admin/assignations"
+        />
 
       </div>
 
