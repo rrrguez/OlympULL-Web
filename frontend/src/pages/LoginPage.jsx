@@ -31,34 +31,35 @@ export default function LoginPage() {
 
   return (
     <div>
-    <h1 className="mb-4">Inicio de sesión</h1>
+    <h1>Inicio de sesión</h1>
 
-    <div className="login-container mt-5" style={{ maxWidth: "400px" }}>
+    <div className="login-container">
       {error && <div className="alert alert-danger">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Usuario</label>
-          <input
-            type="text"
-            className="form-control"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
+      <form className="login-form" onSubmit={handleSubmit}>
+        <div>
+            <div>
+            <p className="form-label">Usuario</p>
+            <input
+                type="text"
+                className="form-control"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+            />
+            </div>
 
-        <div className="mb-3">
-          <label className="form-label">Contraseña</label>
-          <input
-            type="password"
-            className="form-control"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            <div>
+            <p className="form-label">Contraseña</p>
+            <input
+                type="password"
+                className="form-control"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+            />
+            </div>
         </div>
-
-        <button type="submit" className="btn btn-primary">
+        <button className="login-button">
           Entrar
         </button>
       </form>

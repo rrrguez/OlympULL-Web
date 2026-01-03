@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 export default function AdminHome() {
-    const navigate = useNavigate();
     const username = localStorage.getItem("username");
     return (
       <div className="container mt-5">
@@ -13,31 +12,26 @@ export default function AdminHome() {
 
         <OlympULLButton
             text="Gestión de olimpiadas"
-            buttonClass="me-2"
             route="/admin/olympiads"
         />
 
         <OlympULLButton
             text="Gestión de itinerarios"
-            buttonClass="me-2"
             route="/admin/itineraries"
         />
 
         <OlympULLButton
             text="Gestión de rúbricas"
-            buttonClass="me-2"
             route="/admin/rubrics"
         />
 
         <OlympULLButton
             text="Gestión de ejercicios"
-            buttonClass="me-2"
             route="/admin/exercises"
         />
 
         <OlympULLButton
             text="Asignación de ejercicios a olimpiadas"
-            buttonClass="me-2"
             route="/admin/assignations"
         />
 

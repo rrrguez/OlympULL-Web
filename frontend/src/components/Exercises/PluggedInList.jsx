@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { deletePluggedInExercise, getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
+import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
+
 
 function translateCategory(category) {
     if (category == 'ABSTRACTION') {
@@ -34,14 +36,20 @@ function translateCategory(category) {
 
 export default function PluggedInExercisesList() {
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      load();
+        load();
     }, []);
 
     const load = async () => {
-      const res = await getAllPluggedInExercises();
-      setData(res.data);
+        async function loadData() {
+            setLoading(true);
+            const res = await getAllPluggedInExercises();
+            setData(res.data);
+            setLoading(false);
+        }
+        loadData();
     };
 
     const remove = async (id) => {
@@ -62,45 +70,50 @@ export default function PluggedInExercisesList() {
               <th>Recursos</th>
               <th>Nº de inputs</th>
               <th>Límite de tiempo</th>
-              <th>Puntos por testcase</th>
               <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {data.map((o) => (
-              <tr key={o.id}>
-                <td>{o.id}</td>
-                <td>{o.name}</td>
-                <td>{o.description}</td>
-                <td>{translateCategory(o.category)}</td>
-                <td>{o.resources}</td>
-                <td>{o.inputs}</td>
-                <td>{o.time_limit}</td>
-                <td>{o.testcase_value}</td>
+                {loading
+                    ? Array.from({ length: 7 }).map((_, i) => (
+                        <tr key={i} className="skeleton-row">
+                        {Array.from({ length: 9 }).map((_, j) => (
+                            <td key={j}>
+                            <div className="skeleton-cell"></div>
+                            </td>
+                        ))}
+                        </tr>
+                    ))
+                    : data.map((o) => (
+                        <tr key={o.id}>
+                    <td>{o.id}</td>
+                    <td>{o.name}</td>
+                    <td>{o.description}</td>
+                    <td>{translateCategory(o.category)}</td>
+                    <td>{o.resources}</td>
+                    <td>{o.inputs}</td>
+                    <td>{o.time_limit}</td>
                 <td>
-                <div className="table-button-container">
-                    <Button
-                    variant="warning"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => console.log("Editar", o.id)}
-                    >
-                    Editar
-                    </Button>
+                    <div className="table-button-container">
+                        <OlympULLIconButton
+                            text="Editar"
+                            buttonClass="table-button"
+                            route="/admin/exercises"
+                            icon="fa-solid fa-pen-to-square"
+                        />
 
-                    <Button
-                    variant="danger"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => remove(o.id)}
-                    >
-                    Borrar
-                    </Button>
-                </div>
-              </td>
-              </tr>
-            ))}
-          </tbody>
+                        <OlympULLIconButton
+                            text="Eliminar"
+                            buttonSize="sm"
+                            buttonClass="table-button"
+                            route="/admin/exercises"
+                            icon="fa-regular fa-trash-can"
+                        />
+                    </div>
+                </td>
+                </tr>
+                    ))}
+                </tbody>
         </Table>
       </Container>
     );

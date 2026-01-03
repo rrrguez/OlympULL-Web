@@ -1,17 +1,15 @@
-import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-export default function OlympULLIconButton({ text, buttonSize = "sm", buttonClass = "", route, icon }) {
+export default function OlympULLIconButton({ text, buttonClass, route, icon }) {
     const navigate = useNavigate();
 
     return (
-        <Button
-            size = { buttonSize }
+        <button
             className = { buttonClass }
             onClick={() => navigate(route)}
         >
             {icon && <i className={`${icon} me-2`}></i>}
-            { text }
-        </Button>
+            <span className="button-text">{text}</span>
+        </button>
     );
 }

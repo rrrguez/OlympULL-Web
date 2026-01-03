@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
+import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 
 function translateCategory(category) {
     if (category == 'ABSTRACTION') {
@@ -33,73 +34,83 @@ function translateCategory(category) {
 }
 
 export default function UnpluggedExercisesList() {
-  const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    load();
-  }, []);
+    useEffect(() => {
+        load();
+    }, []);
 
-  const load = async () => {
-    const res = await getAllUnpluggedExercises();
-    setData(res.data);
-  };
+    const load = async () => {
+        async function loadData() {
+            setLoading(true);
+            const res = await getAllUnpluggedExercises();
+            setData(res.data);
+            setLoading(false);
+        }
+        loadData();
+    };
 
-  const remove = async (id) => {
-    await deleteUnpluggedExercise(id);
-    load();
-  };
+    const remove = async (id) => {
+        await deleteUnpluggedExercise(id);
+        load();
+    };
 
-  return (
-    <Container className="mt-4">
-      <h2>Ejercicios desenchufados</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Categoría</th>
-            <th>Recursos</th>
-            <th>Rúbrica</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((o) => (
-            <tr key={o.id}>
-              <td>{o.id}</td>
-              <td>{o.name}</td>
-              <td>{o.description}</td>
-              <td>{translateCategory(o.category)}</td>
-              <td>{o.resources}</td>
-              <td>{o.rubric}</td>
-              <td>
-                <div className="table-button-container">
-                    <Button
-                    variant="warning"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => console.log("Editar", o.id)}
-                    >
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    Editar
-                    </Button>
-
-                    <Button
-                    variant="danger"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => remove(o.id)}
-                    >
-                        <i class="fa-regular fa-trash-can"></i>
-                    Borrar
-                    </Button>
-                </div>
-              </td>
+    return (
+        <Container className="mt-4">
+        <h2>Ejercicios desenchufados</h2>
+        <Table striped bordered hover>
+            <thead>
+            <tr>
+                <th>Código</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Recursos</th>
+                <th>Rúbrica</th>
+                <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
+            </thead>
+            <tbody>
+                {loading
+                    ? Array.from({ length: 5 }).map((_, i) => (
+                        <tr key={i} className="skeleton-row">
+                        {Array.from({ length: 7 }).map((_, j) => (
+                            <td key={j}>
+                            <div className="skeleton-cell"></div>
+                            </td>
+                        ))}
+                        </tr>
+                    ))
+                    : data.map((o) => (
+                        <tr key={o.id}>
+                <td>{o.id}</td>
+                <td>{o.name}</td>
+                <td>{o.description}</td>
+                <td>{translateCategory(o.category)}</td>
+                <td>{o.resources}</td>
+                <td>{o.rubric}</td>
+                <td>
+                    <div className="table-button-container">
+                        <OlympULLIconButton
+                            text="Editar"
+                            buttonClass="table-button"
+                            route="/admin/exercises"
+                            icon="fa-solid fa-pen-to-square"
+                        />
+
+                        <OlympULLIconButton
+                            text="Eliminar"
+                            buttonClass="table-button"
+                            route="/admin/exercises"
+                            icon="fa-regular fa-trash-can"
+                        />
+                    </div>
+                </td>
+                </tr>
+                    ))}
+                </tbody>
+        </Table>
+        </Container>
+    );
 }
