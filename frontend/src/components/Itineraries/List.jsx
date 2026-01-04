@@ -1,69 +1,79 @@
 import React, { useEffect, useState } from "react";
 import { getAllItineraries, deleteItinerary } from "../../api/itinerariesApi";
-import { Table, Button, Container } from "react-bootstrap";
+import { Table, Container } from "react-bootstrap";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function ItinerariesList() {
-  const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    load();
-  }, []);
+    useEffect(() => {
+        load();
+    }, []);
 
-  const load = async () => {
-    const res = await getAllItineraries();
-    setData(res.data);
-  };
+    const load = async () => {
+        async function loadData() {
+            setLoading(true);
+            const res = await getAllItineraries();
+            setData(res.data);
+            setLoading(false);
+        }
+        loadData();
+    };
 
-  const remove = async (id) => {
-    await deleteItinerary(id);
-    load();
-  };
+    const remove = async (id) => {
+        await deleteItinerary(id);
+        load();
+    };
 
-  return (
-    <Container className="mt-4">
-      <h2>Itinerarios</h2>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th>Olimpiada</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((o) => (
-            <tr key={o.id}>
-              <td>{o.id}</td>
-              <td>{o.name}</td>
-              <td>{o.description}</td>
-              <td>{o.olympiad}</td>
-              <td>
-                <div className="table-button-container">
-                    <Button
-                    variant="warning"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => console.log("Editar", o.id)}
-                    >
-                    Editar
-                    </Button>
-
-                    <Button
-                    variant="danger"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => remove(o.id)}
-                    >
-                    Borrar
-                    </Button>
-                </div>
-              </td>
+    return (
+        <Container>
+        <Table striped bordered hover>
+            <thead>
+            <tr>
+                <th>Código</th>
+                <th>Título</th>
+                <th>Olimpiada</th>
+                <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
-    </Container>
-  );
+            </thead>
+            <tbody>
+            {loading
+            ? Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i} className="skeleton-row">
+                {Array.from({ length: 4 }).map((_, j) => (
+                    <td key={j}>
+                    <div className="skeleton-cell"></div>
+                    </td>
+                ))}
+                </tr>
+            ))
+            : data.map((o) => (
+            <tr key={o.id}>
+                <td>{o.id}</td>
+                <td>{o.name}</td>
+                <td>{o.olympiad}</td>
+                <td>
+                <div className="table-button-container">
+                    <OlympULLIconButton
+                        text="Editar"
+                        buttonClass="table-button"
+                        route="/admin/olympiads"
+                        icon="fa-solid fa-pen-to-square"
+                    />
+
+                    <OlympULLIconButton
+                        text="Eliminar"
+                        buttonClass="table-button"
+                        route="/admin/olympiads"
+                        icon="fa-regular fa-trash-can"
+                    />
+                </div>
+                </td>
+            </tr>
+            ))}
+            </tbody>
+        </Table>
+        </Container>
+    );
 }

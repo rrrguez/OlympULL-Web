@@ -143,6 +143,7 @@ button:hover {
 
 .content {
     margin-top: 2.5%;
+    margin-bottom: 2.5%;
     width: 80%;
     padding-left: 10%;
     padding-right: 10%;
@@ -160,6 +161,23 @@ button:hover {
 
 }
 
+.element-container {
+    justify-self: center;
+    justify-items: center;
+    border: 2px solid #dbdbdb;
+    border-radius: 10px;
+    background-color: #ededed;
+    padding: 3%;
+    margin-top: 2.5%;
+    max-width: calc(93% + 4px);
+}
+
+.element-form {
+    display: grid;
+    grid-template-columns: 47.5% 47.5%;
+    column-gap: 5%;
+}
+
 .login-container {
     justify-self: center;
     justify-items: center;
@@ -173,7 +191,27 @@ button:hover {
 
 .form-label {
     margin: 0px;
-    margin-bottom: 2%;
+    margin-bottom: 2.5%;
+}
+
+option {
+    font-family: "Argentum Sans Light";
+}
+
+textarea {
+    width: 100%;
+    resize: vertical;
+
+    min-height: 22.5px;
+    padding-top: 0.5%;
+}
+
+.plugged-in-list {
+    margin-top: 4.5%;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
 }
 
 .form-control {
@@ -188,6 +226,15 @@ button:hover {
     padding-right: 2.5%;
     padding-left: 2.5%;
     margin-bottom: 2.5%;
+}
+
+select.form-control {
+    width: 100%;
+}
+
+button.new-button {
+    margin: 0px;
+    width: 50%;
 }
 
 .form-control:hover {
@@ -282,14 +329,20 @@ tr {
 .table-button, .icon-button {
     display: flex;
     align-items: center;
+    align-self: center;
     justify-content: center;
-    gap: 10%;
+    gap: 6.5%;
 
     height: 100%;
     width: 100%;
 
     padding-top: 5%;
     padding-bottom: 5%;
+}
+
+.table-button {
+    height: 95%;
+    align-self: center;
 }
 
 .table-button i, .icon-button i{

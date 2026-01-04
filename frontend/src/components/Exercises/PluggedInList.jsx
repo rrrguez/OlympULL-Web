@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { deletePluggedInExercise, getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 
@@ -58,7 +58,7 @@ export default function PluggedInExercisesList() {
     };
 
     return (
-      <Container className="mt-4">
+      <Container className="plugged-in-list">
         <h2>Ejercicios enchufados</h2>
         <Table striped bordered hover>
           <thead>

@@ -61,70 +61,164 @@ export default function NewExercise() {
         }
 
     } catch (err) {
-        if (err.response) {
-          console.error("⚠️ Error del servidor:", err.response.data);
-        } else if (err.request) {
-          console.error("❌ No hubo respuesta del servidor:", err.request);
-        } else {
-          console.error("🚫 Error en la configuración de la petición:", err.message);
-        }
-
-        console.error("🔍 Error completo:", err);
+        console.error("Error completo:", err);
         setError(err.response?.data?.error || "Error al crear el ejercicio");
       }
   }
 
   return (
-    <div className="container mt-4">
-      <h1>Nuevo ejercicio</h1>
+    <>
+    <div className="element-container">
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <form onSubmit={handleSubmit} style={{ maxWidth: "500px" }}>
+      <form onSubmit={handleSubmit}>
 
-        {/* Tipo de ejercicio */}
-        <div className="mb-3">
-          <label className="form-label">Tipo de ejercicio</label>
-          <select
-            name="type"
-            className="form-control"
-            value={formData.type}
-            onChange={handleChange}
-            required
-            id="ex_type"
-          >
-            <option value="">-- Seleccionar --</option>
-            <option value="ENCHUFADO">Enchufado</option>
-            <option value="DESENCHUFADO">Desenchufado</option>
-          </select>
+        <div className="element-form" name="exercise-type">
+            <div>
+            <label className="form-label">Tipo de ejercicio</label>
+            <select
+                name="type"
+                className="form-control"
+                value={formData.type}
+                onChange={handleChange}
+                required
+                id="ex_type"
+            >
+                <option value="">-- Seleccionar --</option>
+                <option value="ENCHUFADO">Enchufado</option>
+                <option value="DESENCHUFADO">Desenchufado</option>
+            </select>
+            </div>
+
+            <div></div>
         </div>
 
-        {/* Campos comunes */}
-        <div className="mb-3">
-          <label className="form-label">Código</label>
-          <input
-            type="text"
-            name="id"
-            className="form-control"
-            value={formData.id}
-            onChange={handleChange}
-            required
-          />
+        <div className="element-form">
+            <div>
+            <label className="form-label">Código</label>
+            <input
+                type="text"
+                name="id"
+                className="form-control"
+                value={formData.id}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">Título</label>
+            <input
+                type="text"
+                name="name"
+                className="form-control"
+                value={formData.name}
+                onChange={handleChange}
+                required
+            />
+            </div>
+
+            <div>
+            <label className="form-label">Categoría</label>
+            <select
+                name="category"
+                className="form-control"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                id="category"
+            >
+                <option value="">-- Seleccionar --</option>
+                <option value="ABSTRACTION">Abstracción</option>
+                <option value="ALGORITHMS">Algoritmos</option>
+                <option value="LOOPS">Bucles</option>
+                <option value="CONDITIONALS">Condicionales</option>
+                <option value="COMPOSITION">Composición</option>
+                <option value="FUNCTIONS">Funciones</option>
+                <option value="AI">Inteligencia artificial</option>
+                <option value="PATTERNS RECOGNITION">Reconocimiento de patrones</option>
+                <option value="SEQUENCES">Secuencias</option>
+                <option value="LOOPS AND SEQUENCES">Secuencias y bucles</option>
+                <option value="VARIABLES">Variables</option>
+                <option value="VARIABLES AND FUNCTIONS">Variables y funciones</option>
+                <option value="OTHER">Otro</option>
+            </select>
+            </div>
+
+            <div>
+            <label className="form-label">Recursos</label>
+            <input
+                type="text"
+                name="resources"
+                className="form-control"
+                value={formData.resources}
+                onChange={handleChange}
+            />
+            </div>
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Título</label>
-          <input
-            type="text"
-            name="name"
-            className="form-control"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
+        <div className="element-form">
+            {formData.type === "DESENCHUFADO" && (
+                <div>
+                    <label className="form-label">Rúbrica</label>
+                    <select
+                    name="rubric"
+                    className="form-control"
+                    value={formData.rubric}
+                    onChange={handleChange}
+                    required
+                    >
+                    <option value="">-- Seleccione una rúbrica --</option>
+                    {rubrics.map((o) => (
+                        <option key={o.id} value={o.id}>
+                        {o.id} - {o.name}
+                        </option>
+                    ))}
+                    </select>
+                </div>
+            )}
+            
+            {formData.type === "ENCHUFADO" && (
+            <>
+                <div>
+                <label className="form-label">Número de inputs</label>
+                <input
+                    type="number"
+                    name="inputs"
+                    className="form-control"
+                    value={formData.inputs}
+                    onChange={handleChange}
+                />
+                </div>
+
+                <div>
+                <label className="form-label">Límite de tiempo (segundos)</label>
+                <input
+                    type="number"
+                    name="time_limit"
+                    className="form-control"
+                    value={formData.time_limit}
+                    onChange={handleChange}
+                />
+                </div>
+
+                <div>
+                <label className="form-label">Puntos por cada testcase superado</label>
+                <input
+                    type="number"
+                    step="0.01"
+                    name="testcase_value"
+                    className="form-control"
+                    value={formData.testcase_value}
+                    onChange={handleChange}
+                />
+                </div>
+            </>
+            )}
         </div>
 
-        <div className="mb-3">
+        <div>
           <label className="form-label">Descripción</label>
           <textarea
             name="description"
@@ -134,108 +228,14 @@ export default function NewExercise() {
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Categoría</label>
-          <select
-            name="category"
-            className="form-control"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            id="category"
-          >
-            <option value="">-- Seleccionar --</option>
-            <option value="ABSTRACTION">Abstracción</option>
-            <option value="ALGORITHMS">Algoritmos</option>
-            <option value="LOOPS">Bucles</option>
-            <option value="CONDITIONALS">Condicionales</option>
-            <option value="COMPOSITION">Composición</option>
-            <option value="FUNCTIONS">Funciones</option>
-            <option value="AI">Inteligencia artificial</option>
-            <option value="PATTERNS RECOGNITION">Reconocimiento de patrones</option>
-            <option value="SEQUENCES">Secuencias</option>
-            <option value="LOOPS AND SEQUENCES">Secuencias y bucles</option>
-            <option value="VARIABLES">Variables</option>
-            <option value="VARIABLES AND FUNCTIONS">Variables y funciones</option>
-            <option value="OTHER">Otro</option>
-          </select>
+        <div className="element-form">
+            <h1></h1>
+            <button className="new-button" disabled={loading}>
+            {loading ? "Creando..." : "Crear ejercicio"}
+            </button>
         </div>
-
-        <div className="mb-3">
-          <label className="form-label">Recursos</label>
-          <input
-            type="text"
-            name="resources"
-            className="form-control"
-            value={formData.resources}
-            onChange={handleChange}
-          />
-        </div>
-
-        {/* Si es DESENCHUFADO → mostrar RÚBRICA */}
-        {formData.type === "DESENCHUFADO" && (
-            <div className="mb-3">
-                <label className="form-label">Rúbrica</label>
-                <select
-                name="rubric"
-                className="form-control"
-                value={formData.rubric}
-                onChange={handleChange}
-                required
-                >
-                <option value="">-- Seleccione una rúbrica --</option>
-                {rubrics.map((o) => (
-                    <option key={o.id} value={o.id}>
-                    {o.id} - {o.name}
-                    </option>
-                ))}
-                </select>
-            </div>
-        )}
-
-        {/* Si es ENCHUFADO → mostrar Inputs, Time Limit, Testcase Value */}
-        {formData.type === "ENCHUFADO" && (
-          <>
-            <div className="mb-3">
-              <label className="form-label">Número de inputs</label>
-              <input
-                type="number"
-                name="inputs"
-                className="form-control"
-                value={formData.inputs}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Límite de tiempo (segundos)</label>
-              <input
-                type="number"
-                name="time_limit"
-                className="form-control"
-                value={formData.time_limit}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">Valor de testcases</label>
-              <input
-                type="number"
-                step="0.01"
-                name="testcase_value"
-                className="form-control"
-                value={formData.testcase_value}
-                onChange={handleChange}
-              />
-            </div>
-          </>
-        )}
-
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Creando..." : "Crear ejercicio"}
-        </button>
       </form>
     </div>
+    </>
   );
 }

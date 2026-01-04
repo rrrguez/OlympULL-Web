@@ -57,60 +57,60 @@ export default function UnpluggedExercisesList() {
     };
 
     return (
-        <Container className="mt-4">
-        <h2>Ejercicios desenchufados</h2>
-        <Table striped bordered hover>
-            <thead>
-            <tr>
-                <th>Código</th>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Categoría</th>
-                <th>Recursos</th>
-                <th>Rúbrica</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-                {loading
-                    ? Array.from({ length: 5 }).map((_, i) => (
-                        <tr key={i} className="skeleton-row">
-                        {Array.from({ length: 7 }).map((_, j) => (
-                            <td key={j}>
-                            <div className="skeleton-cell"></div>
-                            </td>
-                        ))}
-                        </tr>
-                    ))
-                    : data.map((o) => (
-                        <tr key={o.id}>
-                <td>{o.id}</td>
-                <td>{o.name}</td>
-                <td>{o.description}</td>
-                <td>{translateCategory(o.category)}</td>
-                <td>{o.resources}</td>
-                <td>{o.rubric}</td>
-                <td>
-                    <div className="table-button-container">
-                        <OlympULLIconButton
-                            text="Editar"
-                            buttonClass="table-button"
-                            route="/admin/exercises"
-                            icon="fa-solid fa-pen-to-square"
-                        />
-
-                        <OlympULLIconButton
-                            text="Eliminar"
-                            buttonClass="table-button"
-                            route="/admin/exercises"
-                            icon="fa-regular fa-trash-can"
-                        />
-                    </div>
-                </td>
+        <Container>
+            <h2>Ejercicios desenchufados</h2>
+            <Table striped bordered hover>
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Categoría</th>
+                    <th>Recursos</th>
+                    <th>Rúbrica</th>
+                    <th>Acciones</th>
                 </tr>
+                </thead>
+                <tbody>
+                    {loading
+                        ? Array.from({ length: 5 }).map((_, i) => (
+                            <tr key={i} className="skeleton-row">
+                            {Array.from({ length: 7 }).map((_, j) => (
+                                <td key={j}>
+                                <div className="skeleton-cell"></div>
+                                </td>
+                            ))}
+                            </tr>
+                        ))
+                        : data.map((o) => (
+                            <tr key={o.id}>
+                    <td>{o.id}</td>
+                    <td>{o.name}</td>
+                    <td>{o.description}</td>
+                    <td>{translateCategory(o.category)}</td>
+                    <td>{o.resources}</td>
+                    <td>{o.rubric}</td>
+                    <td>
+                        <div className="table-button-container">
+                            <OlympULLIconButton
+                                text="Editar"
+                                buttonClass="table-button"
+                                route="/admin/exercises"
+                                icon="fa-solid fa-pen-to-square"
+                            />
+
+                            <OlympULLIconButton
+                                text="Eliminar"
+                                buttonClass="table-button"
+                                route="/admin/exercises"
+                                icon="fa-regular fa-trash-can"
+                            />
+                        </div>
+                    </td>
+                    </tr>
                     ))}
-                </tbody>
-        </Table>
+                    </tbody>
+            </Table>
         </Container>
     );
 }

@@ -1,10 +1,14 @@
 import { Container } from "react-bootstrap";
 import NewItinerary from "../../components/Itineraries/New";
+import PageHeader from "../../components/layouts/PageHeader";
 
 export default function ItinerariesPage() {
     return (
         <Container>
-            <h2> Nuevo itinerario  </h2>
+            <PageHeader
+                title="Nuevo itinerario"
+                backButtonRoute="/admin/itineraries"
+            />
 
             <NewItinerary />
         </Container>

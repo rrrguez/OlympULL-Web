@@ -1,25 +1,19 @@
-import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import ItinerariesList from "../../components/Itineraries/List";
+import PageHeader from "../../components/layouts/PageHeader";
 
 export default function ItinerariesPage() {
-    const navigate = useNavigate();
     return (
         <Container>
-            <div style={{display: "flex"}}>
-                <h2> Gestión de itinerarios </h2>
-
-                <Button
-                    variant="link"
-                    size="lg"
-                    className="me-2"
-                    onClick={() => navigate("/admin/itineraries/new")}
-                >
-                    Nuevo itinerario
-                </Button>
-
-            </div>
-
+            <PageHeader
+                title="Gestión de itinerarios"
+                newButton={1}
+                importButton={1}
+                exportButton={1}
+                newButtonText="Nuevo itinerario"
+                newButtonRoute="/admin/itineraries/new"
+                backButtonRoute="/admin"
+            />
 
             <ItinerariesList/>
         </Container>
