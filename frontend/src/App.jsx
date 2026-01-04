@@ -12,6 +12,8 @@ import AdminRubricsPage from "./pages/admin/AdminRubricsPage";
 import AdminNewRubricPage from "./pages/admin/AdminNewRubricPage";
 import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
 import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminNewUserPage from "./pages/admin/AdminNewUserPage";
 import OrganizerHome from "./pages/OrganizerHome";
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
@@ -37,7 +39,7 @@ export default function App() {
             path="/admin"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminHome />
+                    <AdminHome />
                 </PrivateRoute>
             }
             />
@@ -45,7 +47,7 @@ export default function App() {
             path="/admin/olympiads"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminOlympiadsPage />
+                    <AdminOlympiadsPage />
                 </PrivateRoute>
             }
             />
@@ -54,7 +56,7 @@ export default function App() {
             path="/admin/olympiads/new"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminNewOlympiadPage />
+                    <AdminNewOlympiadPage />
                 </PrivateRoute>
             }
             />
@@ -63,7 +65,7 @@ export default function App() {
             path="/admin/itineraries"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminItinerariesPage />
+                    <AdminItinerariesPage />
                 </PrivateRoute>
             }
             />
@@ -72,7 +74,7 @@ export default function App() {
             path="/admin/itineraries/new"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminNewItineraryPage />
+                    <AdminNewItineraryPage />
                 </PrivateRoute>
             }
             />
@@ -81,7 +83,7 @@ export default function App() {
             path="/admin/exercises"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminExercisesPage />
+                    <AdminExercisesPage />
                 </PrivateRoute>
             }
             />
@@ -90,7 +92,7 @@ export default function App() {
             path="/admin/exercises/new"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminNewExercisePage />
+                    <AdminNewExercisePage />
                 </PrivateRoute>
             }
             />
@@ -99,7 +101,7 @@ export default function App() {
             path="/admin/rubrics"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminRubricsPage />
+                    <AdminRubricsPage />
                 </PrivateRoute>
             }
             />
@@ -108,7 +110,7 @@ export default function App() {
             path="/admin/rubrics/new"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminNewRubricPage />
+                    <AdminNewRubricPage />
                 </PrivateRoute>
             }
             />
@@ -117,25 +119,43 @@ export default function App() {
             path="/admin/assignations"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminAssignationsPage />
+                    <AdminAssignationsPage />
                 </PrivateRoute>
             }
             />
 
             <Route
-            path="/admin/assignations"
+            path="/admin/assignations/olympiads"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminAssignationsPage />
+                    <AdminAssignationsPage />
                 </PrivateRoute>
             }
             />
 
             <Route
-            path="/admin/assignations/new"
+            path="/admin/assignations/olympiads/new"
             element={
                 <PrivateRoute type="ADMIN">
-                <AdminNewAssignationPage />
+                    <AdminNewAssignationPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/users"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminUsersPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/users/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminNewUserPage />
                 </PrivateRoute>
             }
             />

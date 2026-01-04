@@ -70,7 +70,7 @@ export default function PluggedInExercisesList() {
               <th>Recursos</th>
               <th>Nº de inputs</th>
               <th>Límite de tiempo</th>
-              <th>Acciones</th>
+              <th>Acciones rápidas</th>
             </tr>
           </thead>
           <tbody>

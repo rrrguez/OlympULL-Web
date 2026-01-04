@@ -93,7 +93,7 @@ export default function NewOlympiad() {
             <input
                 type="number"
                 name="year"
-                className="form-control"
+                className="form-control read-only-field"
                 value={formData.year}
                 readOnly
             />
@@ -155,5 +155,3 @@ export default function NewOlympiad() {
         </div>
     );
 }
-
-

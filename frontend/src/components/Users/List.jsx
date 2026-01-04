@@ -1,40 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { deleteOlympiad, getAllOlympiads } from "../../api/olympiadsApi";
+import { deleteUser, getAllUsers } from "../../api/usersApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-function getOlympiadStatusIcon(start, stop) {
-    const now = new Date();
-    const startDate = new Date(start);
-    const stopDate = new Date(stop);
-
-    if (now < startDate) {
-        return (
-            <i
-                className="fa-regular fa-alarm-clock"
-                title="Pendiente"
-            />
-        );
-    }
-
-    if (now >= startDate && now <= stopDate) {
-        return (
-            <i
-                className="fa-solid fa-fire fa-fade"
-                title="En curso"
-            />
-        );
-    }
-
-    return (
-        <i
-            className="fa-regular fa-circle-check"
-            title="Finalizada"
-        />
-    );
-}
-
-export default function OlympiadsList() {
+export default function UsersList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -45,7 +14,7 @@ export default function OlympiadsList() {
     const load = async () => {
         async function loadData() {
             setLoading(true);
-            const res = await getAllOlympiads();
+            const res = await getAllUsers();
             setData(res.data);
             setLoading(false);
         }
@@ -53,7 +22,7 @@ export default function OlympiadsList() {
     };
 
     const remove = async (id) => {
-        await deleteOlympiad(id);
+        await deleteUser(id);
         load();
     };
 
@@ -62,13 +31,9 @@ export default function OlympiadsList() {
         <table className="table table-hover table-bordered">
             <thead>
             <tr>
-                <th></th>
-                <th>Código</th>
-                <th>Título</th>
-                <th>Año</th>
-                <th>Fecha y hora de inicio</th>
-                <th>Fecha y hora de final</th>
-                <th>Zona horaria</th>
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Tipo de usuario</th>
                 <th>Acciones rápidas</th>
             </tr>
             </thead>
@@ -76,7 +41,7 @@ export default function OlympiadsList() {
             {loading
             ? Array.from({ length: 5 }).map((_, i) => (
                 <tr key={i} className="skeleton-row">
-                {Array.from({ length: 8 }).map((_, j) => (
+                {Array.from({ length: 5 }).map((_, j) => (
                     <td key={j}>
                     <div className="skeleton-cell"></div>
                     </td>
@@ -85,13 +50,9 @@ export default function OlympiadsList() {
             ))
             : data.map((o) => (
                 <tr key={o.id}>
-                <td>{getOlympiadStatusIcon(o.start, o.stop)}</td>
                 <td>{o.id}</td>
-                <td>{o.name}</td>
-                <td>{o.year}</td>
-                <td>{o.start}</td>
-                <td>{o.stop}</td>
-                <td>{o.timezone}</td>
+                <td>{o.username}</td>
+                <td>{o.type}</td>
                 <td>
                     <div className="table-button-container">
                         <OlympULLIconButton

@@ -1,64 +1,74 @@
-import { getAllAssignations } from "../../api/assignationsApi";
 import { useEffect, useState } from "react";
-import { Container, Button, Table } from "react-bootstrap";
-
+import { Container, Table } from "react-bootstrap";
+import { getAllAssignations } from "../../api/assignationsApi";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function AssignationsList() {
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      load();
+        load();
     }, []);
 
     const load = async () => {
-      const res = await getAllAssignations();
-      setData(res.data);
+        async function loadData() {
+            setLoading(true);
+            const res = await getAllAssignations();
+            setData(res.data);
+            setLoading(false);
+        }
+        loadData();
     };
 
     return (
-      <Container className="mt-4">
-        <h2>Asignationes de ejercicios a olimpiadas</h2>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Ejercicio</th>
-              <th>Olympiada</th>
-              <th>Itinerario</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((o) => (
-              <tr key={o.exercise}>
-                <td>{o.exercise}</td>
-                <td>{o.olympiad}</td>
-                <td>{o.itinerary}</td>
-                <td>
-                <div className="table-button-container">
-                    <Button
-                    variant="warning"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => console.log("Editar", o.id)}
-                    >
-                    Editar
-                    </Button>
+        <Container>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                    <th>Ejercicio</th>
+                    <th>Olimpiada</th>
+                    <th>Itinerario</th>
+                    <th>Acciones rápidas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {loading
+                    ? Array.from({ length: 5 }).map((_, i) => (
+                        <tr key={i} className="skeleton-row">
+                        {Array.from({ length: 5 }).map((_, j) => (
+                            <td key={j}>
+                            <div className="skeleton-cell"></div>
+                            </td>
+                        ))}
+                        </tr>
+                    ))
+                    : data.map((o) => (
+                    <tr key={o.exercise}>
+                        <td>{o.exercise}</td>
+                        <td>{o.olympiad}</td>
+                        <td>{o.itinerary}</td>
+                        <td>
+                            <div className="table-button-container">
+                                <OlympULLIconButton
+                                    text="Editar"
+                                    buttonClass="table-button"
+                                    route="/admin/rubrics"
+                                    icon="fa-solid fa-pen-to-square"
+                                />
 
-                    <Button
-                    variant="danger"
-                    size="sm"
-                    className="table-button"
-                    onClick={() => remove(o.id)}
-                    >
-                    Borrar
-                    </Button>
-                </div>
-              </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
+                                <OlympULLIconButton
+                                    text="Eliminar"
+                                    buttonClass="table-button"
+                                    route="/admin/rubrics"
+                                    icon="fa-regular fa-trash-can"
+                                />
+                            </div>
+                        </td>
+                    </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </Container>
     );
-  }
-
+}

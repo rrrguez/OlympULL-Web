@@ -1,23 +1,23 @@
 import { Container } from "react-bootstrap";
-import RubricsList from "../../components/Exercises/RubricList";
+import UsersList from "../../components/Users/List";
 import PageHeader from "../../components/layouts/PageHeader";
 
-export default function RubricsPage() {
+export default function AdminUsersPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de rúbricas"
+                title="Gestión de usuarios"
                 newButton={1}
                 importButton={1}
                 exportButton={1}
-                newButtonText="Nueva rúbrica"
-                newButtonRoute="/admin/rubrics/new"
+                newButtonText="Nuevo usuario"
+                newButtonRoute="/admin/users/new"
                 importButtonRoute=""
                 exportButtonRoute=""
                 backButtonRoute="/admin"
             />
 
-            <RubricsList/>
+            <UsersList/>
         </Container>
     );
 }

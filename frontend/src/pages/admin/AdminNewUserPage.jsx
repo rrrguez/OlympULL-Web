@@ -1,17 +1,17 @@
 import { Container } from "react-bootstrap";
-import NewRubric from "../../components/Exercises/NewRubric";
+import NewUser from "../../components/Users/New";
 import PageHeader from "../../components/layouts/PageHeader";
 
-export default function RubricsPage() {
+export default function UsersPage() {
     return (
         <>
         <Container>
             <PageHeader
-                title="Nueva rúbrica"
-                backButtonRoute="/admin/rubrics"
+                title="Nuevo usuario"
+                backButtonRoute="/admin/users"
             />
 
-            <NewRubric />
+            <NewUser />
         </Container>
         </>
     );

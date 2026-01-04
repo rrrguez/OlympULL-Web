@@ -13,6 +13,7 @@ import adminPluggedInExercisesRoutes from "./routes/admin/pluggedInExercises.js"
 import adminUnpluggedExercisesRoutes from "./routes/admin/unpluggedExercises.js";
 import adminRubricsRoutes from "./routes/admin/rubrics.js";
 import adminAssignationsRoutes from "./routes/admin/assignations.js";
+import adminUsersRoutes from "./routes/admin/users.js";
 
 import { isAdmin, isOrganizer, authenticateToken } from "./middlewares/auth.js";
 
@@ -28,5 +29,6 @@ app.use("/api/admin/plugged-in-exercises", authenticateToken, isAdmin, adminPlug
 app.use("/api/admin/unplugged-exercises", authenticateToken, isAdmin, adminUnpluggedExercisesRoutes);
 app.use("/api/admin/rubrics", authenticateToken, isAdmin, adminRubricsRoutes);
 app.use("/api/admin/assignations", authenticateToken, isAdmin, adminAssignationsRoutes);
+app.use("/api/admin/users", authenticateToken, isAdmin, adminUsersRoutes);
 
 export default app;

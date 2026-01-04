@@ -1,24 +1,28 @@
-import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Container } from "react-bootstrap";
 import AssignationsList from "../../components/Exercises/AssignationsList";
+import PageHeader from "../../components/layouts/PageHeader";
 
 export default function AssignationsPage() {
-    const navigate = useNavigate();
     return (
         <Container>
-            <div style={{display: "flex"}}>
-                <h2> Gestión de asignaciones de ejercicios a olimpiadas </h2>
+            <PageHeader
+                title={
+                    <>
+                        Gestión de asignaciones
+                        <br />
+                        Ejercicios ➜ Olimpiadas
+                    </>
+                }
+                newButton={1}
+                importButton={1}
+                exportButton={1}
+                newButtonText="Nueva asignación"
+                newButtonRoute="/admin/assignations/olympiads/new"
+                importButtonRoute=""
+                exportButtonRoute=""
+                backButtonRoute="/admin"
+            />
 
-                <Button
-                    variant="link"
-                    size="lg"
-                    className="me-2"
-                    onClick={() => navigate("/admin/assignations/new")}
-                >
-                    Nueva asignación
-                </Button>
-
-            </div>
             <AssignationsList/>
         </Container>
 

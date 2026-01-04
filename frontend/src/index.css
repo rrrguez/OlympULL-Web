@@ -64,6 +64,11 @@ h2 {
     font-size: x-large;
 }
 
+h2.section-title {
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+}
+
 button {
     border-radius: 5px;
     border: 1px solid transparent;
@@ -126,13 +131,11 @@ button:hover {
 .grid-admin {
     display: grid;
     grid-template-columns: 50% 50%;
-    grid-template-rows: 33% 33% 33%;
-    row-gap: 15%;
+    row-gap: 15px;
     column-gap: 5%;
     align-items: center;
     align-content: center;
     justify-items: center;
-    margin-top: 2.5%;
     width: 95%;
 }
 
@@ -192,6 +195,10 @@ button:hover {
 .form-label {
     margin: 0px;
     margin-bottom: 2.5%;
+}
+
+.password-field {
+    font-family: "Argentum Sans Semibold";
 }
 
 option {
@@ -359,4 +366,18 @@ tr {
 
 .icon-button .button-text {
     font-size: auto;
+}
+
+.read-only-field {
+    background-color: #ededed;
+}
+
+.read-only-field:hover {
+    background-color: #ededed;
+    cursor: not-allowed;
+    outline: 0px;
+}
+
+.read-only-field:focus {
+    outline: 0px solid black;
 }

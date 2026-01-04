@@ -1,7 +1,7 @@
 export default function OrganizerHome() {
-    const username = localStorage.getItem("username");
+    const username = localStorage.getItem("id");
     return (
-      <div className="container mt-5">
+      <div className="container">
         <h1>Bienvenido, {username} (Organizer)</h1>
         <p>Este es el panel de organización.</p>
       </div>

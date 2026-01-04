@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -11,8 +11,8 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const data = await login(username, password);
-      localStorage.setItem("username", username);
+      const data = await login(id, password);
+      localStorage.setItem("id", id);
       // Redirección según tipo de usuario
       switch (data.type) {
         case "ADMIN":
@@ -42,8 +42,8 @@ export default function LoginPage() {
             <input
                 type="text"
                 className="form-control"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={id}
+                onChange={(e) => setId(e.target.value)}
                 required
             />
             </div>

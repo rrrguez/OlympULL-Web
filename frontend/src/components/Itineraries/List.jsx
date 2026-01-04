@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getAllItineraries, deleteItinerary } from "../../api/itinerariesApi";
-import { Table, Container } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
+import { deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function ItinerariesList() {
@@ -34,7 +34,7 @@ export default function ItinerariesList() {
                 <th>Código</th>
                 <th>Título</th>
                 <th>Olimpiada</th>
-                <th>Acciones</th>
+                <th>Acciones rápidas</th>
             </tr>
             </thead>
             <tbody>

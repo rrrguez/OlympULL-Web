@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container, Table } from "react-bootstrap";
+import { Container, Table } from "react-bootstrap";
 import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 
@@ -68,7 +68,7 @@ export default function UnpluggedExercisesList() {
                     <th>Categoría</th>
                     <th>Recursos</th>
                     <th>Rúbrica</th>
-                    <th>Acciones</th>
+                    <th>Acciones rápidas</th>
                 </tr>
                 </thead>
                 <tbody>
