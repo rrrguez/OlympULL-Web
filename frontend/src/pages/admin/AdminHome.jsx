@@ -28,6 +28,16 @@ export default function AdminHome() {
                 />
 
                 <OlympULLButton
+                    text="Gestión de escuelas"
+                    route="/admin/schools"
+                />
+
+                <OlympULLButton
+                    text="Gestión de equipos"
+                    route="/admin/teams"
+                />
+
+                <OlympULLButton
                     text="Asignación de ejercicios a olimpiadas"
                     route="/admin/assignations/olympiads"
                 />
@@ -40,16 +50,24 @@ export default function AdminHome() {
                     route="/admin/users"
                 />
                 <OlympULLButton
-                    text="Gestión de equipos"
-                    route="/admin/teams"
+                    text="Gestión de monitores"
+                    route="/admin/monitors"
                 />
                 <OlympULLButton
-                    text="Asignación de itinerarios a organizadores"
-                    route="/admin/assignations/organizers"
+                    text="Gestión de organizadores"
+                    route="/admin/organizers"
+                />
+                <OlympULLButton
+                    text="Gestión de participantes"
+                    route="/admin/participants"
                 />
                 <OlympULLButton
                     text="Asignación de ejercicios a monitores"
                     route="/admin/assignations/monitors"
+                />
+                <OlympULLButton
+                    text="Asignación de itinerarios a organizadores"
+                    route="/admin/assignations/organizers"
                 />
             </div>
         </div>

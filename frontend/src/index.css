@@ -102,12 +102,77 @@ button:hover {
     background-color: #5c068c;
     height: 70px;
     width: 90%;
-    align-items: flex-start;
-    align-content: center;
     padding-top: 1%;
     padding-bottom: 1%;
     padding-left: 5%;
     padding-right: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-menu-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: right;
+}
+
+.user-menu {
+    color: white;
+    align-self: center;
+    width: auto;
+    padding-right: 10px;
+}
+
+.user-menu-icons {
+    display: grid;
+    align-items: center;
+    grid-template-columns: auto auto;
+    width: 135%;
+    gap: 20%;
+}
+
+.user-menu i {
+    font-size: 125%;
+    align-self: flex-end;
+}
+
+.user-menu i.fa-caret-down {
+  display: inline-block;
+  transform-origin: 50% 50%;
+}
+
+.user-menu i.fa-caret-down {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.user-menu i.fa-caret-down {
+    will-change: transform;
+}
+
+.user-menu.open i.fa-caret-down {
+    transform: rotate(180deg);
+}
+
+.user-menu:hover {
+    cursor:pointer;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 80%;
+    background: #ededed;
+    border: 2px solid #dbdbdb;
+    border-radius: 5px;
+    width: 25%;
+    padding-left: 1.25%;
+    padding-right: 1.25%;
+    padding-top: 0.25%;
+    padding-bottom: 0.25%;
+}
+
+.dropdown-button {
+    background-color: gray;
 }
 
 .app-footer {
@@ -333,7 +398,7 @@ tr {
 }
 
 
-.table-button, .icon-button {
+.table-button, .icon-button, .dropdown-button {
     display: flex;
     align-items: center;
     align-self: center;
@@ -352,13 +417,14 @@ tr {
     align-self: center;
 }
 
-.table-button i, .icon-button i{
+.table-button i, .icon-button i , .dropdown-button i {
     display: inline-flex;
     align-items: center;
     width: auto;
+    align-self: center;
 }
 
-.table-button .button-text, .icon-button .button-text {
+.table-button .button-text, .icon-button .button-text, .dropdown-button .button-text {
     width: auto;
     white-space: nowrap;
     font-size: small;

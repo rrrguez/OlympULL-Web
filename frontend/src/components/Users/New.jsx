@@ -93,8 +93,8 @@ export default function NewOlympiad() {
             >
                 <option value="">-- Seleccionar --</option>
                 <option value="ADMIN">Administrador</option>
-                <option value="ORGANIZER">Organizador</option>
                 <option value="MONITOR">Monitor</option>
+                <option value="ORGANIZER">Organizador</option>
                 <option value="PARTICIPANT">Participante</option>
             </select>
             </div>
