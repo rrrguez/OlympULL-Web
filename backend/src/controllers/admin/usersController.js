@@ -47,6 +47,17 @@ export const update = async (req, res) => {
   }
 };
 
+// PUT: actualizar
+export const updatePassword = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = await model.updatePassword({ id, ...req.body });
+      res.json(data.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
 // DELETE
 export const remove = async (req, res) => {
   try {
@@ -63,5 +74,6 @@ export default {
     getById,
     create,
     update,
+    updatePassword,
     remove,
 };

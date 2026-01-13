@@ -17,6 +17,12 @@ export const update = (data) =>
         [data.username, data.id]
     );
 
+export const updatePassword = (data) =>
+    pool.query(
+        "UPDATE t_users SET password=$2 WHERE id=$1 RETURNING *",
+        [data.id, data.password]
+    );
+
 export const remove = ( id ) =>
     pool.query(
         "DELETE FROM t_users WHERE id = $1", [id]);

@@ -1,9 +1,11 @@
-import { useState, useRef, useEffect } from "react";
-import OlympULLIconButton from "../../components/buttons/OlympULLIconButton"
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleClickOutside = (e) => {
@@ -41,7 +43,7 @@ export default function Header() {
                         <OlympULLIconButton
                             text="Cambiar contraseña"
                             buttonClass="dropdown-button"
-                            route="/password"
+                            route="/change-password"
                             icon="fa-solid fa-key"
                         />
                         <OlympULLIconButton

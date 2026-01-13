@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import NotFoundPage from "./pages/404";
 import LoginPage from "./pages/LoginPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
 import AdminNewOlympiadPage from "./pages/admin/AdminNewOlympiadPage";
@@ -34,6 +35,7 @@ export default function App() {
       <Routes>
         <Route element={<MainLayout />}>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/change-password" element={<ChangePasswordPage/>}/>
             <Route path="/404" element={<NotFoundPage />} />
             <Route
             path="/admin"

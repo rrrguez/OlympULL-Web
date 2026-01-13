@@ -220,7 +220,7 @@ button:hover {
 }
 
 
-.login-form {
+.login-form, .password-form {
     display: grid;
     grid-template-rows: 80% 20%;
     align-items: center;
@@ -246,7 +246,7 @@ button:hover {
     column-gap: 5%;
 }
 
-.login-container {
+.login-container, .password-container {
     justify-self: center;
     justify-items: center;
     border: 2px solid #dbdbdb;
@@ -317,7 +317,7 @@ button.new-button {
     outline: 1.75px solid black;
 }
 
-.login-button {
+.login-button, .password-button {
     width: 65%;
     justify-self: center;
     height: 90%;
