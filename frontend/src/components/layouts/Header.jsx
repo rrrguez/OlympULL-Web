@@ -1,22 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
-    const navigate = useNavigate();
+    const location = useLocation();
 
-    useEffect(() => {
-        const handleClickOutside = (e) => {
-          if (menuRef.current && !menuRef.current.contains(e.target)) {
-            setOpen(false);
-          }
-        };
-
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("type");
+        localStorage.removeItem("id");
+    }
 
     return (
         <header className="app-header">
@@ -25,36 +21,40 @@ export default function Header() {
             src="/olympull-web_logo.png"
             alt="OlympULL Web logo"
         />
+            {location.pathname != "/login" &&
             <div className="user-menu-wrapper">
                 <div
                     className={`user-menu ${open ? "open" : ""}`}
-                    onClick={() => setOpen(!open)}
                     ref={menuRef}
                 >
                     <div className="user-menu-icons">
                         <i className="fa-solid fa-user"></i>
-                        <i className="fa-solid fa-caret-down"></i>
+                        <i className="fa-solid fa-caret-down"
+                        onClick={() => setOpen(!open)}></i>
                     </div>
                 </div>
 
-                    {open && (
+                {open && (
                     <div className="user-dropdown"
                     onClick={(e) => e.stopPropagation()}>
                         <OlympULLIconButton
                             text="Cambiar contraseña"
                             buttonClass="dropdown-button"
-                            route="/change-password"
                             icon="fa-solid fa-key"
+                            route="/change-password"
+                            onClick={() => setOpen(false)}
                         />
                         <OlympULLIconButton
                             text = "Cerrar sesión"
                             buttonClass="dropdown-button"
-                            route="/login"
                             icon="fa-solid fa-power-off"
+                            route="/login"
+                            onClick={() => handleLogout()}
                         />
                     </div>
-                    )}
-                </div>
+                )}
+            </div>
+            }
         </header>
     );
 }
