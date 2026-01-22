@@ -300,6 +300,12 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
     margin-bottom: 2.5%;
 }
 
+.wide-description-field {
+    padding-left: 1.25%;
+    padding-right: 1.25%;
+    width: 97.5%;
+}
+
 select.form-control {
     width: 100%;
 }
@@ -447,3 +453,4 @@ tr {
 .read-only-field:focus {
     outline: 0px solid black;
 }
+

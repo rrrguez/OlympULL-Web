@@ -11,6 +11,10 @@ import AdminExercisesPage from "./pages/admin/AdminExercisesPage";
 import AdminNewExercisePage from "./pages/admin/AdminNewExercisePage";
 import AdminRubricsPage from "./pages/admin/AdminRubricsPage";
 import AdminNewRubricPage from "./pages/admin/AdminNewRubricPage";
+import AdminSchoolsPage from "./pages/admin/AdminSchoolsPage";
+import AdminNewSchoolPage from "./pages/admin/AdminNewSchoolPage";
+import AdminTeamsPage from "./pages/admin/AdminTeamsPage";
+import AdminNewTeamPage from "./pages/admin/AdminNewTeamPage";
 import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
 import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
@@ -113,6 +117,42 @@ export default function App() {
             element={
                 <PrivateRoute type="ADMIN">
                     <AdminNewRubricPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/schools"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminSchoolsPage/>
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/schools/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminNewSchoolPage/>
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/teams"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminTeamsPage/>
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/teams/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminNewTeamPage/>
                 </PrivateRoute>
             }
             />

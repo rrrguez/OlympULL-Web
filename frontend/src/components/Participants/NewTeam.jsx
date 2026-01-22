@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createRubric } from "../../api/rubricsApi";
+import { createTeam } from "../../api/teamsApi";
 
 export default function NewRubric() {
     const navigate = useNavigate();
@@ -8,13 +8,13 @@ export default function NewRubric() {
     const [formData, setFormData] = useState({
         id: "",
         name: "",
-        description: "",
-        points: "",
-        labels: "",
     });
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const [schools, setSchools] = useState([]);
+    const [itineraries, setItineraries] = useState([]);
 
     function handleChange(e) {
         setFormData({
@@ -29,12 +29,27 @@ export default function NewRubric() {
         setLoading(true);
 
         try {
-        await createRubric(formData);
-        navigate("/admin/rubrics");
+        await createTeam(formData);
+        navigate("/admin/teams");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la rúbrica");
+        setError(err.response?.data?.error || "Error al crear el equipo");
         } finally {
         setLoading(false);
+        }
+    }
+
+    async function loadItineraries(olympiadId) {
+        try {
+        setLoadingItineraries(true);
+
+        const res = await getItineraryByOlympiad(olympiadId);
+
+        setItineraries(res.data);
+        } catch (err) {
+        console.error("Error cargando itinerarios", err);
+        setError("No se pudieron cargar los itinerarios");
+        } finally {
+        setLoadingItineraries(false);
         }
     }
 
@@ -66,45 +81,45 @@ export default function NewRubric() {
                             required
                         />
                     </div>
-
                     <div>
-                        <label className="form-label">Puntos</label>
+                        <label className="form-label">Escuela</label>
                         <input
-                            type="string"
-                            name="points"
+                            type="text"
+                            name="name"
                             className="form-control"
-                            value={formData.points}
+                            value={formData.name}
                             onChange={handleChange}
                             required
                         />
                     </div>
-
                     <div>
-                        <label className="form-label">Etiquetas</label>
-                        <input
-                            type="timestamp"
-                            name="labels"
+                        <label className="form-label">Olimpiada</label>
+                        <select
+                            type="text"
+                            name="olympiad"
                             className="form-control"
-                            value={formData.labels}
+                            value={formData.name}
                             onChange={handleChange}
+                            required
                         />
                     </div>
-                </div>
-
-                <div>
-                    <label className="form-label">Descripción</label>
-                    <textarea
-                        name="description"
-                        className="form-control wide-description-field"
-                        value={formData.description}
-                        onChange={handleChange}
-                    ></textarea>
+                    <div>
+                        <label className="form-label">Itinerario</label>
+                        <select
+                            type="text"
+                            name="itineary"
+                            className="form-control"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
                 </div>
 
                 <div className="element-form">
                     <h1></h1>
                     <button className="new-button" disabled={loading}>
-                        {loading ? "Creando..." : "Crear rúbrica"}
+                        {loading ? "Creando..." : "Crear equipo"}
                     </button>
                 </div>
             </form>

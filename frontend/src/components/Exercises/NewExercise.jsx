@@ -178,7 +178,7 @@ export default function NewExercise() {
                     </select>
                 </div>
             )}
-            
+
             {formData.type === "ENCHUFADO" && (
             <>
                 <div>
@@ -214,6 +214,16 @@ export default function NewExercise() {
                     onChange={handleChange}
                 />
                 </div>
+                <div>
+                <label className="form-label">Enunciado del ejercicio</label>
+                <input
+                    className="form-control file-input"
+                    type="file"
+                    id="pdf-upload"
+                    accept="application/pdf"
+                    onChange={handleChange}
+                />
+                </div>
             </>
             )}
         </div>
@@ -222,7 +232,7 @@ export default function NewExercise() {
           <label className="form-label">Descripción</label>
           <textarea
             name="description"
-            className="form-control"
+            className="form-control wide-description-field"
             value={formData.description}
             onChange={handleChange}
           />

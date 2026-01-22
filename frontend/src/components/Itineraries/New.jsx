@@ -104,7 +104,7 @@ export default function NewItinerary() {
                 <label className="form-label">Descripción</label>
                 <textarea
                     name="description"
-                    className="form-control"
+                    className="form-control wide-description-field"
                     value={formData.description}
                     onChange={handleChange}
                 ></textarea>
