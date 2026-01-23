@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTeam } from "../../api/teamsApi";
+import { getAllSchools } from "../../api/schoolsApi";
+import { getAllOlympiads } from "../../api/olympiadsApi";
+import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 
-export default function NewRubric() {
+export default function NewTeam() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         id: "",
         name: "",
+        school: "",
+        itinerary: "",
     });
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [schools, setSchools] = useState([]);
+    const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
+
+    const [loadingItineraries, setLoadingItineraries] = useState(false);
+
+    const itineraryDisabled =
+    !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
     function handleChange(e) {
         setFormData({
@@ -38,6 +49,28 @@ export default function NewRubric() {
         }
     }
 
+    useEffect(() => {
+        async function loadSchools() {
+            try {
+                const data = await getAllSchools();
+                setSchools(data.data);
+            } catch (err) {
+                console.error("Error retrieving schools", err);
+            }
+        }
+        loadSchools();
+
+        async function loadOlympiads() {
+            try {
+            const data = await getAllOlympiads();
+            setOlympiads(data.data);
+            } catch (err) {
+            console.error("Error cargando olimpiadas", err);
+            }
+        }
+        loadOlympiads();
+    })
+
     async function loadItineraries(olympiadId) {
         try {
         setLoadingItineraries(true);
@@ -47,11 +80,19 @@ export default function NewRubric() {
         setItineraries(res.data);
         } catch (err) {
         console.error("Error cargando itinerarios", err);
-        setError("No se pudieron cargar los itinerarios");
         } finally {
         setLoadingItineraries(false);
         }
     }
+
+    useEffect(() => {
+        if (formData.olympiad) {
+        loadItineraries(formData.olympiad);
+        setFormData(prev => ({ ...prev, itinerary: "" }));
+        } else {
+        setItineraries([]);
+        }
+    }, [formData.olympiad]);
 
     return (
         <div className="element-container">
@@ -83,36 +124,64 @@ export default function NewRubric() {
                     </div>
                     <div>
                         <label className="form-label">Escuela</label>
-                        <input
-                            type="text"
-                            name="name"
+                        <select
+                            name="school"
                             className="form-control"
-                            value={formData.name}
+                            value={formData.school}
                             onChange={handleChange}
                             required
-                        />
+                            >
+                            <option value="">-- Seleccione una escuela --</option>
+                            {schools.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                {o.id} - {o.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="form-label">Olimpiada</label>
                         <select
-                            type="text"
                             name="olympiad"
                             className="form-control"
-                            value={formData.name}
+                            value={formData.olympiad}
                             onChange={handleChange}
                             required
-                        />
+                            >
+                            <option value="">-- Seleccione una olimpiada --</option>
+                            {olympiads.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                {o.id} - {o.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="form-label">Itinerario</label>
                         <select
-                            type="text"
-                            name="itineary"
+                            name="itinerary"
                             className="form-control"
-                            value={formData.name}
+                            value={formData.itinerary}
                             onChange={handleChange}
+                            disabled={itineraryDisabled}
                             required
-                        />
+                        >
+                            <option value="">
+                                {loadingItineraries
+                                ? "Cargando itinerarios..."
+                                : !formData.olympiad
+                                ? "-- Seleccione primero una olimpiada --"
+                                : itineraries.length === 0
+                                ? "No hay itinerarios disponibles"
+                                : "-- Seleccione un itinerario --"}
+                            </option>
+
+                            {itineraries.map((i) => (
+                                <option key={i.id} value={i.id}>
+                                {i.id} - {i.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 

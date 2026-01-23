@@ -9,7 +9,6 @@ function authHeaders() {
     };
 }
 
-// Ejercicios enchufados
 export const getAllTeams = () => axios.get(API, authHeaders());
 export const getTeam = (id) => axios.get(`${API}/${id}`, authHeaders());
 export const createTeam = (data) => axios.post(API, data, authHeaders());

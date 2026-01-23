@@ -35,6 +35,7 @@ export default function RubricList() {
                     <th>Nombre</th>
                     <th>Escuela</th>
                     <th>Itinerario</th>
+                    <th>Acciones rápidas</th>
                 </tr>
                 </thead>
                 <tbody>

@@ -33,13 +33,14 @@ export default function RubricList() {
                 <tr>
                     <th>Código</th>
                     <th>Nombre</th>
+                    <th>Acciones rápidas</th>
                 </tr>
                 </thead>
                 <tbody>
                 {loading
                 ? Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i} className="skeleton-row">
-                    {Array.from({ length: 5 }).map((_, j) => (
+                    {Array.from({ length: 3 }).map((_, j) => (
                         <td key={j}>
                         <div className="skeleton-cell"></div>
                         </td>

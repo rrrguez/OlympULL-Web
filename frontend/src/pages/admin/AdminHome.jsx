@@ -46,7 +46,7 @@ export default function AdminHome() {
             <h2 className="section-title">Gestión de usuarios</h2>
             <div className="grid-admin">
                 <OlympULLButton
-                    text="Gestión de usuarios"
+                    text="Gestión de cuentas de usuario"
                     route="/admin/users"
                 />
                 <OlympULLButton
@@ -60,14 +60,6 @@ export default function AdminHome() {
                 <OlympULLButton
                     text="Gestión de participantes"
                     route="/admin/participants"
-                />
-                <OlympULLButton
-                    text="Asignación de ejercicios a monitores"
-                    route="/admin/assignations/monitors"
-                />
-                <OlympULLButton
-                    text="Asignación de itinerarios a organizadores"
-                    route="/admin/assignations/organizers"
                 />
             </div>
         </div>

@@ -65,10 +65,8 @@ export default function OlympiadsList() {
                 <th></th>
                 <th>Código</th>
                 <th>Título</th>
-                <th>Año</th>
                 <th>Fecha y hora de inicio</th>
                 <th>Fecha y hora de final</th>
-                <th>Zona horaria</th>
                 <th>Acciones rápidas</th>
             </tr>
             </thead>
@@ -88,10 +86,8 @@ export default function OlympiadsList() {
                 <td>{getOlympiadStatusIcon(o.start, o.stop)}</td>
                 <td>{o.id}</td>
                 <td>{o.name}</td>
-                <td>{o.year}</td>
                 <td>{o.start}</td>
                 <td>{o.stop}</td>
-                <td>{o.timezone}</td>
                 <td>
                     <div className="table-button-container">
                         <OlympULLIconButton

@@ -9,7 +9,6 @@ function authHeaders() {
     };
 }
 
-// Ejercicios enchufados
 export const getAllSchools = () => axios.get(API, authHeaders());
 export const getSchool = (id) => axios.get(`${API}/${id}`, authHeaders());
 export const createSchool = (data) => axios.post(API, data, authHeaders());

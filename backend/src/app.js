@@ -12,6 +12,8 @@ import adminItinerariesRoutes from "./routes/admin/itineraries.js";
 import adminPluggedInExercisesRoutes from "./routes/admin/pluggedInExercises.js";
 import adminUnpluggedExercisesRoutes from "./routes/admin/unpluggedExercises.js";
 import adminRubricsRoutes from "./routes/admin/rubrics.js";
+import adminSchoolsRoutes from "./routes/admin/schools.js";
+import adminTeamsRoutes from "./routes/admin/teams.js";
 import adminAssignationsRoutes from "./routes/admin/assignations.js";
 import adminUsersRoutes from "./routes/admin/users.js";
 
@@ -28,6 +30,8 @@ app.use("/api/admin/itineraries", authenticateToken, isAdmin, adminItinerariesRo
 app.use("/api/admin/plugged-in-exercises", authenticateToken, isAdmin, adminPluggedInExercisesRoutes);
 app.use("/api/admin/unplugged-exercises", authenticateToken, isAdmin, adminUnpluggedExercisesRoutes);
 app.use("/api/admin/rubrics", authenticateToken, isAdmin, adminRubricsRoutes);
+app.use("/api/admin/schools", authenticateToken, isAdmin, adminSchoolsRoutes);
+app.use("/api/admin/teams", authenticateToken, isAdmin, adminTeamsRoutes);
 app.use("/api/admin/assignations", authenticateToken, isAdmin, adminAssignationsRoutes);
 app.use("/api/admin/users", authenticateToken, isAdmin, adminUsersRoutes);
 
