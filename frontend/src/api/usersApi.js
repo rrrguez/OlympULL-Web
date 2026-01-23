@@ -12,6 +12,7 @@ function authHeaders() {
 
 export const getAllUsers = () => axios.get(API, authHeaders());
 export const getUser = (id) => axios.get(`${API}/${id}`, authHeaders());
+export const getUserByType = (type) => axios.get(`${API}/type/${type}`, authHeaders());
 export const createUser = (data) => axios.post(API, data, authHeaders());
 export const updateUser = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 export const updateUserPassword = (id, data) => axios.put(`${API}/${id}/password`, data, authHeaders());

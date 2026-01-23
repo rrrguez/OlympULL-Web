@@ -5,6 +5,9 @@ export const getAll = () => pool.query("SELECT * FROM t_users");
 export const getById = ( id ) =>
     pool.query("SELECT * FROM t_users WHERE id = $1", [id]);
 
+export const getByType = ( type ) =>
+    pool.query("SELECT * FROM t_users WHERE type = $1", [type]);
+
 export const create = ( data ) =>
     pool.query(
         "INSERT INTO t_users (id, username, password, type) VALUES ($1, $2, $3, $4) RETURNING *",

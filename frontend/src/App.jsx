@@ -19,6 +19,10 @@ import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
 import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminNewUserPage from "./pages/admin/AdminNewUserPage";
+import AdminMonitorsPage from "./pages/admin/AdminMonitorsPage";
+import AdminNewMonitorPage from "./pages/admin/AdminNewMonitorPage";
+import AdminOrganizersPage from "./pages/admin/AdminOrganizersPage";
+import AdminNewOrganizerPage from "./pages/admin/AdminNewOrganizerPage";
 import OrganizerHome from "./pages/OrganizerHome";
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
@@ -198,6 +202,42 @@ export default function App() {
             element={
                 <PrivateRoute type="ADMIN">
                     <AdminNewUserPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/monitors"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminMonitorsPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/monitors/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminNewMonitorPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/organizers"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminOrganizersPage />
+                </PrivateRoute>
+            }
+            />
+
+            <Route
+            path="/admin/organizers/new"
+            element={
+                <PrivateRoute type="ADMIN">
+                    <AdminNewOrganizerPage />
                 </PrivateRoute>
             }
             />

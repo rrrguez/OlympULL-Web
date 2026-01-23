@@ -26,6 +26,22 @@ export const getById = async (req, res) => {
   }
 };
 
+// GET: obtener una por código
+export const getByType = async (req, res) => {
+    try {
+      const { type } = req.params;
+      const result = await model.getByType(type);
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Usuarios no encontrados" });
+      }
+
+      res.json(result.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+
 // POST: crear nueva
 export const create = async (req, res) => {
   try {
@@ -72,6 +88,7 @@ export const remove = async (req, res) => {
 export default {
     getAll,
     getById,
+    getByType,
     create,
     update,
     updatePassword,
