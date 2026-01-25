@@ -6,7 +6,7 @@ export default function AdminOrganizersPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de usuarios organizadores"
+                title="Gestión de organizadores"
                 newButton={1}
                 importButton={1}
                 exportButton={1}

@@ -18,7 +18,6 @@ export default function NewTeam() {
     const [loading, setLoading] = useState(false);
 
     const [monitors, setMonitors] = useState([]);
-
     const [exercises, setExercises] = useState([]);
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
@@ -62,10 +61,10 @@ export default function NewTeam() {
         loadMonitors();
         async function loadOlympiads() {
             try {
-            const data = await getAllOlympiads();
-            setOlympiads(data.data);
+                const data = await getAllOlympiads();
+                setOlympiads(data.data);
             } catch (err) {
-            console.error("Error cargando olimpiadas", err);
+                console.error("Error cargando olimpiadas", err);
             }
         }
         loadOlympiads();
@@ -103,16 +102,16 @@ export default function NewTeam() {
                     <div>
                         <label className="form-label">Monitor</label>
                         <select
-                            name="monitor"
+                            name="id"
                             className="form-control"
-                            value={formData.school}
+                            value={formData.id}
                             onChange={handleChange}
                             required
                             >
                             <option value="">-- Seleccione un monitor --</option>
                             {monitors.map((o) => (
                                 <option key={o.id} value={o.id}>
-                                {o.id} - {o.name}
+                                {o.id} - {o.username}
                                 </option>
                             ))}
                         </select>

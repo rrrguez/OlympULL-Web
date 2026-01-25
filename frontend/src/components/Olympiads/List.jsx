@@ -34,6 +34,19 @@ function getOlympiadStatusIcon(start, stop) {
     );
 }
 
+function formatDate(dateFromDB) {
+    const date = dateFromDB.split("T")[0];
+    const formattedDateArray = date.split("-");
+    const formattedDate = formattedDateArray[2] + "-" + formattedDateArray[1] + "-" + formattedDateArray[0];
+
+    let time = dateFromDB.split("T")[1];
+    time = time.split(".000Z")[0];
+    let timeArray = time.split(":");
+    time = timeArray[0] + ":" + timeArray[1];
+
+    return formattedDate + ", " + time;
+}
+
 export default function OlympiadsList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -65,8 +78,8 @@ export default function OlympiadsList() {
                 <th></th>
                 <th>Código</th>
                 <th>Título</th>
-                <th>Fecha y hora de inicio</th>
-                <th>Fecha y hora de final</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de final</th>
                 <th>Acciones rápidas</th>
             </tr>
             </thead>
@@ -86,12 +99,20 @@ export default function OlympiadsList() {
                 <td>{getOlympiadStatusIcon(o.start, o.stop)}</td>
                 <td>{o.id}</td>
                 <td>{o.name}</td>
-                <td>{o.start}</td>
-                <td>{o.stop}</td>
+                <td>{formatDate(o.start)}</td>
+                <td>{formatDate(o.stop)}</td>
                 <td>
-                    <div className="table-button-container">
+                    <div className="table-button-container with-duplicate">
+                        <OlympULLIconButton
+                            text="Duplicar"
+                            title="Duplicar"
+                            buttonClass="table-button"
+                            route="/admin/olympiads"
+                            icon="fa-solid fa-clone"
+                        />
                         <OlympULLIconButton
                             text="Editar"
+                            title="Editar"
                             buttonClass="table-button"
                             route="/admin/olympiads"
                             icon="fa-solid fa-pen-to-square"
@@ -99,6 +120,7 @@ export default function OlympiadsList() {
 
                         <OlympULLIconButton
                             text="Eliminar"
+                            title="Eliminar"
                             buttonClass="table-button"
                             route="/admin/olympiads"
                             icon="fa-regular fa-trash-can"

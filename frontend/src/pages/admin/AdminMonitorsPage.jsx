@@ -6,7 +6,7 @@ export default function AdminMonitorsPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de usuarios monitores"
+                title="Gestión de monitores"
                 newButton={1}
                 importButton={1}
                 exportButton={1}

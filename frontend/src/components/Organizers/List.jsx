@@ -31,8 +31,7 @@ export default function OrganizerList() {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Organizer</th>
-                    <th>Ejercicio</th>
+                    <th>Organizador</th>
                     <th>Itinerario</th>
                     <th>Olimpiada</th>
                     <th>Acciones rápidas</th>
@@ -42,7 +41,7 @@ export default function OrganizerList() {
                 {loading
                 ? Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i} className="skeleton-row">
-                    {Array.from({ length: 3 }).map((_, j) => (
+                    {Array.from({ length: 4 }).map((_, j) => (
                         <td key={j}>
                         <div className="skeleton-cell"></div>
                         </td>

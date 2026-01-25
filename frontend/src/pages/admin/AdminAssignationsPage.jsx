@@ -9,8 +9,6 @@ export default function AssignationsPage() {
                 title={
                     <>
                         Gestión de asignaciones
-                        <br />
-                        Ejercicios ➜ Olimpiadas
                     </>
                 }
                 newButton={1}

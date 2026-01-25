@@ -54,9 +54,17 @@ export default function ItinerariesList() {
                 <td>{o.name}</td>
                 <td>{o.olympiad}</td>
                 <td>
-                <div className="table-button-container">
+                <div className="table-button-container with-duplicate">
+                    <OlympULLIconButton
+                        text="Duplicar"
+                        title="Duplicar"
+                        buttonClass="table-button"
+                        route="/admin/olympiads"
+                        icon="fa-solid fa-clone"
+                    />
                     <OlympULLIconButton
                         text="Editar"
+                        title="Editar"
                         buttonClass="table-button"
                         route="/admin/olympiads"
                         icon="fa-solid fa-pen-to-square"
@@ -64,6 +72,7 @@ export default function ItinerariesList() {
 
                     <OlympULLIconButton
                         text="Eliminar"
+                        title="Eliminar"
                         buttonClass="table-button"
                         route="/admin/olympiads"
                         icon="fa-regular fa-trash-can"
