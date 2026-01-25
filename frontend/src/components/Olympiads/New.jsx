@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createOlympiad } from "../../api/olympiadsApi";
+import { toast } from "react-toastify";
 
 export default function NewOlympiad() {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ export default function NewOlympiad() {
         timezone: "",
     });
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -45,14 +46,13 @@ export default function NewOlympiad() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createOlympiad(formData);
         navigate("/admin/olympiads");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la olimpiada");
+        toast.error(err.response?.data?.error || "Error al crear la olimpiada");
         } finally {
         setLoading(false);
         }

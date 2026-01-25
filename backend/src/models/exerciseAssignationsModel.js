@@ -3,6 +3,16 @@ import pool from "../db.js";
 // Obtener todos
 export const getAll = () => pool.query("SELECT * FROM T_EXERCISES_OLYMPIAD_ITINERARY");
 
+export const getOlympiads = (exercise) =>
+    pool.query(
+        "SELECT OLYMPIAD FROM T_EXERCISES_OLYMPIAD_ITINERARY WHERE EXERCISE = $1", [exercise]
+    );
+
+export const getItineraries = (data) =>
+    pool.query(
+        "SELECT OLYMPIAD FROM T_EXERCISES_OLYMPIAD_ITINERARY WHERE EXERCISE=$1 AND OLYMPIAD=$2", [data.exercise, data.olympiad]
+    );
+
 // Crear uno nuevo
 export const create = async (data) => {
 

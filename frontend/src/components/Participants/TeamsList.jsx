@@ -34,6 +34,7 @@ export default function RubricList() {
                     <th>Código</th>
                     <th>Nombre</th>
                     <th>Escuela</th>
+                    <th>Olimpiada</th>
                     <th>Itinerario</th>
                     <th>Acciones rápidas</th>
                 </tr>
@@ -54,11 +55,20 @@ export default function RubricList() {
                     <td>{o.id}</td>
                     <td>{o.name}</td>
                     <td>{o.school}</td>
+                    <td></td>
                     <td>{o.itinerary}</td>
                     <td>
-                        <div className="table-button-container">
+                        <div className="table-button-container with-duplicate">
+                        <OlympULLIconButton
+                            text="Duplicar"
+                            title="Duplicar"
+                            buttonClass="table-button"
+                            route="/admin/Teams"
+                            icon="fa-solid fa-clone"
+                        />
                         <OlympULLIconButton
                             text="Editar"
+                            title="Editar"
                             buttonClass="table-button"
                             route="/admin/Teams"
                             icon="fa-solid fa-pen-to-square"
@@ -66,6 +76,7 @@ export default function RubricList() {
 
                         <OlympULLIconButton
                             text="Eliminar"
+                            title="Eliminar"
                             buttonClass="table-button"
                             route="/admin/Teams"
                             icon="fa-regular fa-trash-can"

@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserByType } from "../../api/usersApi";
-import { getAllOlympiads } from "../../api/olympiadsApi";
+import { getAssignationsOlympiads } from "../../api/assignationsApi";
+import { getAssignationsItineraries } from "../../api/assignationsApi";
+import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
+import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 
 export default function NewTeam() {
@@ -22,8 +25,11 @@ export default function NewTeam() {
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
+    const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
+    const olympiadDisabled =
+    !formData.exercise || loadingOlympiads || olympiads.length === 0;
     const itineraryDisabled =
     !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
@@ -59,38 +65,69 @@ export default function NewTeam() {
             }
         }
         loadMonitors();
-        async function loadOlympiads() {
+
+        async function loadExercises() {
             try {
-                const data = await getAllOlympiads();
-                setOlympiads(data.data);
+                const dataPluggedIn = await getAllPluggedInExercises();
+                const dataUnplugged = await getAllUnpluggedExercises();
+                setExercises([
+                    ...dataUnplugged.data,
+                    ...dataPluggedIn.data
+                ]);
             } catch (err) {
-                console.error("Error cargando olimpiadas", err);
+                console.error("Error cargando ejercicios", err);
+                setError("No se pudieron cargar los ejercicios");
             }
-        }
-        loadOlympiads();
+            }
+        loadExercises();
     })
 
-    async function loadItineraries(olympiadId) {
+    async function loadOlympiads(exercise) {
         try {
-        setLoadingItineraries(true);
-
-        const res = await getItineraryByOlympiad(olympiadId);
-
-        setItineraries(res.data);
+            setLoadingOlympiads(true);
+            const data = await getAssignationsOlympiads(exercise);
+            setOlympiads(data.data);
         } catch (err) {
-        console.error("Error cargando itinerarios", err);
+            console.error("Error cargando olimpiadas", err);
         } finally {
-        setLoadingItineraries(false);
+            setLoadingOlympiads(false);
+        }
+    }
+
+    async function loadItineraries(exercise, olympiadId) {
+        try {
+            setLoadingItineraries(true);
+            const res = await getAssignationsItineraries(exercise, olympiadId);
+            setItineraries(res.data);
+        } catch (err) {
+            console.error("Error cargando itinerarios", err);
+        } finally {
+            setLoadingItineraries(false);
         }
     }
 
     useEffect(() => {
-        if (formData.olympiad) {
-        loadItineraries(formData.olympiad);
-        setFormData(prev => ({ ...prev, itinerary: "" }));
-        } else {
-        setItineraries([]);
+        if (!formData.exercise) {
+            setOlympiads([]);
+            return;
         }
+
+        loadOlympiads(formData.exercise);
+        setFormData(prev => ({
+            ...prev,
+            olympiad: "",
+            itinerary: ""
+        }));
+    }, [formData.exercise]);
+
+    useEffect(() => {
+        if (!formData.olympiad) {
+            setItineraries([]);
+            return;
+        }
+
+        loadItineraries(formData.exercise, formData.olympiad);
+        setFormData(prev => ({ ...prev, itinerary: "" }));
     }, [formData.olympiad]);
 
     return (
@@ -118,14 +155,20 @@ export default function NewTeam() {
                     </div>
                     <div>
                         <label className="form-label">Ejercicio</label>
-                        <input
-                            type="text"
-                            name="name"
+                        <select
+                            name="exercise"
                             className="form-control"
-                            value={formData.name}
+                            value={formData.exercise}
                             onChange={handleChange}
                             required
-                        />
+                            >
+                            <option value="">-- Seleccione un ejercicio --</option>
+                            {exercises.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                {o.id} - {o.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="form-label">Olimpiada</label>
@@ -133,13 +176,22 @@ export default function NewTeam() {
                             name="olympiad"
                             className="form-control"
                             value={formData.olympiad}
+                            disabled={olympiadDisabled}
                             onChange={handleChange}
                             required
                             >
-                            <option value="">-- Seleccione una olimpiada --</option>
+                            <option value="">
+                                {loadingOlympiads
+                                ? "Cargando olimpiadas..."
+                                : !formData.olympiad
+                                ? "-- Seleccione primero un ejercicio --"
+                                : olympiads.length === 0
+                                ? "No hay olimpiadas disponibles"
+                                : "-- Seleccione una olimpiada --"}
+                            </option>
                             {olympiads.map((o) => (
-                                <option key={o.id} value={o.id}>
-                                {o.id} - {o.name}
+                                <option key={o.olympiad} value={o.olympiad}>
+                                {o.olympiad}
                                 </option>
                             ))}
                         </select>
@@ -165,8 +217,8 @@ export default function NewTeam() {
                             </option>
 
                             {itineraries.map((i) => (
-                                <option key={i.id} value={i.id}>
-                                {i.id} - {i.name}
+                                <option key={i.itinerary} value={i.itinerary}>
+                                {i.itinerary}
                                 </option>
                             ))}
                         </select>

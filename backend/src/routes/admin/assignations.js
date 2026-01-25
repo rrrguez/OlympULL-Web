@@ -4,6 +4,8 @@ import exerciseAssignationsController from "../../controllers/admin/exerciseAssi
 const router = express.Router();
 
 router.get("/", exerciseAssignationsController.getAll);
+router.get("/olympiads/:exercise", exerciseAssignationsController.getOlympiads);
+router.get("/itineraries/:exercise/:olympiad", exerciseAssignationsController.getItineraries);
 router.post("/", exerciseAssignationsController.create);
 router.delete("/", exerciseAssignationsController.remove);
 

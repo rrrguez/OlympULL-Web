@@ -32,8 +32,8 @@ export default function OrganizerList() {
                 <thead>
                 <tr>
                     <th>Organizador</th>
-                    <th>Itinerario</th>
                     <th>Olimpiada</th>
+                    <th>Itinerario</th>
                     <th>Acciones rápidas</th>
                 </tr>
                 </thead>

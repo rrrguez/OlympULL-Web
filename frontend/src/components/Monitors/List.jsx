@@ -33,8 +33,8 @@ export default function MonitorList() {
                 <tr>
                     <th>Monitor</th>
                     <th>Ejercicio</th>
-                    <th>Itinerario</th>
                     <th>Olimpiada</th>
+                    <th>Itinerario</th>
                     <th>Acciones rápidas</th>
                 </tr>
                 </thead>
@@ -52,7 +52,9 @@ export default function MonitorList() {
                 : data.map((o) => (
                     <tr key={o.id}>
                     <td>{o.id}</td>
-                    <td>{o.name}</td>
+                    <td>{o.exercise}</td>
+                    <td>{o.olympiad}</td>
+                    <td>{o.itinerary}</td>
                     <td>
                         <div className="table-button-container">
                         <OlympULLIconButton

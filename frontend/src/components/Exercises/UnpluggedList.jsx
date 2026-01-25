@@ -64,7 +64,6 @@ export default function UnpluggedExercisesList() {
                 <tr>
                     <th>Código</th>
                     <th>Título</th>
-                    <th>Descripción</th>
                     <th>Categoría</th>
                     <th>Recursos</th>
                     <th>Rúbrica</th>
@@ -86,14 +85,22 @@ export default function UnpluggedExercisesList() {
                             <tr key={o.id}>
                     <td>{o.id}</td>
                     <td>{o.name}</td>
-                    <td>{o.description}</td>
                     <td>{translateCategory(o.category)}</td>
                     <td>{o.resources}</td>
                     <td>{o.rubric}</td>
                     <td>
-                        <div className="table-button-container">
+                        <div className="table-button-container with-duplicate">
+                            <OlympULLIconButton
+                                text="Duplicar"
+                                title="Duplicar"
+                                buttonClass="table-button"
+                                route="/admin/exercises"
+                                icon="fa-solid fa-clone"
+                            />
+
                             <OlympULLIconButton
                                 text="Editar"
+                                title="Editar"
                                 buttonClass="table-button"
                                 route="/admin/exercises"
                                 icon="fa-solid fa-pen-to-square"
@@ -101,6 +108,7 @@ export default function UnpluggedExercisesList() {
 
                             <OlympULLIconButton
                                 text="Eliminar"
+                                title="Eliminar"
                                 buttonClass="table-button"
                                 route="/admin/exercises"
                                 icon="fa-regular fa-trash-can"

@@ -363,8 +363,8 @@ tr {
 
 .table-button-container.with-duplicate {
     display: grid;
-    grid-template-columns: 30% 30% 30%;
-    grid-column-gap: 5%;
+    grid-template-columns: 31.5% 31.5% 31.5%;
+    grid-column-gap: 2.75%;
     font-family: 'Argentum Sans Semibold';
     font-size: smaller;
 }

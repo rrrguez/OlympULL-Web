@@ -10,6 +10,26 @@ export const getAll = async (req, res) => {
   }
 };
 
+export const getOlympiads = async (req, res) => {
+    try {
+        const { exercise } = req.params;
+        const result = await model.getOlympiads(exercise);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const getItineraries = async (req, res) => {
+    try {
+        const { exercise, olympiad } = req.params;
+        const result = await model.getItineraries(exercise, olympiad);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 // POST: crear nuevo
 export const create = async (req, res) => {
   try {
@@ -33,6 +53,8 @@ export const remove = async (req, res) => {
 
 export default {
     getAll,
+    getOlympiads,
+    getItineraries,
     create,
     remove
 };

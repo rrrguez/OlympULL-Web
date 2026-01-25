@@ -56,9 +56,18 @@ export default function RubricList() {
                     <td>{o.points}</td>
                     <td>{o.labels}</td>
                     <td>
-                        <div className="table-button-container">
+                        <div className="table-button-container with-duplicate">
+                        <OlympULLIconButton
+                            text="Duplicar"
+                            title="Duplicar"
+                            buttonClass="table-button"
+                            route="/admin/rubrics"
+                            icon="fa-solid fa-pen-to-square"
+                        />
+
                         <OlympULLIconButton
                             text="Editar"
+                            title="Editar"
                             buttonClass="table-button"
                             route="/admin/rubrics"
                             icon="fa-solid fa-pen-to-square"
