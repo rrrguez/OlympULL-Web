@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createUnpluggedExercise } from "../../api/unpluggedExercisesApi";
 import { createPluggedInExercise } from "../../api/pluggedInExercisesApi";
 import { getAllRubrics } from "../../api/rubricsApi";
+import { toast } from "react-toastify";
 
 export default function NewExercise() {
   const navigate = useNavigate();
@@ -21,7 +22,6 @@ export default function NewExercise() {
   });
 
   const [rubrics, setRubrics] = useState([]);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
@@ -38,7 +38,7 @@ export default function NewExercise() {
         setRubrics(data.data);
       } catch (err) {
         console.error("Error cargando rúbricas", err);
-        setError("No se pudieron cargar las rúbricas");
+        toast.error("Error cargando las rúbricas");
       }
     }
     loadRubrics();
@@ -46,7 +46,6 @@ export default function NewExercise() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     try {
@@ -62,18 +61,14 @@ export default function NewExercise() {
 
     } catch (err) {
         console.error("Error completo:", err);
-        setError(err.response?.data?.error || "Error al crear el ejercicio");
+        toast.error(err.response?.data?.error || "Error al crear el ejercicio");
       }
   }
 
   return (
     <>
     <div className="element-container">
-
-      {error && <div className="alert alert-danger">{error}</div>}
-
       <form onSubmit={handleSubmit}>
-
         <div className="element-form" name="exercise-type">
             <div>
             <label className="form-label">Tipo de ejercicio</label>

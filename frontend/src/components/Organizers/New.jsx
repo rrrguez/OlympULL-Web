@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getUserByType } from "../../api/usersApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { toast } from "react-toastify";
 
 export default function NewTeam() {
     const navigate = useNavigate();
@@ -14,12 +15,10 @@ export default function NewTeam() {
         itinerary: "",
     });
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [organizers, setOrganizers] = useState([]);
 
-    const [exercises, setExercises] = useState([]);
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
@@ -37,14 +36,13 @@ export default function NewTeam() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createOrganizer(formData);
         navigate("/admin/teams");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la asignación");
+        toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
         setLoading(false);
         }
@@ -57,6 +55,7 @@ export default function NewTeam() {
                 setOrganizers(data.data);
             } catch (err) {
                 console.error("Error cargando la lista de organizeres", err);
+                toast.error("Error cargando la lista de organizadores");
             }
         }
         loadOrganizers();
@@ -66,6 +65,7 @@ export default function NewTeam() {
             setOlympiads(data.data);
             } catch (err) {
             console.error("Error cargando olimpiadas", err);
+            toast.error("Error cargando las olimpiadas");
             }
         }
         loadOlympiads();
@@ -80,6 +80,7 @@ export default function NewTeam() {
         setItineraries(res.data);
         } catch (err) {
         console.error("Error cargando itinerarios", err);
+        toast.error("Error cargando los itinerarios");
         } finally {
         setLoadingItineraries(false);
         }
@@ -96,8 +97,6 @@ export default function NewTeam() {
 
     return (
         <div className="element-container">
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>

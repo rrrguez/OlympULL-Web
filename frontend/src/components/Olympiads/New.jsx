@@ -16,7 +16,6 @@ export default function NewOlympiad() {
         timezone: "",
     });
 
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -60,8 +59,6 @@ export default function NewOlympiad() {
 
     return (
         <div className="element-container">
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
 
             <div className="element-form">

@@ -6,6 +6,7 @@ import { getAssignationsItineraries } from "../../api/assignationsApi";
 import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { toast } from "react-toastify";
 
 export default function NewTeam() {
     const navigate = useNavigate();
@@ -17,7 +18,6 @@ export default function NewTeam() {
         itinerary: "",
     });
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [monitors, setMonitors] = useState([]);
@@ -42,14 +42,13 @@ export default function NewTeam() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createMonitor(formData);
         navigate("/admin/teams");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la asignación");
+        toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
         setLoading(false);
         }
@@ -62,6 +61,7 @@ export default function NewTeam() {
                 setMonitors(data.data);
             } catch (err) {
                 console.error("Error cargando la lista de monitores", err);
+                toast.error("Error cargando la lista de monitores")
             }
         }
         loadMonitors();
@@ -76,7 +76,7 @@ export default function NewTeam() {
                 ]);
             } catch (err) {
                 console.error("Error cargando ejercicios", err);
-                setError("No se pudieron cargar los ejercicios");
+                toast.error("Error cargando los ejercicios");
             }
             }
         loadExercises();
@@ -88,7 +88,8 @@ export default function NewTeam() {
             const data = await getAssignationsOlympiads(exercise);
             setOlympiads(data.data);
         } catch (err) {
-            console.error("Error cargando olimpiadas", err);
+            console.error("Error cargando las olimpiadas", err);
+            toast.error("Error cargando las olimpiadas")
         } finally {
             setLoadingOlympiads(false);
         }
@@ -101,6 +102,7 @@ export default function NewTeam() {
             setItineraries(res.data);
         } catch (err) {
             console.error("Error cargando itinerarios", err);
+            toast.error("Error cargando las olimpiadas")
         } finally {
             setLoadingItineraries(false);
         }
@@ -132,8 +134,6 @@ export default function NewTeam() {
 
     return (
         <div className="element-container">
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>

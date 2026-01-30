@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createItinerary } from "../../api/itinerariesApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
+import { toast } from "react-toastify";
 
 export default function NewItinerary() {
     const navigate = useNavigate();
@@ -14,7 +15,6 @@ export default function NewItinerary() {
     });
 
     const [olympiads, setOlympiads] = useState([]);
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -31,7 +31,7 @@ export default function NewItinerary() {
             setOlympiads(data.data);
         } catch (err) {
             console.error("Error cargando itinerarios", err);
-            setError("No se pudieron cargar las itinerarios");
+            toast.error("No se pudieron cargar las itinerarios");
         }
         }
         loadOlympiads();
@@ -39,14 +39,13 @@ export default function NewItinerary() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createItinerary(formData);
         navigate("/admin/itineraries");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear el itinerario");
+        toast.error(err.response?.data?.error || "Error al crear el itinerario");
         } finally {
         setLoading(false);
         }
@@ -54,8 +53,6 @@ export default function NewItinerary() {
 
     return (
         <div className="element-container">
-        {error && <div className="alert alert-danger">{error}</div>}
-
         <form onSubmit={handleSubmit}>
             <div className="element-form">
                 <div>

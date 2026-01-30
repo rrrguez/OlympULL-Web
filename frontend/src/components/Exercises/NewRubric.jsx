@@ -13,7 +13,6 @@ export default function NewRubric() {
         labels: "",
     });
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -25,14 +24,13 @@ export default function NewRubric() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createRubric(formData);
         navigate("/admin/rubrics");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la rúbrica");
+        toast.error(err.response?.data?.error || "Error al crear la rúbrica");
         } finally {
         setLoading(false);
         }
@@ -40,8 +38,6 @@ export default function NewRubric() {
 
     return (
         <div className="element-container">
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>

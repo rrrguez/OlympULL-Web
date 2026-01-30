@@ -5,6 +5,7 @@ import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
+import { toast } from "react-toastify";
 
 export default function NewAssignation() {
     const navigate = useNavigate();
@@ -18,7 +19,6 @@ export default function NewAssignation() {
     const [exercises, setExercises] = useState([]);
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     const [loadingItineraries, setLoadingItineraries] = useState(false);
@@ -44,7 +44,7 @@ export default function NewAssignation() {
             ]);
         } catch (err) {
             console.error("Error cargando ejercicios", err);
-            setError("No se pudieron cargar los ejercicios");
+            toast.error("Error cargando los ejercicios");
         }
         }
         loadExercises();
@@ -55,7 +55,7 @@ export default function NewAssignation() {
             setOlympiads(data.data);
             } catch (err) {
             console.error("Error cargando olimpiadas", err);
-            setError("No se pudieron cargar las olimpiadas");
+            toast.error("Error cargando las olimpiadas");
             }
         }
         loadOlympiads();
@@ -70,7 +70,7 @@ export default function NewAssignation() {
         setItineraries(res.data);
         } catch (err) {
         console.error("Error cargando itinerarios", err);
-        setError("No se pudieron cargar los itinerarios");
+        toast.error("Error cargando los itinerarios");
         } finally {
         setLoadingItineraries(false);
         }
@@ -87,14 +87,13 @@ export default function NewAssignation() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createAssignation(formData);
         navigate("/admin/assignations/olympiads");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la asignación");
+        toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
         setLoading(false);
         }
@@ -102,8 +101,6 @@ export default function NewAssignation() {
 
     return (
         <div>
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="element-container">
                     <div className="element-form">

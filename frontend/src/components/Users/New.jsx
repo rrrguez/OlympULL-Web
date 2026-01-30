@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/usersApi";
+import { toast } from "react-toastify";
 
 export default function NewOlympiad() {
     const navigate = useNavigate();
@@ -12,7 +13,6 @@ export default function NewOlympiad() {
         type: "",
     });
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -24,7 +24,6 @@ export default function NewOlympiad() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         console.log(formData);
@@ -33,7 +32,7 @@ export default function NewOlympiad() {
             await createUser(formData);
             navigate("/admin/users");
             } catch (err) {
-            setError(err.response?.data?.error || "Error al crear el usuario");
+            toast.error(err.response?.data?.error || "Error al crear el usuario");
             } finally {
             setLoading(false);
         }
@@ -41,8 +40,6 @@ export default function NewOlympiad() {
 
     return (
         <div className="element-container">
-            {error && <div>{error}</div>}
-
             <form onSubmit={handleSubmit}>
 
             <div className="element-form">

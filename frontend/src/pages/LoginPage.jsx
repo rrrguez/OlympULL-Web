@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,7 +25,7 @@ export default function LoginPage() {
           navigate("/public");
       }
     } catch (err) {
-      setError(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -34,7 +34,6 @@ export default function LoginPage() {
     <h1>Inicio de sesión</h1>
 
     <div className="login-container">
-      {error && <div className="alert alert-danger">{error}</div>}
       <form className="login-form" onSubmit={handleSubmit}>
         <div>
             <div>

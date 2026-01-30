@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createSchool } from "../../api/schoolsApi";
+import { toast } from "react-toastify";
 
 export default function NewRubric() {
     const navigate = useNavigate();
@@ -10,7 +11,6 @@ export default function NewRubric() {
         name: "",
     });
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
     function handleChange(e) {
@@ -22,14 +22,13 @@ export default function NewRubric() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        setError("");
         setLoading(true);
 
         try {
         await createSchool(formData);
         navigate("/admin/schools");
         } catch (err) {
-        setError(err.response?.data?.error || "Error al crear la escuela");
+        toast.error(err.response?.data?.error || "Error al crear la escuela");
         } finally {
         setLoading(false);
         }
@@ -37,8 +36,6 @@ export default function NewRubric() {
 
     return (
         <div className="element-container">
-            {error && <div className="alert alert-danger">{error}</div>}
-
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>

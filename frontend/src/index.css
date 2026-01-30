@@ -89,6 +89,22 @@ button:hover {
     box-shadow: none;
 }
 
+.Toastify__toast, .Toastify__toast-body {
+    font-family: "Argentum Sans Light", sans-serif !important;
+}
+
+button.Toastify__close-button {
+    width: auto;
+    height: 70%;
+    align-self: center;
+    justify-self: center;
+}
+
+button.Toastify__close-button:hover {
+    background-color: transparent;
+    color: #313d4b;
+}
+
 .app-container {
     background-color: #ffffff;
     width: 100%;

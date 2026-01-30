@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import OlympiadsList from "../../components/Olympiads/List";
 import PageHeader from "../../components/layouts/PageHeader";
+import { toast } from "react-toastify";
 
 export default function OlympiadsPage() {
     return (
