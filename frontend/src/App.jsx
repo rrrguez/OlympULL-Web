@@ -7,6 +7,7 @@ import ChangePasswordPage from "./pages/ChangePasswordPage";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
 import AdminNewOlympiadPage from "./pages/admin/AdminNewOlympiadPage";
+import AdminEditOlympiadPage from "./pages/admin/AdminEditOlympiadPage";
 import AdminItinerariesPage from "./pages/admin/AdminItinerariesPage";
 import AdminNewItineraryPage from "./pages/admin/AdminNewItineraryPage";
 import AdminExercisesPage from "./pages/admin/AdminExercisesPage";
@@ -71,6 +72,15 @@ export default function App() {
                 element={
                     <PrivateRoute type="ADMIN">
                         <AdminNewOlympiadPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
+                path="/admin/olympiads/edit/:id"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminEditOlympiadPage />
                     </PrivateRoute>
                 }
                 />

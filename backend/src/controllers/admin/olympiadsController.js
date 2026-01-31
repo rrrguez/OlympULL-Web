@@ -14,7 +14,7 @@ export const getAll = async (req, res) => {
 export const getOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getById(id);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Olimpiada no encontrada" });
@@ -51,7 +51,7 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });

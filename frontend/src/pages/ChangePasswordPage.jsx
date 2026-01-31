@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateUserPassword } from "../api/usersApi";
+import { toast } from "react-toastify";
+import PageHeader from "../components/layouts/PageHeader";
 
 export default function ChangePasswordPage() {
     const username = localStorage.getItem("id");
@@ -8,22 +10,25 @@ export default function ChangePasswordPage() {
     const [repeat_password, setRepeatPassword] = useState("");
     const navigate = useNavigate();
 
+    const backButtonRouteText = localStorage.type == "ADMIN" ? "/admin" : localStorage.type == "ORGANIZER" ? "/organizer" : "/monitor";
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (password != repeat_password) {
-            console.log("Las contraseñas no coinciden");
+            toast.error("Las contraseñas no coinciden");
         } else {
-            console.log(password);
             await updateUserPassword(username, { password });
-            if (localStorage.type == "ADMIN") navigate("/admin");
-            if (localStorage.type == "ORGANIZER") navigate("/organizer");
-            if (localStorage.type == "MONITOR") navigate("/monitor");
+            toast.success("Contraseña actualizada con éxito")
+            navigate(backButtonRouteText);
         }
     };
 
     return (
         <div>
-        <h1>Cambio de contraseña de {username}</h1>
+        <PageHeader
+            title="Cambio de contraseña"
+            backButtonRoute={backButtonRouteText}
+        />
 
         <div className="password-container">
         <form className="password-form" onSubmit={handleSubmit}>

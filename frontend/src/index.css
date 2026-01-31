@@ -98,6 +98,7 @@ button.Toastify__close-button {
     height: 70%;
     align-self: center;
     justify-self: center;
+    box-shadow: none;
 }
 
 button.Toastify__close-button:hover {

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { deleteOlympiad, getAllOlympiads } from "../../api/olympiadsApi";
+import { deleteOlympiad, getAllOlympiads, createOlympiad } from "../../api/olympiadsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 function getOlympiadStatusIcon(start, stop) {
     const now = new Date();
@@ -65,9 +66,30 @@ export default function OlympiadsList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteOlympiad(id);
-        load();
+    const remove = async (id, name) => {
+        try {
+            await deleteOlympiad(id);
+            toast.success("Olimpiada " + name + " eliminada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
+    };
+
+    const duplicate = async (olympiad) => {
+        try {
+            const newOlympiad = {
+                ...olympiad,
+                id: olympiad.id + " - copia",
+                name: olympiad.name + " - copia",
+            };
+
+            await createOlympiad(newOlympiad);
+            toast.success("Olimpiada '" + olympiad.name + "' duplicada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -107,14 +129,14 @@ export default function OlympiadsList() {
                             text="Duplicar"
                             title="Duplicar"
                             buttonClass="table-button"
-                            route="/admin/olympiads"
+                            onClick={() => duplicate(o)}
                             icon="fa-solid fa-clone"
                         />
                         <OlympULLIconButton
                             text="Editar"
                             title="Editar"
                             buttonClass="table-button"
-                            route="/admin/olympiads"
+                            route={`/admin/olympiads/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
 
@@ -122,7 +144,7 @@ export default function OlympiadsList() {
                             text="Eliminar"
                             title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/olympiads"
+                            onClick={() => remove(o.id, o.name)}
                             icon="fa-regular fa-trash-can"
                         />
                     </div>

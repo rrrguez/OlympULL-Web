@@ -7,7 +7,7 @@ export default function OlympULLIconButton({ text, buttonClass, route, icon, onC
         if (route) navigate(route);
 
         if (onClick) {
-            requestAnimationFrame(onClick);
+            onClick();
         }
     };
 
