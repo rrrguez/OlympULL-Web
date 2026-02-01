@@ -479,3 +479,68 @@ tr {
     outline: 0px solid black;
 }
 
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    width: 50%;
+    height: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    display: grid;
+    grid-template-rows: 25% 55%;
+    gap: 20%;
+}
+
+.modal .modal-header-elements {
+    justify-content: center;
+}
+
+.modal .modal-header-elements * {
+    padding: 0%;
+}
+
+.modal form {
+    justify-items: center;
+}
+
+.modal .modal-header-elements h2 {
+    align-self: center;
+}
+
+.modal .modal-header-elements .icon-button {
+    width: 25%;
+}
+
+.modal button.import-button {
+    width: 75%;
+    justify-self: center;
+    margin-top: 0%;
+    margin-bottom: 0%;
+}
+
+.modal-body {
+    width: 100%;
+    height: 100%;
+    justify-items: center;
+}
+
+.modal-body form {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 30% 50%;
+    gap: 20%;
+    justify-content: center;
+    align-items: center;
+}
+

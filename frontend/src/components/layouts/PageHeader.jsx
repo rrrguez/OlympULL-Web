@@ -1,6 +1,6 @@
 import OlympULLIconButton from "../buttons/OlympULLIconButton"
 
-export default function PageHeader({ title, newButton = 0, importButton = 0, exportButton = 0, newButtonText="", newButtonRoute="", importButtonRoute="", exportButtonRoute="", backButtonRoute}) {
+export default function PageHeader({ title, newButton = 0, importButton = 0, exportButton = 0, newButtonText="", newButtonRoute="", importButtonOnClick="", exportButtonOnClick="", backButtonRoute}) {
     return (
         <>
             <div style={{display: "flex"}}>
@@ -20,7 +20,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                     <OlympULLIconButton
                         text="Importar datos"
                         buttonClass="icon-button"
-                        route={ importButtonRoute }
+                        onClick={ importButtonOnClick }
                         icon="fa-solid fa-file-arrow-down"
                     />
                 ) : (
@@ -30,7 +30,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                     <OlympULLIconButton
                         text="Exportar datos"
                         buttonClass="icon-button"
-                        route={ exportButtonRoute }
+                        onClick={ exportButtonOnClick }
                         icon="fa-solid fa-file-arrow-up"
                     />
                 ) : (

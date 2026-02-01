@@ -69,7 +69,7 @@ export default function OlympiadsList() {
     const remove = async (id, name) => {
         try {
             await deleteOlympiad(id);
-            toast.success("Olimpiada " + name + " eliminada con éxito");
+            toast.success("Olimpiada '" + name + "' eliminada con éxito");
             load();
         } catch (err) {
             toast.error(err)
