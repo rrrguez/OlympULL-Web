@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import ModalHeader from "../layouts/ModalHeader";
-//import { importOlympiads } from "../../api/olympiadsApi";
 
-export default function ImportModal({ open, onClose }) {
+export default function ImportModal({ open, onClose, onImport, title ="Importar datos", successMessage="Datos importados con éxito", onSuccess }) {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,8 +19,10 @@ export default function ImportModal({ open, onClose }) {
 
     try {
       setLoading(true);
-      //await importOlympiads(formData);
-      toast.success("Datos importados correctamente");
+      await onImport(formData);
+      toast.success(successMessage);
+      await
+      window.location.reload(); // CAMBIAR
       onClose();
     } catch (err) {
       toast.error(
@@ -38,10 +39,9 @@ export default function ImportModal({ open, onClose }) {
     <div className="modal-overlay">
       <div className="modal">
         <ModalHeader
-            title="Importar datos"
+            title={title}
             cancelAction={
                 (e) => {
-                    e.stopPropagation();
                     onClose();
                 }
             }

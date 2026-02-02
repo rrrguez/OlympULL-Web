@@ -15,3 +15,8 @@ export const getOlympiad = (id) => axios.get(`${API}/${id}`, authHeaders());
 export const createOlympiad = (data) => axios.post(API, data, authHeaders());
 export const updateOlympiad = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 export const deleteOlympiad = (id) => axios.delete(`${API}/${id}`, authHeaders());
+export const importOlympiads = (formData) => axios.post(`${API}/import`, formData, authHeaders());
+export const exportOlympiads = () => axios.get(`${API}/export`, {
+    ...authHeaders(),
+    responseType: "blob",
+});

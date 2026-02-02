@@ -1,0 +1,24 @@
+import multer from "multer";
+import path from "path";
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.resolve("/app/uploads"));
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + "-" + file.originalname);
+    },
+});
+
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype !== "text/csv") {
+            cb(new Error("Solo se permiten archivos CSV"));
+        } else {
+            cb(null, true);
+        }
+    },
+});
+
+export default upload;

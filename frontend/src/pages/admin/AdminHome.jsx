@@ -1,7 +1,9 @@
 import OlympULLButton from "../../components/buttons/OlympULLButton";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminHome() {
     const username = localStorage.getItem("id");
+    const navigate = useNavigate();
     return (
         <div className="container mt-5">
             <h1>¡Bienvenido, {username}!</h1>
@@ -9,37 +11,37 @@ export default function AdminHome() {
             <div className="grid-admin">
                 <OlympULLButton
                     text="Gestión de olimpiadas"
-                    route="/admin/olympiads"
+                    onClickAction={() => navigate("/admin/olympiads")}
                 />
 
                 <OlympULLButton
                     text="Gestión de itinerarios"
-                    route="/admin/itineraries"
+                    onClickAction={() => navigate("/admin/itineraries")}
                 />
 
                 <OlympULLButton
                     text="Gestión de rúbricas"
-                    route="/admin/rubrics"
+                    onClickAction={() => navigate("/admin/rubrics")}
                 />
 
                 <OlympULLButton
                     text="Gestión de ejercicios"
-                    route="/admin/exercises"
+                    onClickAction={() => navigate("/admin/exercises")}
                 />
 
                 <OlympULLButton
                     text="Gestión de escuelas"
-                    route="/admin/schools"
+                    onClickAction={() => navigate("/admin/schools")}
                 />
 
                 <OlympULLButton
                     text="Gestión de equipos"
-                    route="/admin/teams"
+                    onClickAction={() => navigate("/admin/teams")}
                 />
 
                 <OlympULLButton
                     text="Asignación de ejercicios a olimpiadas"
-                    route="/admin/assignations/olympiads"
+                    onClickAction={() => navigate("/admin/assignations/olympiads")}
                 />
             </div>
 
@@ -47,19 +49,19 @@ export default function AdminHome() {
             <div className="grid-admin">
                 <OlympULLButton
                     text="Gestión de cuentas de usuario"
-                    route="/admin/users"
+                    onClickAction={() => navigate("/admin/users")}
                 />
                 <OlympULLButton
                     text="Gestión de monitores"
-                    route="/admin/monitors"
+                    onClickAction={() => navigate("/admin/monitors")}
                 />
                 <OlympULLButton
                     text="Gestión de organizadores"
-                    route="/admin/organizers"
+                    onClickAction={() => navigate("/admin/organizers")}
                 />
                 <OlympULLButton
                     text="Gestión de participantes"
-                    route="/admin/participants"
+                    onClickAction={() => navigate("/admin/participants")}
                 />
             </div>
         </div>
