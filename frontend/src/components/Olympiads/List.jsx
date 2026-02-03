@@ -3,50 +3,8 @@ import { Container } from "react-bootstrap";
 import { deleteOlympiad, getAllOlympiads, createOlympiad } from "../../api/olympiadsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
-
-function getOlympiadStatusIcon(start, stop) {
-    const now = new Date();
-    const startDate = new Date(start);
-    const stopDate = new Date(stop);
-
-    if (now < startDate) {
-        return (
-            <i
-                className="fa-regular fa-alarm-clock"
-                title="Pendiente"
-            />
-        );
-    }
-
-    if (now >= startDate && now <= stopDate) {
-        return (
-            <i
-                className="fa-solid fa-fire fa-fade"
-                title="En curso"
-            />
-        );
-    }
-
-    return (
-        <i
-            className="fa-regular fa-circle-check"
-            title="Finalizada"
-        />
-    );
-}
-
-function formatDate(dateFromDB) {
-    const date = dateFromDB.split("T")[0];
-    const formattedDateArray = date.split("-");
-    const formattedDate = formattedDateArray[2] + "-" + formattedDateArray[1] + "-" + formattedDateArray[0];
-
-    let time = dateFromDB.split("T")[1];
-    time = time.split(".000Z")[0];
-    let timeArray = time.split(":");
-    time = timeArray[0] + ":" + timeArray[1];
-
-    return formattedDate + ", " + time;
-}
+import formatDate from "../../utils/dates";
+import getOlympiadStatus from "../../utils/olympiads";
 
 export default function OlympiadsList() {
     const [data, setData] = useState([]);
@@ -118,7 +76,11 @@ export default function OlympiadsList() {
             ))
             : data.map((o) => (
                 <tr key={o.id}>
-                <td>{getOlympiadStatusIcon(o.start, o.stop)}</td>
+                <td>
+                    {getOlympiadStatus(o.start, o.stop) === 'pending' && <i className="fa-regular fa-alarm-clock" />}
+                    {getOlympiadStatus(o.start, o.stop) === 'active' && <i className="fa-solid fa-fire fa-fade" />}
+                    {getOlympiadStatus(o.start, o.stop) === 'finished' && <i className="fa-regular fa-circle-check" />}
+                </td>
                 <td>{o.id}</td>
                 <td>{o.name}</td>
                 <td>{formatDate(o.start)}</td>

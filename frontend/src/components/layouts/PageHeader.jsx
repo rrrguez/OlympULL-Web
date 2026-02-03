@@ -3,7 +3,7 @@ import OlympULLIconButton from "../buttons/OlympULLIconButton"
 export default function PageHeader({ title, newButton = 0, importButton = 0, exportButton = 0, newButtonText="", newButtonRoute="", importButtonOnClick="", exportButtonOnClick="", backButtonRoute}) {
     return (
         <>
-            <div style={{display: "flex"}}>
+            <div className="page-header-layout">
                 <h1> { title } </h1>
                 <div className="page-header-buttons">
                 { newButton === 1 ? (

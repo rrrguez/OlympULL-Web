@@ -27,7 +27,6 @@ export default function OlympiadsPage() {
         }
     };
 
-
     return (
         <Container>
             <PageHeader

@@ -6,7 +6,7 @@ export default function AdminUsersPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de cuentas de usuario"
+                title="Gestión de usuarios"
                 newButton={1}
                 importButton={1}
                 exportButton={1}
