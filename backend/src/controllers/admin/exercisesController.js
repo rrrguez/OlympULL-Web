@@ -1,3 +1,4 @@
+import pool from "../../db.js";
 import * as model from "../../models/exercisesModel.js";
 
 // DESENCHUFADOS
@@ -59,6 +60,83 @@ export const removeUnplugged = async (req, res) => {
   }
 };
 
+// POST: Importar datos desde CSV
+export const importUnpluggedCsv = async (req, res) => {
+    console.log(req.file);
+    if (!req.file) {
+        return res.status(400).json({ error: "No se ha enviado ningún archivo" });
+    }
+
+    // console.log("CSV: ", req.file);
+
+    const results = [];
+
+    fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on("data", (data) => {
+            console.log(data);
+            results.push(data);
+        })
+        .on("end", async () => {
+            const client = await pool.connect();
+            try {
+                await client.query("BEGIN");
+                for (const o of results) {
+                    if (!o.id || !o.name || !o.category || !o.resources || !o.rubric) {
+                        console.warn("Fila inválida: ", o);
+                        continue;
+                    }
+                    await pool.query(
+                        `INSERT INTO t_exercises (id,name,description, category,resources)
+                        VALUES ($1,$2,$3,$4,$5)
+                        ON CONFLICT (id) DO UPDATE SET
+                            id=EXCLUDED.id,
+                            name=EXCLUDED.name,
+                            description=EXCLUDED.description,
+                            category=EXCLUDED.category,
+                            resources=EXCLUDED.resources`,
+                        [
+                            o.id,
+                            o.name,
+                            o.description || null,
+                            o.category,
+                            o.resources,
+                        ]
+                    );
+                    await pool.query(
+                        `INSERT INTO t_unplugged_exercises (id, rubric)
+                        VALUES ($1,$2)
+                        RETURNING *`,
+                        [o.id, o.rubric]
+                    );
+                }
+
+                await client.query("COMMIT");
+
+                res.json({ imported: results.length });
+            } catch (err) {
+                res.status(500).json({ error: "Error procesando el CSV" });
+            } finally {
+                client.release();
+                fs.unlink(req.file.path, () => {});
+            }
+      });
+  };
+
+export const exportUnpluggedCsv = async (req, res) => {
+    const { rows } = await pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id");
+
+    let csv = "id,name,description, category,resources\n";
+
+    rows.forEach((o) => {
+        csv += `${o.id},"${o.name}","${o.description}",${o.category},${o.resources}\n`;
+    });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=exercises-olympiads-itineraries.csv");
+    res.send(csv);
+};
+
 // ENCHUFADOS
 // GET: obtener todos
 export const getAllPluggedIn = async (req, res) => {
@@ -118,6 +196,83 @@ export const getAllPluggedIn = async (req, res) => {
     }
   };
 
+// POST: Importar datos desde CSV
+export const importPluggedInCsv = async (req, res) => {
+    console.log(req.file);
+    if (!req.file) {
+        return res.status(400).json({ error: "No se ha enviado ningún archivo" });
+    }
+
+    // console.log("CSV: ", req.file);
+
+    const results = [];
+
+    fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on("data", (data) => {
+            console.log(data);
+            results.push(data);
+        })
+        .on("end", async () => {
+            const client = await pool.connect();
+            try {
+                await client.query("BEGIN");
+                for (const o of results) {
+                    if (!o.id || !o.name || !o.category || !o.resources || !o.rubric || !o.inputs || !o.testcase_value) {
+                        console.warn("Fila inválida: ", o);
+                        continue;
+                    }
+                    await pool.query(
+                        `INSERT INTO t_exercises (id,name,description, category,resources)
+                        VALUES ($1,$2,$3,$4,$5)
+                        ON CONFLICT (id) DO UPDATE SET
+                            id=EXCLUDED.id,
+                            name=EXCLUDED.name,
+                            description=EXCLUDED.description,
+                            category=EXCLUDED.category,
+                            resources=EXCLUDED.resources`,
+                        [
+                            o.id,
+                            o.name,
+                            o.description || null,
+                            o.category,
+                            o.resources,
+                        ]
+                    );
+                    await pool.query(
+                        `INSERT INTO t_plugged_in_exercises (id,inputs,time_limit,testcase_value)
+                        VALUES ($1,$2,$3,$4)
+                        RETURNING *`,
+                        [o.id, o.inputs, o.time_limit || null, o.testcase_value]
+                    );
+                }
+
+                await client.query("COMMIT");
+
+                res.json({ imported: results.length });
+            } catch (err) {
+                res.status(500).json({ error: "Error procesando el CSV" });
+            } finally {
+                client.release();
+                fs.unlink(req.file.path, () => {});
+            }
+      });
+  };
+
+export const exportPluggedInCsv = async (req, res) => {
+    const { rows } = await pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id");
+
+    let csv = "id,name,description,category,resources,inputs,time_limit,testcase_value\n";
+
+    rows.forEach((o) => {
+        csv += `${o.id},"${o.name}","${o.description}",${o.category},${o.resources},${o.inputs},${o.time_limit},${o.testcase_value}\n`;
+    });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=exercises-olympiads-itineraries.csv");
+    res.send(csv);
+};
+
 export default {
     // DESENCHUFADOS
     getAllUnplugged,
@@ -125,6 +280,8 @@ export default {
     createUnplugged,
     updateUnplugged,
     removeUnplugged,
+    importUnpluggedCsv,
+    exportUnpluggedCsv,
 
     // ENCHUFADOS
     getAllPluggedIn,
@@ -132,4 +289,6 @@ export default {
     createPluggedIn,
     updatePluggedIn,
     removePluggedIn,
+    importPluggedInCsv,
+    exportPluggedInCsv,
 };

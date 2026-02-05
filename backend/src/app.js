@@ -18,6 +18,7 @@ import adminAssignationsRoutes from "./routes/admin/assignations.js";
 import adminUsersRoutes from "./routes/admin/users.js";
 import adminMonitorsRoutes from "./routes/admin/monitors.js";
 import adminOrganizersRoutes from "./routes/admin/organizers.js";
+import adminParticipantsRoutes from "./routes/admin/participants.js"
 
 import { isAdmin, isOrganizer, authenticateToken } from "./middlewares/auth.js";
 
@@ -38,5 +39,6 @@ app.use("/api/admin/assignations", authenticateToken, isAdmin, adminAssignations
 app.use("/api/admin/users", authenticateToken, isAdmin, adminUsersRoutes);
 app.use("/api/admin/monitors", authenticateToken, isAdmin, adminMonitorsRoutes);
 app.use("/api/admin/organizers", authenticateToken, isAdmin, adminOrganizersRoutes);
+app.use("/api/admin/participants", authenticateToken, isAdmin, adminParticipantsRoutes);
 
 export default app;

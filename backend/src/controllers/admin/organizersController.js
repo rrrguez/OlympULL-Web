@@ -58,10 +58,74 @@ export const remove = async (req, res) => {
   }
 };
 
+// POST: Importar datos desde CSV
+export const importCsv = async (req, res) => {
+    console.log(req.file);
+    if (!req.file) {
+        return res.status(400).json({ error: "No se ha enviado ningún archivo" });
+    }
+
+    //console.log("CSV: ", req.file);
+
+    const results = [];
+
+    fs.createReadStream(req.file.path)
+        .pipe(csv())
+        .on("data", (data) => {
+            console.log(data);
+            results.push(data);
+        })
+        .on("end", async () => {
+            const client = await pool.connect();
+            try {
+                await client.query("BEGIN");
+                for (const o of results) {
+                    if (!o.id || !o.itinerary) {
+                        console.warn("Fila inválida: ", o);
+                        continue;
+                    }
+                    await pool.query(
+                        `INSERT INTO t_olympiads (id, itinerary)
+                        VALUES ($1,$2)`,
+                        [
+                            o.id,
+                            o.itinerary,
+                        ]
+                    );
+                }
+
+                await client.query("COMMIT");
+
+                res.json({ imported: results.length });
+            } catch (err) {
+                res.status(500).json({ error: "Error procesando el CSV" });
+            } finally {
+                client.release();
+                fs.unlink(req.file.path, () => {});
+            }
+      });
+  };
+
+export const exportCsv = async (req, res) => {
+    const { rows } = await pool.query("SELECT * FROM t_organizers");
+
+    let csv = "id,itinerary\n";
+
+    rows.forEach((o) => {
+        csv += `${o.id},"${o.itinerary}"\n`;
+    });
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.send(csv);
+};
+
 export default {
     getAll,
     getById,
     create,
     update,
     remove,
+    importCsv,
+    exportCsv,
 };

@@ -15,3 +15,8 @@ export const getUnpluggedExercise = (id) => axios.get(`${API}/${id}`, authHeader
 export const createUnpluggedExercise = (data) => axios.post(API, data, authHeaders());
 export const updateUnpluggedExercise = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 export const deleteUnpluggedExercise = (id) => axios.delete(`${API}/${id}`, authHeaders());
+export const importUnpluggedExercises = (formData) => axios.post(`${API}/import`, formData, authHeaders());
+export const exportUnpluggedExercises = () => axios.post(`${API}/export`, {
+    ...authHeaders(),
+    responseType: "blob",
+});

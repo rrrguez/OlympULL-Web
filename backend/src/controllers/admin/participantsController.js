@@ -1,4 +1,4 @@
-import * as model from "../../models/monitorsModel.js";
+import * as model from "../../models/participantsModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -14,10 +14,10 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getById(id);
+    const result = await model.getByid(id);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+      return res.status(404).json({ message: "Participante no encontrado" });
     }
 
     res.json(result.rows[0]);
@@ -65,7 +65,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    console.log("CSV: ", req.file);
+    // console.log("CSV: ", req.file);
 
     const results = [];
 
@@ -80,25 +80,20 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.exercise || !o.itinerary || !o.olympiad) {
+                    if (!o.id || !o.school || !o.itinerary) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_monitors (id, exercise,itinerary,olympiad)
-                        VALUES ($1,$2,$3,$4)
-                        ON CONFLICT (id, exercise,itinerary,olympiad) DO UPDATE SET
-                            exercise=EXCLUDED.exercise,
-                            itinerary=EXCLUDED.itinerary,
-                            olympiad=EXCLUDED.olympiad,
-                            start=EXCLUDED.start,
-                            stop=EXCLUDED.stop,
-                            timezone=EXCLUDED.timezone`,
+                        `INSERT INTO t_participants (id, school, itinerary)
+                        VALUES ($1,$2,$3)
+                        ON CONFLICT (id) DO UPDATE SET
+                            school=EXCLUDED.school,
+                            itinerary=EXCLUDED.itinerary`,
                         [
                             o.id,
-                            o.exerise,
+                            o.school,
                             o.itinerary,
-                            o.olympiad,
                         ]
                     );
                 }
@@ -116,12 +111,12 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_monitors");
+    const { rows } = await pool.query("SELECT * FROM t_participants");
 
-    let csv = "id,exercise,itinerary,olympiad\n";
+    let csv = "id,school,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.exercise}","${o.itinerary}",${o.olympiad}\n`;
+        csv += `${o.id},"${o.name}"\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

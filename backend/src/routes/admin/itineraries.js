@@ -1,13 +1,15 @@
 import express from "express";
-import itineraryController from "../../controllers/admin/itinerariesController.js";
+import itinerariesController from "../../controllers/admin/itinerariesController.js";
 
 const router = express.Router();
 
-router.get("/", itineraryController.getAll);
-router.get("/olympiad/:olympiadId", itineraryController.getByOlympiad);
-router.get("/:id", itineraryController.getOne);
-router.post("/", itineraryController.create);
-router.put("/:id", itineraryController.update);
-router.delete("/:id", itineraryController.remove);
+router.get("/", itinerariesController.getAll);
+router.get("/olympiad/:olympiadId", itinerariesController.getByOlympiad);
+router.get("/export", itinerariesController.exportCsv);
+router.get("/:id", itinerariesController.getOne);
+router.post("/", itinerariesController.create);
+router.put("/:id", itinerariesController.update);
+router.delete("/:id", itinerariesController.remove);
+router.post("/import", upload.single("file"), itinerariesController.importCsv);
 
 export default router;

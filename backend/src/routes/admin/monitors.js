@@ -4,9 +4,11 @@ import monitorsController from "../../controllers/admin/monitorsController.js";
 const router = express.Router();
 
 router.get("/", monitorsController.getAll);
+router.get("/export", monitorsController.exportCsv);
 router.get("/:id", monitorsController.getById);
 router.post("/", monitorsController.create);
 router.put("/:id", monitorsController.update);
 router.delete("/:id", monitorsController.remove);
+router.post("/import", upload.single("file"), monitorsController.importCsv);
 
 export default router;

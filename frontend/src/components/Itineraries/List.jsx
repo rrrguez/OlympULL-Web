@@ -59,14 +59,14 @@ export default function ItinerariesList() {
                         text="Duplicar"
                         title="Duplicar"
                         buttonClass="table-button"
-                        route="/admin/olympiads"
+                        onClick={() => duplicate(o)}
                         icon="fa-solid fa-clone"
                     />
                     <OlympULLIconButton
                         text="Editar"
                         title="Editar"
                         buttonClass="table-button"
-                        route="/admin/olympiads"
+                        route={`/admin/itineraries/edit/${o.id}`}
                         icon="fa-solid fa-pen-to-square"
                     />
 
@@ -74,7 +74,7 @@ export default function ItinerariesList() {
                         text="Eliminar"
                         title="Eliminar"
                         buttonClass="table-button"
-                        route="/admin/olympiads"
+                        onClick={() => remove(o.id, o.name)}
                         icon="fa-regular fa-trash-can"
                     />
                 </div>

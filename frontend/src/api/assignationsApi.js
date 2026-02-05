@@ -14,3 +14,8 @@ export const getAssignationsOlympiads = (exercise) => axios.get(`${API}/olympiad
 export const getAssignationsItineraries = (exercise, olympiad) => axios.get(`${API}/itineraries/${exercise}/${olympiad}`, authHeaders());
 export const createAssignation = (data) => axios.post(API, data, authHeaders());
 export const deleteAssignation = (id) => axios.delete(`${API}/${id}`, authHeaders());
+export const importAssignations = (formData) => axios.post(`${API}/import`, formData, authHeaders());
+export const exportAssignations = () => axios.post(`${API}/export`, {
+    ...authHeaders(),
+    responseType: "blob",
+});
