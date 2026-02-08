@@ -1,32 +1,48 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+// COMMON PAGES
 import NotFoundPage from "./pages/404";
 import LoginPage from "./pages/LoginPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+
+// ADMIN PAGES
 import AdminHome from "./pages/admin/AdminHome";
+// Olympiads
 import AdminOlympiadsPage from "./pages/admin/AdminOlympiadsPage";
 import AdminNewOlympiadPage from "./pages/admin/AdminNewOlympiadPage";
 import AdminEditOlympiadPage from "./pages/admin/AdminEditOlympiadPage";
+// Itineraries
 import AdminItinerariesPage from "./pages/admin/AdminItinerariesPage";
 import AdminNewItineraryPage from "./pages/admin/AdminNewItineraryPage";
+import AdminEditItineraryPage from "./pages/admin/AdminEditItineraryPage";
+//Exercises & rubrics
 import AdminExercisesPage from "./pages/admin/AdminExercisesPage";
 import AdminNewExercisePage from "./pages/admin/AdminNewExercisePage";
 import AdminRubricsPage from "./pages/admin/AdminRubricsPage";
 import AdminNewRubricPage from "./pages/admin/AdminNewRubricPage";
+import AdminEditRubricPage from "./pages/admin/AdminEditRubricPage";
+// Schools
 import AdminSchoolsPage from "./pages/admin/AdminSchoolsPage";
 import AdminNewSchoolPage from "./pages/admin/AdminNewSchoolPage";
+// Teams
 import AdminTeamsPage from "./pages/admin/AdminTeamsPage";
 import AdminNewTeamPage from "./pages/admin/AdminNewTeamPage";
+// Assignations
 import AdminAssignationsPage from "./pages/admin/AdminAssignationsPage";
 import AdminNewAssignationPage from "./pages/admin/AdminNewAssignationPage";
+// Users
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminNewUserPage from "./pages/admin/AdminNewUserPage";
 import AdminMonitorsPage from "./pages/admin/AdminMonitorsPage";
 import AdminNewMonitorPage from "./pages/admin/AdminNewMonitorPage";
 import AdminOrganizersPage from "./pages/admin/AdminOrganizersPage";
 import AdminNewOrganizerPage from "./pages/admin/AdminNewOrganizerPage";
+
+// ORGANIZER PAGES
 import OrganizerHome from "./pages/OrganizerHome";
+
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
 
@@ -104,6 +120,15 @@ export default function App() {
                 />
 
                 <Route
+                path="/admin/itineraries/edit/:id"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminEditItineraryPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
                 path="/admin/exercises"
                 element={
                     <PrivateRoute type="ADMIN">
@@ -135,6 +160,15 @@ export default function App() {
                 element={
                     <PrivateRoute type="ADMIN">
                         <AdminNewRubricPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
+                path="/admin/rubrics/edit/:id"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminEditRubricPage />
                     </PrivateRoute>
                 }
                 />

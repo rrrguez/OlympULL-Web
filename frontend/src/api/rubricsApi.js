@@ -16,7 +16,7 @@ export const createRubric = (data) => axios.post(API, data, authHeaders());
 export const updateRubric = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 export const deleteRubric = (id) => axios.delete(`${API}/${id}`, authHeaders());
 export const importRubrics = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportRubrics = () => axios.post(`${API}/export`, {
+export const exportRubrics = () => axios.get(`${API}/export`, {
     ...authHeaders(),
     responseType: "blob",
 });

@@ -68,7 +68,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    console.log("CSV: ", req.file);
+    //console.log("CSV: ", req.file);
 
     const results = [];
 

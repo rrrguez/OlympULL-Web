@@ -1,45 +1,74 @@
-import { Button, Container } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
+import { Container } from "react-bootstrap";
 import UnpluggedExercisesList from "../../components/Exercises/UnpluggedList";
 import PluggedInExercisesList from "../../components/Exercises/PluggedInList";
+import PageHeader from "../../components/layouts/PageHeader";
+import { toast } from "react-toastify";
+import { useState } from "react";
+import ImportModal from "../../components/modals/ImportModal";
+import { importPluggedInExercises, exportPluggedInExercises } from "../../api/pluggedInExercisesApi";
+import { importUnpluggedExercises, exportUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 
 export default function ExercisesPage() {
-    const navigate = useNavigate();
+    const [importOpen, setImportOpen] = useState(false);
+
+    const exportUnpluggedExercisesFunction = async () => {
+        try {
+            const res = await exportUnpluggedExercises();
+
+            const blob = new Blob([res.data], { type: "text/csv" });
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "unplugged-exercises.csv";
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            toast.error(err);
+        }
+    };
+
+    const exportPluggedInExercisesFunction = async () => {
+        try {
+            const res = await exportPluggedInExercises();
+
+            const blob = new Blob([res.data], { type: "text/csv" });
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "plugged-in-exercises.csv";
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            toast.error(err);
+        }
+    };
+
     return (
         <Container>
-            <div style={{display: "flex"}}>
-                <h1> Gestión de ejercicios </h1>
-                <div className="page-header-buttons">
-                <OlympULLIconButton
-                    text="Nuevo ejercicio"
-                    buttonClass="icon-button"
-                    route="/admin/exercises/new"
-                    icon="fa-solid fa-plus"
-                />
-                <OlympULLIconButton
-                    text="Importar datos"
-                    buttonClass="icon-button"
-                    route="/admin/exercises/new"
-                    icon="fa-solid fa-file-arrow-down"
-                />
-                <OlympULLIconButton
-                    text="Exportar datos"
-                    buttonClass="icon-button"
-                    route="/admin/exercises/new"
-                    icon="fa-solid fa-file-arrow-up"
-                />
-                <OlympULLIconButton
-                    text="Volver"
-                    buttonClass="icon-button"
-                    route="/admin/"
-                    icon="fa-solid fa-angle-left"
-                />
-                </div>
-            </div>
+            <PageHeader
+                title = "Gestión de ejercicios"
+                newButton={1}
+                newButtonText="Nuevo ejercicio"
+                newButtonRoute="/admin/olympiads/new"
+                importButtonOnClick={() => setImportOpen(true)}
+                //exportButtonOnClick={exportExercisesFunction}
+                backButtonRoute="/admin"
+            />
 
             <UnpluggedExercisesList/>
             <PluggedInExercisesList/>
+
+            <ImportModal
+                open={importOpen}
+                onClose={() => setImportOpen(false)}
+                //onImport={importExercises}
+                title="Importar ejercicios"
+                successMessage="Ejercicios importados con éxito"
+            />
         </Container>
 
     );

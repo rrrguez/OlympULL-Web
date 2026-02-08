@@ -1,6 +1,7 @@
 // src/routes/olympiadsRoutes.js
 import express from "express";
 import rubricsController from "../../controllers/admin/rubricsController.js";
+import upload from "../../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

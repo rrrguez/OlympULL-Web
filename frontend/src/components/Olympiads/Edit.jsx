@@ -170,7 +170,7 @@ export default function EditOlympiad() {
             <div className="element-form">
                 <h1/>
                 <button className="new-button" disabled={loading}>
-                    {loading ? "Editando..." : "Editar olimpiada"}
+                    {loading ? "Editando..." : "Editar"}
                 </button>
             </div>
         </form>

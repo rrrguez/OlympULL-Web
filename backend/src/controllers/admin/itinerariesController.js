@@ -1,4 +1,7 @@
 import * as model from "../../models/itinerariesModel.js";
+import pool from "../../db.js";
+import csv from "csv-parser";
+import fs from "fs";
 
 // GET: obtener todos
 export const getAll = async (req, res) => {
@@ -62,7 +65,7 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -91,13 +94,13 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name || !o.olympiadId) {
+                    if (!o.id || !o.name || !o.olympiad) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
                         `INSERT INTO t_itineraries (id, name, description, olympiad)
-                        VALUES ($1,$2,$3,$4,$5,$6,$7)
+                        VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
                             name=EXCLUDED.name,
                             description=EXCLUDED.description,
@@ -106,7 +109,7 @@ export const importCsv = async (req, res) => {
                             o.id,
                             o.name,
                             o.description || null,
-                            o.olympiadId,
+                            o.olympiad,
                         ]
                     );
                 }
@@ -124,16 +127,16 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_olympiads");
+    const { rows } = await pool.query("SELECT * FROM t_itineraries");
 
     let csv = "id,name,description,olympiad\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}","${o.description}",${o.olympiadId}\n`;
+        csv += `${o.id},"${o.name}","${o.description}",${o.olympiad}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=itineraries.csv");
     res.send(csv);
 };
 

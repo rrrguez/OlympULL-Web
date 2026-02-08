@@ -14,7 +14,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                         icon="fa-solid fa-plus"
                     />
                 ) : (
-                    <div/>
+                    null
                 )}
                 { importButton === 1 ? (
                     <OlympULLIconButton
@@ -24,7 +24,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                         icon="fa-solid fa-file-arrow-down"
                     />
                 ) : (
-                    <div/>
+                    null
                 )}
                 { exportButton === 1 ? (
                     <OlympULLIconButton
@@ -34,7 +34,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                         icon="fa-solid fa-file-arrow-up"
                     />
                 ) : (
-                    <div/>
+                    null
                 )}
                 <OlympULLIconButton
                     text="Volver"

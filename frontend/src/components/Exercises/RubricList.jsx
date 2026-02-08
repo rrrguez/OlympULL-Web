@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteRubric, getAllRubrics } from "../../api/rubricsApi";
+import { createRubric, deleteRubric, getAllRubrics } from "../../api/rubricsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function RubricList() {
     const [data, setData] = useState([]);
@@ -21,9 +22,30 @@ export default function RubricList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteRubric(id);
-        load();
+    const remove = async (id, name) => {
+        try {
+            await deleteRubric(id);
+            toast.success("Rúbrica '" + name + "' eliminada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
+    };
+
+    const duplicate = async (rubric) => {
+        try {
+            const newRubric = {
+                ...rubric,
+                id: rubric.id + " - copia",
+                name: rubric.name + " - copia",
+            };
+
+            await createRubric(newRubric);
+            toast.success("Rúbrica '" + rubric.name + "' duplicada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -61,22 +83,21 @@ export default function RubricList() {
                             text="Duplicar"
                             title="Duplicar"
                             buttonClass="table-button"
-                            route="/admin/rubrics"
-                            icon="fa-solid fa-pen-to-square"
+                            onClick={() => duplicate(o)}
+                            icon="fa-solid fa-clone"
                         />
-
                         <OlympULLIconButton
                             text="Editar"
                             title="Editar"
                             buttonClass="table-button"
-                            route="/admin/rubrics"
+                            route={`/admin/rubrics/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
-
                         <OlympULLIconButton
                             text="Eliminar"
+                            title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/rubrics"
+                            onClick={() => remove(o.id, o.name)}
                             icon="fa-regular fa-trash-can"
                         />
                         </div>

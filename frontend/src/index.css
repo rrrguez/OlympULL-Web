@@ -239,7 +239,7 @@ button.Toastify__close-button:hover {
 
 .login-form, .password-form {
     display: grid;
-    grid-template-rows: 80% 20%;
+    grid-template-rows: 8fr 2fr;
     align-items: center;
     align-content: center;
     gap: 5%;
@@ -372,16 +372,16 @@ tr {
 
 .table-button-container {
     display: grid;
-    grid-template-columns: 47.5% 47.5%;
-    grid-column-gap: 5%;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 5px;
     font-family: 'Argentum Sans Semibold';
     font-size: smaller;
 }
 
 .table-button-container.with-duplicate {
     display: grid;
-    grid-template-columns: 31.5% 31.5% 31.5%;
-    grid-column-gap: 2.75%;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 5px;
     font-family: 'Argentum Sans Semibold';
     font-size: smaller;
 }
@@ -400,17 +400,22 @@ tr {
 
 .page-header-layout {
     display: grid;
-    grid-template-columns: 40% 55%;
-    gap: 5%;
+    grid-template-columns: 1fr 1fr;
 }
 
 .page-header-buttons {
     display: grid;
-    grid-template-columns: 24.25% 24.25% 24.25% 24.25%;
-    grid-gap: 1%;
+    grid-template-columns: repeat(auto-fill, 1fr);
+    gap: 5px;
     height: 45%;
     align-self: center;
 }
+
+.page-header-buttons {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: end;
+  }
 
 .skeleton-cell {
     height: 30px;
@@ -440,7 +445,7 @@ tr {
     align-items: center;
     align-self: center;
     justify-content: center;
-    gap: 6.5%;
+    gap: 5px;
 
     height: 100%;
     width: 100%;

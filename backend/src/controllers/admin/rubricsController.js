@@ -1,4 +1,7 @@
 import * as model from "../../models/rubricsModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -14,7 +17,7 @@ export const getAll = async (req, res) => {
 export const getOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getById(id);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Rúbrica no encontrada" });
@@ -51,7 +54,7 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Rúbrica eliminada correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -65,7 +68,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    console.log("CSV: ", req.file);
+    //console.log("CSV: ", req.file);
 
     const results = [];
 
@@ -124,7 +127,7 @@ export const exportCsv = async (req, res) => {
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=rubrics.csv");
     res.send(csv);
 };
 

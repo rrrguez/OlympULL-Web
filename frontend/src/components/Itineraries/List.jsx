@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
+import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function ItinerariesList() {
     const [data, setData] = useState([]);
@@ -21,9 +22,30 @@ export default function ItinerariesList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteItinerary(id);
-        load();
+    const remove = async (id, name) => {
+        try {
+            await deleteItinerary(id);
+            toast.success("Itinerario '" + name + "' eliminado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
+    };
+
+    const duplicate = async (itinerary) => {
+        try {
+            const newItinerary = {
+                ...itinerary,
+                id: itinerary.id + " - copia",
+                name: itinerary.name + " - copia",
+            };
+
+            await createItinerary(newItinerary);
+            toast.success("Itinerario '" + itinerary.name + "' duplicado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (

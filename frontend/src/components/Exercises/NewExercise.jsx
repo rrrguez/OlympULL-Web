@@ -49,12 +49,11 @@ export default function NewExercise() {
     setLoading(true);
 
     try {
-        console.log(formData.category);
+        // console.log(formData.category);
         if(formData.type === "DESENCHUFADO") {
             await createUnpluggedExercise(formData);
             navigate("/admin/exercises");
         } else {
-        console.log("prueba")
             await createPluggedInExercise(formData);
             navigate("/admin/exercises");
         }
@@ -149,6 +148,7 @@ export default function NewExercise() {
                 className="form-control"
                 value={formData.resources}
                 onChange={handleChange}
+                required
             />
             </div>
         </div>
@@ -217,6 +217,7 @@ export default function NewExercise() {
                     id="pdf-upload"
                     accept="application/pdf"
                     onChange={handleChange}
+                    //required
                 />
                 </div>
             </>

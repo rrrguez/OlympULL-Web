@@ -101,7 +101,6 @@ export default function OlympiadsList() {
                             route={`/admin/olympiads/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
-
                         <OlympULLIconButton
                             text="Eliminar"
                             title="Eliminar"
