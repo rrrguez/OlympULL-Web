@@ -1,0 +1,5 @@
+id,name,description,category,resources,inputs,time_limit,testcase_value
+EJ-05,"Ejercicio 5","",COMPOSITION,PC,5,3600,5
+EJ-06,"Ejercicio 6","",FUNCTIONS,PC,2,3600,10
+EJ-07,"Ejercicio 7","",AI,PC,5,3600,5
+EJ-08,"Ejercicio 8","",PATTERNS RECOGNITION,PC,2,3600,10

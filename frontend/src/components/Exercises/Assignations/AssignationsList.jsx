@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { getAllAssignations } from "../../api/assignationsApi";
-import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { getAllAssignations } from "../../../api/assignationsApi";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function AssignationsList() {
     const [data, setData] = useState([]);

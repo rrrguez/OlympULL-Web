@@ -378,12 +378,15 @@ tr {
     font-size: smaller;
 }
 
+.table-button-container button {
+    height: 90%;
+}
+
 .table-button-container.with-duplicate {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-column-gap: 5px;
     font-family: 'Argentum Sans Semibold';
-    font-size: smaller;
 }
 
 .table tbody tr td {
@@ -415,7 +418,22 @@ tr {
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     justify-content: end;
-  }
+}
+
+.exercise-header-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 1fr);
+    grid-template-rows: 1fr;
+    gap: 5px;
+    align-self: center;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: end;
+}
+
+.exercise-header-buttons button {
+    height: 80%;
+}
 
 .skeleton-cell {
     height: 30px;
@@ -457,6 +475,13 @@ tr {
 .table-button {
     height: 95%;
     align-self: center;
+    gap: 10px;
+    background-color: #888888;
+}
+
+.table-button:hover {
+    color: #dbdbdbdb;
+    background-color: #888888;
 }
 
 .table-button i, .icon-button i , .dropdown-button i {

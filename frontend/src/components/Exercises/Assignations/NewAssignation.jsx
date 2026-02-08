@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createAssignation } from "../../api/assignationsApi";
-import { getItineraryByOlympiad } from "../../api/itinerariesApi";
-import { getAllOlympiads } from "../../api/olympiadsApi";
-import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
-import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
+import { createAssignation } from "../../../api/assignationsApi";
+import { getItineraryByOlympiad } from "../../../api/itinerariesApi";
+import { getAllOlympiads } from "../../../api/olympiadsApi";
+import { getAllPluggedInExercises } from "../../../api/pluggedInExercisesApi";
+import { getAllUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
 import { toast } from "react-toastify";
 
 export default function NewAssignation() {

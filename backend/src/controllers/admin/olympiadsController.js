@@ -87,10 +87,12 @@ export const importCsv = async (req, res) => {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
+                    /**
                     console.log("INSERTING:", {
                         id: o.id,
                         year: Number(o.year),
                     });
+                    */
                     await pool.query(
                         `INSERT INTO t_olympiads (id, name, description, year, start, stop, timezone)
                         VALUES ($1,$2,$3,$4,$5,$6,$7)

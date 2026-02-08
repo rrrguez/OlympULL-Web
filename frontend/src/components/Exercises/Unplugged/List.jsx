@@ -1,12 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
-import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
-import translateCategory from "../../utils/categories";
+import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
+import translateCategory from "../../../utils/categories";
+import ExercisesHeader from "../../layouts/ExercisesHeader";
+import ImportModal from "../../modals/ImportModal";
 
 export default function UnpluggedExercisesList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const [importOpen, setImportOpen] = useState(false);
+
+    const exportUnpluggedExercisesFunction = async () => {
+        try {
+            const res = await exportUnpluggedExercises();
+
+            const blob = new Blob([res.data], { type: "text/csv" });
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "unplugged-exercises.csv";
+            a.click();
+
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            toast.error(err);
+        }
+    };
 
     useEffect(() => {
         load();
@@ -29,12 +51,21 @@ export default function UnpluggedExercisesList() {
 
     return (
         <Container>
-            <h2>Ejercicios desenchufados</h2>
+            <ExercisesHeader
+                title="Ejercicios desenchufados"
+                newButton={1}
+                importButton={1}
+                exportButton={1}
+                newButtonText="Nuevo ejercicio desenchufado"
+                newButtonRoute="/admin/exercises/unplugged/new"
+                importButtonOnClick=""
+                exportButtonOnClick=""
+            />
+
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Código</th>
-                    <th>Título</th>
+                    <th>Nombre</th>
                     <th>Categoría</th>
                     <th>Recursos</th>
                     <th>Rúbrica</th>
@@ -54,7 +85,6 @@ export default function UnpluggedExercisesList() {
                         ))
                         : data.map((o) => (
                             <tr key={o.id}>
-                    <td>{o.id}</td>
                     <td>{o.name}</td>
                     <td>{translateCategory(o.category)}</td>
                     <td>{o.resources}</td>

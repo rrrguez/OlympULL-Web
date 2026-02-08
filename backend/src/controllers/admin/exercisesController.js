@@ -1,4 +1,6 @@
 import pool from "../../db.js";
+import csv from "csv-parser";
+import fs from "fs";
 import * as model from "../../models/exercisesModel.js";
 
 // DESENCHUFADOS
@@ -53,7 +55,7 @@ export const updateUnplugged = async (req, res) => {
 export const removeUnplugged = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.deleteUnplugged(id);
+    await model.removeUnplugged(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -90,7 +92,6 @@ export const importUnpluggedCsv = async (req, res) => {
                         `INSERT INTO t_exercises (id,name,description, category,resources)
                         VALUES ($1,$2,$3,$4,$5)
                         ON CONFLICT (id) DO UPDATE SET
-                            id=EXCLUDED.id,
                             name=EXCLUDED.name,
                             description=EXCLUDED.description,
                             category=EXCLUDED.category,
@@ -106,8 +107,12 @@ export const importUnpluggedCsv = async (req, res) => {
                     await pool.query(
                         `INSERT INTO t_unplugged_exercises (id, rubric)
                         VALUES ($1,$2)
-                        RETURNING *`,
-                        [o.id, o.rubric]
+                        ON CONFLICT (id) DO UPDATE SET
+                            rubric=EXCLUDED.rubric`,
+                        [
+                            o.id,
+                            o.rubric
+                        ]
                     );
                 }
 
@@ -126,10 +131,10 @@ export const importUnpluggedCsv = async (req, res) => {
 export const exportUnpluggedCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id");
 
-    let csv = "id,name,description, category,resources\n";
+    let csv = "id,name,description,category,resources,rubric\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}","${o.description}",${o.category},${o.resources}\n`;
+        csv += `${o.id},"${o.name}","${o.description}",${o.category},${o.resources},${o.rubric}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
@@ -141,60 +146,60 @@ export const exportUnpluggedCsv = async (req, res) => {
 // GET: obtener todos
 export const getAllPluggedIn = async (req, res) => {
     try {
-      const result = await model.getAllPluggedIn();
-      res.json(result.rows);
+    const result = await model.getAllPluggedIn();
+    res.json(result.rows);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
     }
-  };
+};
 
-  // GET: obtener uno por código
-  export const getOnePluggedIn = async (req, res) => {
+// GET: obtener uno por código
+export const getOnePluggedIn = async (req, res) => {
     try {
-      const { id } = req.params;
-      const result = await model.getPluggedInByid(id);
+    const { id } = req.params;
+    const result = await model.getPluggedInByid(id);
 
-      if (result.rows.length === 0) {
+    if (result.rows.length === 0) {
         return res.status(404).json({ message: "Ejercicio no encontrado" });
-      }
-
-      res.json(result.rows[0]);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
     }
-  };
 
-  // POST: crear nuevo
-  export const createPluggedIn = async (req, res) => {
+    res.json(result.rows[0]);
+    } catch (err) {
+    res.status(500).json({ error: err.message });
+    }
+};
+
+// POST: crear nuevo
+export const createPluggedIn = async (req, res) => {
     try {
-      const data = await model.createPluggedIn(req.body);
-      res.status(201).json(data);
+    const data = await model.createPluggedIn(req.body);
+    res.status(201).json(data);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
     }
-  };
+};
 
-  // PUT: actualizar
-  export const updatePluggedIn = async (req, res) => {
+// PUT: actualizar
+export const updatePluggedIn = async (req, res) => {
     try {
-      const { id } = req.params;
-      const data = await model.updatePluggedIn({ id, ...req.body });
-      res.json(data.rows[0]);
+    const { id } = req.params;
+    const data = await model.updatePluggedIn({ id, ...req.body });
+    res.json(data.rows[0]);
     } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
     }
-  };
+};
 
-  // DELETE
-  export const removePluggedIn = async (req, res) => {
+// DELETE
+export const removePluggedIn = async (req, res) => {
     try {
-      const { id } = req.params;
-      await model.deletePluggedIn(id);
-      res.json({ message: "Eliminado correctamente" });
+    const { id } = req.params;
+    await model.removePluggedIn(id);
+    res.json({ message: "Eliminado correctamente" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
     }
-  };
+};
 
 // POST: Importar datos desde CSV
 export const importPluggedInCsv = async (req, res) => {
@@ -218,7 +223,7 @@ export const importPluggedInCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name || !o.category || !o.resources || !o.rubric || !o.inputs || !o.testcase_value) {
+                    if (!o.id || !o.name || !o.category || !o.resources || !o.inputs || !o.testcase_value) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
@@ -226,7 +231,6 @@ export const importPluggedInCsv = async (req, res) => {
                         `INSERT INTO t_exercises (id,name,description, category,resources)
                         VALUES ($1,$2,$3,$4,$5)
                         ON CONFLICT (id) DO UPDATE SET
-                            id=EXCLUDED.id,
                             name=EXCLUDED.name,
                             description=EXCLUDED.description,
                             category=EXCLUDED.category,
@@ -242,8 +246,16 @@ export const importPluggedInCsv = async (req, res) => {
                     await pool.query(
                         `INSERT INTO t_plugged_in_exercises (id,inputs,time_limit,testcase_value)
                         VALUES ($1,$2,$3,$4)
-                        RETURNING *`,
-                        [o.id, o.inputs, o.time_limit || null, o.testcase_value]
+                        ON CONFLICT (id) DO UPDATE SET
+                            inputs=EXCLUDED.inputs,
+                            time_limit=EXCLUDED.time_limit,
+                            testcase_value=EXCLUDED.testcase_value`,
+                        [
+                            o.id,
+                            Number(o.inputs),
+                            Number(o.time_limit) || null,
+                            Number(o.testcase_value)
+                        ]
                     );
                 }
 

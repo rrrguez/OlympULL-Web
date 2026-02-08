@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import AssignationsList from "../../components/Exercises/AssignationsList";
+import AssignationsList from "../../components/Exercises/Assignations/AssignationsList";
 import PageHeader from "../../components/layouts/PageHeader";
 
 export default function AssignationsPage() {

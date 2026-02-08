@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import NewRubric from "../../components/Exercises/NewRubric";
+import NewRubric from "../../components/Rubrics/NewRubric";
 import PageHeader from "../../components/layouts/PageHeader";
 
 export default function RubricsPage() {

@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import RubricsList from "../../components/Exercises/RubricList";
+import RubricsList from "../../components/Rubrics/RubricList";
 import PageHeader from "../../components/layouts/PageHeader";
 import { toast } from "react-toastify";
 import { useState } from "react";

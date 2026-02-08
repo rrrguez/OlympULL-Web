@@ -17,9 +17,14 @@ import AdminEditOlympiadPage from "./pages/admin/AdminEditOlympiadPage";
 import AdminItinerariesPage from "./pages/admin/AdminItinerariesPage";
 import AdminNewItineraryPage from "./pages/admin/AdminNewItineraryPage";
 import AdminEditItineraryPage from "./pages/admin/AdminEditItineraryPage";
-//Exercises & rubrics
+//Exercises
 import AdminExercisesPage from "./pages/admin/AdminExercisesPage";
-import AdminNewExercisePage from "./pages/admin/AdminNewExercisePage";
+// Plugged in
+import AdminNewPluggedInPage from "./pages/admin/AdminNewPluggedInExercisePage";
+// Unplugged
+import AdminNewUnpluggedPage from "./pages/admin/AdminNewUnpluggedExercisePage";
+
+// Rubrics
 import AdminRubricsPage from "./pages/admin/AdminRubricsPage";
 import AdminNewRubricPage from "./pages/admin/AdminNewRubricPage";
 import AdminEditRubricPage from "./pages/admin/AdminEditRubricPage";
@@ -138,10 +143,19 @@ export default function App() {
                 />
 
                 <Route
-                path="/admin/exercises/new"
+                path="/admin/exercises/unplugged/new"
                 element={
                     <PrivateRoute type="ADMIN">
-                        <AdminNewExercisePage />
+                        <AdminNewUnpluggedPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
+                path="/admin/exercises/plugged-in/new"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminNewPluggedInPage />
                     </PrivateRoute>
                 }
                 />
