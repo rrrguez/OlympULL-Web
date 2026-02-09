@@ -82,7 +82,7 @@ export default function EditItinerary() {
                 <input
                     type="text"
                     name="id"
-                    className="form-control"
+                    className="form-control read-only-field"
                     value={formData.id}
                     disabled
                 />

@@ -38,8 +38,8 @@ export default function OlympiadsList() {
         try {
             const newOlympiad = {
                 ...olympiad,
-                id: olympiad.id + " - copia",
-                name: olympiad.name + " - copia",
+                id: olympiad.id + "-copia",
+                name: olympiad.name + "-copia",
             };
 
             await createOlympiad(newOlympiad);
@@ -59,6 +59,7 @@ export default function OlympiadsList() {
                 <th>Título</th>
                 <th>Fecha de inicio</th>
                 <th>Fecha de final</th>
+                <th>Zona horaria</th>
                 <th>Acciones rápidas</th>
             </tr>
             </thead>
@@ -83,6 +84,7 @@ export default function OlympiadsList() {
                 <td>{o.name}</td>
                 <td>{formatDate(o.start)}</td>
                 <td>{formatDate(o.stop)}</td>
+                <td>{o.timezone}</td>
                 <td>
                     <div className="table-button-container with-duplicate">
                         <OlympULLIconButton

@@ -69,7 +69,7 @@ export default function EditOlympiad() {
                     <input
                         type="text"
                         name="id"
-                        className="form-control"
+                        className="form-control read-only-field"
                         value={formData.id}
                         disabled
                     />
