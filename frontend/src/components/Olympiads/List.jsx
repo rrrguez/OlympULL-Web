@@ -56,7 +56,6 @@ export default function OlympiadsList() {
             <thead>
             <tr>
                 <th></th>
-                <th>Código</th>
                 <th>Título</th>
                 <th>Fecha de inicio</th>
                 <th>Fecha de final</th>
@@ -81,7 +80,6 @@ export default function OlympiadsList() {
                     {getOlympiadStatus(o.start, o.stop) === 'active' && <i className="fa-solid fa-fire fa-fade" />}
                     {getOlympiadStatus(o.start, o.stop) === 'finished' && <i className="fa-regular fa-circle-check" />}
                 </td>
-                <td>{o.id}</td>
                 <td>{o.name}</td>
                 <td>{formatDate(o.start)}</td>
                 <td>{formatDate(o.stop)}</td>

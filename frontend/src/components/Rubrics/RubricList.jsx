@@ -53,7 +53,6 @@ export default function RubricList() {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Código</th>
                     <th>Nombre</th>
                     <th>Puntos</th>
                     <th>Etiquetas</th>
@@ -73,7 +72,6 @@ export default function RubricList() {
                 ))
                 : data.map((o) => (
                     <tr key={o.id}>
-                    <td>{o.id}</td>
                     <td>{o.name}</td>
                     <td>{o.points}</td>
                     <td>{o.labels}</td>

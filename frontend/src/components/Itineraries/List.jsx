@@ -53,7 +53,6 @@ export default function ItinerariesList() {
         <Table striped bordered hover>
             <thead>
             <tr>
-                <th>Código</th>
                 <th>Título</th>
                 <th>Olimpiada</th>
                 <th>Acciones rápidas</th>
@@ -72,7 +71,6 @@ export default function ItinerariesList() {
             ))
             : data.map((o) => (
             <tr key={o.id}>
-                <td>{o.id}</td>
                 <td>{o.name}</td>
                 <td>{o.olympiad}</td>
                 <td>

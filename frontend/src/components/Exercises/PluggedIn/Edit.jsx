@@ -70,14 +70,14 @@ export default function NewExercise() {
         <form onSubmit={handleSubmit}>
             <div className="element-form">
                 <div>
-                    <label className="form-label">Código</label>
+                    <label className="form-label">ID</label>
                     <input
                         type="text"
                         name="id"
                         className="form-control"
                         value={formData.id}
                         onChange={handleChange}
-                        required
+                        disabled
                     />
                 </div>
 

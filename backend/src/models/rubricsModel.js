@@ -10,8 +10,8 @@ export const create = (data) =>
   );
 export const update = (data) =>
   pool.query(
-    "UPDATE T_RUBRICS SET id=$1,name=$2,description=$3,points=$4,labels=$5 WHERE id=$6 RETURNING *",
-    [data.id, data.name, data.description, data.points, data.labels, data.oldId]
+    "UPDATE T_RUBRICS SET name=$2,description=$3,points=$4,labels=$5 WHERE id=$1 RETURNING *",
+    [data.id, data.name, data.description, data.points, data.labels]
   );
 export const remove = (id) =>
   pool.query("DELETE FROM T_RUBRICS WHERE id=$1", [id]);
