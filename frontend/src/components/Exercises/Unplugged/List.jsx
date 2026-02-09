@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteUnpluggedExercise, getAllUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
+import { deleteUnpluggedExercise, getAllUnpluggedExercises, importUnpluggedExercises, exportUnpluggedExercises, createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 import translateCategory from "../../../utils/categories";
 import ExercisesHeader from "../../layouts/ExercisesHeader";
 import ImportModal from "../../modals/ImportModal";
+import { toast } from "react-toastify";
 
 export default function UnpluggedExercisesList() {
     const [data, setData] = useState([]);
@@ -44,9 +45,30 @@ export default function UnpluggedExercisesList() {
         loadData();
     };
 
+    const duplicate = async (exercise) => {
+        try {
+            const newExercise = {
+                ...exercise,
+                id: exercise.id + "-copia",
+                name: exercise.name + "-copia",
+            };
+
+            await createUnpluggedExercise(newExercise);
+            toast.success("Ejercicio '" + exercise.name + "' duplicado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
+    };
+
     const remove = async (id) => {
-        await deleteUnpluggedExercise(id);
-        load();
+        try {
+            await deleteUnpluggedExercise(id);
+            toast.success("Ejercicio '" + name + "' eliminado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -58,8 +80,8 @@ export default function UnpluggedExercisesList() {
                 exportButton={1}
                 newButtonText="Nuevo ejercicio desenchufado"
                 newButtonRoute="/admin/exercises/unplugged/new"
-                importButtonOnClick=""
-                exportButtonOnClick=""
+                importButtonOnClick={() => setImportOpen(true)}
+                exportButtonOnClick={exportUnpluggedExercisesFunction}
             />
 
             <Table striped bordered hover>
@@ -95,7 +117,7 @@ export default function UnpluggedExercisesList() {
                                 text="Duplicar"
                                 title="Duplicar"
                                 buttonClass="table-button"
-                                route="/admin/exercises"
+                                onClick={() => duplicate(o)}
                                 icon="fa-solid fa-clone"
                             />
 
@@ -103,7 +125,7 @@ export default function UnpluggedExercisesList() {
                                 text="Editar"
                                 title="Editar"
                                 buttonClass="table-button"
-                                route="/admin/exercises"
+                                route={`/admin/exercises/unplugged/edit/${o.id}`}
                                 icon="fa-solid fa-pen-to-square"
                             />
 
@@ -111,7 +133,7 @@ export default function UnpluggedExercisesList() {
                                 text="Eliminar"
                                 title="Eliminar"
                                 buttonClass="table-button"
-                                route="/admin/exercises"
+                                onClick={() => remove(o.id, o.name)}
                                 icon="fa-regular fa-trash-can"
                             />
                         </div>
@@ -120,6 +142,13 @@ export default function UnpluggedExercisesList() {
                     ))}
                     </tbody>
             </Table>
+            <ImportModal
+                open={importOpen}
+                onClose={() => setImportOpen(false)}
+                onImport={importUnpluggedExercises}
+                title="Importar ejercicios desenchufados"
+                successMessage="Ejercicios importados con éxito"
+            />
         </Container>
     );
 }

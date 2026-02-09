@@ -49,8 +49,8 @@ export default function PluggedInExercisesList() {
         try {
             const newExercise = {
                 ...exercise,
-                id: exercise.id + " - copia",
-                name: exercise.name + " - copia",
+                id: exercise.id + "-copia",
+                name: exercise.name + "-copia",
             };
 
             await createPluggedInExercise(newExercise);

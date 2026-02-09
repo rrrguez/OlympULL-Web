@@ -182,11 +182,11 @@ export const createPluggedIn = async (req, res) => {
 // PUT: actualizar
 export const updatePluggedIn = async (req, res) => {
     try {
-    const { id } = req.params;
-    const data = await model.updatePluggedIn({ id, ...req.body });
-    res.json(data.rows[0]);
+        const { id } = req.params;
+        const data = await model.updatePluggedIn({ id, ...req.body });
+        res.json(data.rows[0]);
     } catch (err) {
-    res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 

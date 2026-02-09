@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPluggedInExercise, updatePluggedInExercise } from "../../../api/pluggedInExercisesApi";
+import { getUnpluggedExercise, updateUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import { toast } from "react-toastify";
+import { getAllRubrics } from "../../../api/rubricsApi";
 
-export default function NewExercise() {
+export default function EditUnpluggedExercise() {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    const [rubrics, setRubrics] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -14,10 +16,7 @@ export default function NewExercise() {
         name: "",
         description: "",
         category: "",
-        resources: "",
-        inputs: null,
-        time_limit: null,
-        testcase_value: null,
+        rubric: "",
     });
 
     function handleChange(e) {
@@ -27,13 +26,26 @@ export default function NewExercise() {
         });
     }
 
+    useEffect(() => {
+        async function loadRubrics() {
+        try {
+            const data = await getAllRubrics();
+            setRubrics(data.data);
+        } catch (err) {
+            console.error("Error cargando rúbricas", err);
+            toast.error("Error cargando las rúbricas");
+        }
+        }
+        loadRubrics();
+    }, []);
+
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
         try {
             // console.log(formData.category);
-            await updatePluggedInExercise(id, formData);
+            await updateUnpluggedExercise(id, formData);
             navigate("/admin/exercises");
             toast.success("Ejercicio actualizado con éxito");
         } catch (err) {
@@ -47,7 +59,7 @@ export default function NewExercise() {
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await getPluggedInExercise(id);
+                const res = await getUnpluggedExercise(id);
                 const o = res.data;
 
                 setFormData({
@@ -135,48 +147,21 @@ export default function NewExercise() {
 
             <div className="element-form">
                 <div>
-                    <label className="form-label">Número de inputs</label>
-                    <input
-                        type="number"
-                        name="inputs"
-                        className="form-control"
-                        value={formData.inputs}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                <div>
-                    <label className="form-label">Límite de tiempo (segundos)</label>
-                    <input
-                        type="number"
-                        name="time_limit"
-                        className="form-control"
-                        value={formData.time_limit}
-                        onChange={handleChange}
-                    />
-                </div>
-
-                <div>
-                    <label className="form-label">Puntos por cada testcase superado</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="testcase_value"
-                        className="form-control"
-                        value={formData.testcase_value}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label className="form-label">Enunciado</label>
-                    <input
-                        className="form-control file-input"
-                        type="file"
-                        id="pdf-upload"
-                        accept="application/pdf"
-                        onChange={handleChange}
-                        //required
-                    />
+                    <label className="form-label">Rúbrica</label>
+                    <select
+                    name="rubric"
+                    className="form-control"
+                    value={formData.rubric}
+                    onChange={handleChange}
+                    required
+                    >
+                    <option value="">-- Seleccione una rúbrica --</option>
+                    {rubrics.map((o) => (
+                        <option key={o.id} value={o.id}>
+                        {o.id} - {o.name}
+                        </option>
+                    ))}
+                    </select>
                 </div>
             </div>
 

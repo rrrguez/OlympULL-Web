@@ -3,7 +3,6 @@ import { Container, Table } from "react-bootstrap";
 import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
-import { getOlympiad } from "../../api/olympiadsApi";
 
 export default function ItinerariesList() {
     const [data, setData] = useState([]);

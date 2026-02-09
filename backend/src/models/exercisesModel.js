@@ -3,7 +3,7 @@ import pool from "../db.js";
 // EJERCICIOS DESENCHUFADOS
 
 // Obtener todos
-export const getAllUnplugged = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id;");
+export const getAllUnplugged = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id ORDER BY name;");
 
 // Obtener uno por ID
 export const getUnpluggedByid = (id) =>
@@ -60,13 +60,14 @@ export const updateUnplugged = async (data) => {
     try {
         await client.query("BEGIN");
 
-        await client.query(`
+        const result = await client.query(`
             UPDATE t_exercises
             SET name = $1,
                 description = $2,
                 category = $3,
                 resources = $4
             WHERE id = $5
+            RETURNING *
         `, [
             data.name,
             data.description,
@@ -85,6 +86,7 @@ export const updateUnplugged = async (data) => {
         ]);
 
         await client.query("COMMIT");
+        return result;
     } catch (err) {
         await client.query("ROLLBACK");
         throw err;
@@ -102,11 +104,11 @@ export const removeUnplugged = (id) => {
 // EJERICIOS ENCHUFADOS
 
 // Obtener todos
-export const getAllPluggedIn = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id;");
+export const getAllPluggedIn = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id ORDER BY e.name;");
 
-// Obtener uno por ID - ARREGLAR
+// Obtener uno por ID
 export const getPluggedInByid = (id) =>
-  pool.query("SELECT * FROM t_exercises WHERE id = $1", [id]);
+  pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id WHERE e.id = $1 AND u.id = $1", [id]);
 
 // Crear uno nuevo
 export const createPluggedIn = async (data) => {
@@ -156,13 +158,13 @@ export const updatePluggedIn = async (data) => {
     try {
         await client.query("BEGIN");
 
-        await client.query(`
+        const result = await client.query(`
             UPDATE t_exercises
             SET name = $1,
                 description = $2,
                 category = $3,
                 resources = $4
-            WHERE id = $5
+            WHERE id = $5 RETURNING *
         `, [
             data.name,
             data.description,
@@ -175,8 +177,8 @@ export const updatePluggedIn = async (data) => {
         UPDATE t_plugged_in_exercises
         SET inputs = $1,
             time_limit = $2,
-            testcase_value = $3,
-        WHERE id = $4
+            testcase_value = $3
+        WHERE id = $4 RETURNING *
         `, [
             data.inputs,
             data.time_limit,
@@ -185,6 +187,8 @@ export const updatePluggedIn = async (data) => {
         ]);
 
         await client.query("COMMIT");
+
+        return result;
     } catch (err) {
         await client.query("ROLLBACK");
         throw err;
