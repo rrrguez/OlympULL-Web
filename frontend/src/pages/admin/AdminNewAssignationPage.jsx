@@ -13,7 +13,7 @@ export default function AssignationsPage() {
                         Ejercicio ➜ Olimpiada
                     </>
                 }
-                backButtonRoute={"/admin/assignations/olympiads"}
+                backButtonRoute={"/admin/assignations/"}
             />
 
             <NewAssignation />

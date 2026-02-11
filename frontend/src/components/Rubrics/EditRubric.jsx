@@ -32,7 +32,6 @@ export default function EditOlympiad() {
 
                 setFormData({
                     ...o,
-                    oldId: o.id,
                 });
             } catch(err) {
                 console.log(err);

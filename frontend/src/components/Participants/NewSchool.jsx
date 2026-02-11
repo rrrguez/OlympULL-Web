@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createSchool } from "../../api/schoolsApi";
 import { toast } from "react-toastify";
 
-export default function NewRubric() {
+export default function NewSchool() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -39,7 +39,7 @@ export default function NewRubric() {
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>
-                        <label className="form-label">Código</label>
+                        <label className="form-label">ID</label>
                         <input
                             type="text"
                             name="id"

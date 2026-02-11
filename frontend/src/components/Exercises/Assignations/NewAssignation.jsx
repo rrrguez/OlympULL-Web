@@ -35,27 +35,27 @@ export default function NewAssignation() {
 
     useEffect(() => {
         async function loadExercises() {
-        try {
-            const dataPluggedIn = await getAllPluggedInExercises();
-            const dataUnplugged = await getAllUnpluggedExercises();
-            setExercises([
-                ...dataUnplugged.data,
-                ...dataPluggedIn.data
-            ]);
-        } catch (err) {
-            console.error("Error cargando ejercicios", err);
-            toast.error("Error cargando los ejercicios");
-        }
+            try {
+                const dataPluggedIn = await getAllPluggedInExercises();
+                const dataUnplugged = await getAllUnpluggedExercises();
+                setExercises([
+                    ...dataUnplugged.data,
+                    ...dataPluggedIn.data
+                ]);
+            } catch (err) {
+                console.error("Error cargando ejercicios", err);
+                toast.error("Error cargando los ejercicios");
+            }
         }
         loadExercises();
 
         async function loadOlympiads() {
             try {
-            const data = await getAllOlympiads();
-            setOlympiads(data.data);
+                const data = await getAllOlympiads();
+                setOlympiads(data.data);
             } catch (err) {
-            console.error("Error cargando olimpiadas", err);
-            toast.error("Error cargando las olimpiadas");
+                console.error("Error cargando olimpiadas", err);
+                toast.error("Error cargando las olimpiadas");
             }
         }
         loadOlympiads();
@@ -63,25 +63,25 @@ export default function NewAssignation() {
 
     async function loadItineraries(olympiadId) {
         try {
-        setLoadingItineraries(true);
+            setLoadingItineraries(true);
 
-        const res = await getItineraryByOlympiad(olympiadId);
+            const res = await getItineraryByOlympiad(olympiadId);
 
-        setItineraries(res.data);
+            setItineraries(res.data);
         } catch (err) {
-        console.error("Error cargando itinerarios", err);
-        toast.error("Error cargando los itinerarios");
+            console.error("Error cargando itinerarios", err);
+            toast.error("Error cargando los itinerarios");
         } finally {
-        setLoadingItineraries(false);
+            setLoadingItineraries(false);
         }
     }
 
     useEffect(() => {
         if (formData.olympiad) {
-        loadItineraries(formData.olympiad);
-        setFormData(prev => ({ ...prev, itinerary: "" }));
+            loadItineraries(formData.olympiad);
+            setFormData(prev => ({ ...prev, itinerary: "" }));
         } else {
-        setItineraries([]);
+            setItineraries([]);
         }
     }, [formData.olympiad]);
 
@@ -91,7 +91,7 @@ export default function NewAssignation() {
 
         try {
         await createAssignation(formData);
-        navigate("/admin/assignations/olympiads");
+        navigate("/admin/assignations");
         } catch (err) {
         toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {

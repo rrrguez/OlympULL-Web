@@ -1,4 +1,7 @@
 import * as model from "../../models/monitorsModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -38,24 +41,24 @@ export const create = async (req, res) => {
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.delete(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id, exercise, olympiad, itinerary } = req.params;
+        await model.remove({id, exercise, olympiad, itinerary});
+        res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
@@ -85,18 +88,12 @@ export const importCsv = async (req, res) => {
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_monitors (id, exercise,itinerary,olympiad)
+                        `INSERT INTO t_monitors (id,exercise,itinerary,olympiad)
                         VALUES ($1,$2,$3,$4)
-                        ON CONFLICT (id, exercise,itinerary,olympiad) DO UPDATE SET
-                            exercise=EXCLUDED.exercise,
-                            itinerary=EXCLUDED.itinerary,
-                            olympiad=EXCLUDED.olympiad,
-                            start=EXCLUDED.start,
-                            stop=EXCLUDED.stop,
-                            timezone=EXCLUDED.timezone`,
+                        ON CONFLICT (id,exercise,itinerary,olympiad) DO NOTHING`,
                         [
                             o.id,
-                            o.exerise,
+                            o.exercise,
                             o.itinerary,
                             o.olympiad,
                         ]
@@ -125,7 +122,7 @@ export const exportCsv = async (req, res) => {
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=monitors.csv");
     res.send(csv);
 };
 

@@ -1,4 +1,7 @@
 import * as model from "../../models/exerciseAssignationsModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todos
 export const getAll = async (req, res) => {
@@ -23,7 +26,7 @@ export const getOlympiads = async (req, res) => {
 export const getItineraries = async (req, res) => {
     try {
         const { exercise, olympiad } = req.params;
-        const result = await model.getItineraries(exercise, olympiad);
+        const result = await model.getItineraries({exercise, olympiad});
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -43,13 +46,13 @@ export const create = async (req, res) => {
 // DELETE
 export const remove = async (req, res) => {
     try {
-      const { exercise, olympiad, itinerary } = req.body;
-      await model.remove({ exercise, olympiad, itinerary });
-      res.json({ message: "Asignación eliminada" });
+        const { exercise, olympiad, itinerary } = req.params;
+        await model.remove({ exercise, olympiad, itinerary });
+        res.json({ message: "Asignación eliminada" });
     } catch (err) {
-      res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
-  };
+};
 
 // POST: Importar datos desde CSV
 export const importCsv = async (req, res) => {
@@ -80,10 +83,7 @@ export const importCsv = async (req, res) => {
                     await pool.query(
                         `INSERT INTO t_exercises_olympiad_itinerary (exercise, olympiad, itinerary)
                         VALUES ($1,$2,$3)
-                        ON CONFLICT (exercise, olympiad, itinerary) DO UPDATE SET
-                            exercise=EXCLUDED.exercise,
-                            olympiad=EXCLUDED.olympiad,
-                            itinerary=EXCLUDED.itinerary`,
+                        ON CONFLICT (exercise, olympiad, itinerary) DO NOTHING`,
                         [
                             o.exercise,
                             o.olympiad,
@@ -110,7 +110,7 @@ export const exportCsv = async (req, res) => {
     let csv = "exercise,olympiad,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.exercise},"${o.olympiad}","${o.itinerary}"\n`;
+        csv += `${o.exercise},${o.olympiad},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

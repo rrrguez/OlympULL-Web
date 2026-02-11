@@ -389,6 +389,10 @@ tr {
     font-family: 'Argentum Sans Semibold';
 }
 
+.table-button-container.only-delete {
+    grid-template-columns: 1fr;
+}
+
 .table tbody tr td {
     border-bottom: 2px solid #dee2e6;
 }

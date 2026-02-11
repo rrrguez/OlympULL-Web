@@ -64,7 +64,6 @@ export default function EditUnpluggedExercise() {
 
                 setFormData({
                     ...o,
-                    oldId: o.id,
                 });
             } catch(err) {
                 console.log(err);

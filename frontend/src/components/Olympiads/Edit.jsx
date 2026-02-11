@@ -16,14 +16,13 @@ export default function EditOlympiad() {
         year: "",
         start: "",
         stop: "",
-        timezone: "",
-        oldId: "",
+        timezone: ""
     });
 
     function handleChange(e) {
         setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
+            ...formData,
+            [e.target.name]: e.target.value
         });
     }
 
@@ -55,7 +54,6 @@ export default function EditOlympiad() {
                     ...o,
                     start: o.start?.slice(0, 16),
                     stop: o.stop?.slice(0, 16),
-                    oldId: o.id,
                 });
             } catch(err) {
                 console.log(err);

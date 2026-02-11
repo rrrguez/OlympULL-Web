@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteTeam, getAllTeams } from "../../api/teamsApi";
+import { deleteTeam, getAllTeams, createTeam } from "../../api/teamsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
-export default function RubricList() {
+export default function TeamsList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -21,9 +22,30 @@ export default function RubricList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteTeam(id);
-        load();
+    const remove = async (id, name) => {
+        try {
+            await deleteTeam(id);
+            toast.success("Equipo '" + name + "' eliminado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
+    };
+
+    const duplicate = async (team) => {
+        try {
+            const newTeam = {
+                ...team,
+                id: team.id + "-copia",
+                name: team.name + "-copia",
+            };
+
+            await createTeam(newTeam);
+            toast.success("Equipo '" + team.name + "' duplicado con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -31,7 +53,6 @@ export default function RubricList() {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Código</th>
                     <th>Nombre</th>
                     <th>Escuela</th>
                     <th>Olimpiada</th>
@@ -52,33 +73,31 @@ export default function RubricList() {
                 ))
                 : data.map((o) => (
                     <tr key={o.id}>
-                    <td>{o.id}</td>
                     <td>{o.name}</td>
-                    <td>{o.school}</td>
-                    <td></td>
-                    <td>{o.itinerary}</td>
+                    <td>{o.school_name}</td>
+                    <td>{o.olympiad_name}</td>
+                    <td>{o.itinerary_name}</td>
                     <td>
                         <div className="table-button-container with-duplicate">
                         <OlympULLIconButton
                             text="Duplicar"
                             title="Duplicar"
                             buttonClass="table-button"
-                            route="/admin/Teams"
+                            onClick={() => duplicate(o)}
                             icon="fa-solid fa-clone"
                         />
                         <OlympULLIconButton
                             text="Editar"
                             title="Editar"
                             buttonClass="table-button"
-                            route="/admin/Teams"
+                            route={`/admin/teams/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
-
                         <OlympULLIconButton
                             text="Eliminar"
                             title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/Teams"
+                            onClick={() => remove(o.id, o.name)}
                             icon="fa-regular fa-trash-can"
                         />
                         </div>

@@ -1,4 +1,7 @@
 import * as model from "../../models/usersModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -73,7 +76,7 @@ export const updatePassword = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -102,13 +105,17 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.username, !o.password, !o.type) {
+                    if (!o.id || !o.username || !o.password || !o.type) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
                         `INSERT INTO t_users (id, username, password, type)
-                        VALUES ($1,$2,$3,$4)`,
+                        VALUES ($1,$2,$3,$4)
+                        ON CONFLICT (id) DO UPDATE SET
+                            username=EXCLUDED.username,
+                            password=EXCLUDED.password,
+                            type=EXCLUDED.type`,
                         [
                             o.id,
                             o.username,
@@ -133,14 +140,14 @@ export const importCsv = async (req, res) => {
 export const exportCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM t_users");
 
-    let csv = "id,username,type\n";
+    let csv = "id,username,password,type\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.username}","${o.type}"\n`;
+        csv += `${o.id},"${o.username}",${o.password},"${o.type}"\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=users.csv");
     res.send(csv);
 };
 

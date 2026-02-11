@@ -1,16 +1,16 @@
 import { Container } from "react-bootstrap";
-import EditRubric from "../../components/Rubrics/EditRubric";
+import EditTeam from "../../components/Participants/EditTeam";
 import PageHeader from "../../components/layouts/PageHeader";
 
 export default function OlympiadsPage() {
     return (
         <Container>
             <PageHeader
-                title="Editar rúbrica"
-                backButtonRoute="/admin/rubrics"
+                title="Editar equipo"
+                backButtonRoute="/admin/teams"
             />
 
-            <EditRubric />
+            <EditTeam />
         </Container>
 
     );

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteSchool, getAllSchools } from "../../api/schoolsApi";
+import { deleteSchool, getAllSchools, createSchool } from "../../api/schoolsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function RubricList() {
     const [data, setData] = useState([]);
@@ -21,9 +22,30 @@ export default function RubricList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteSchool(id);
-        load();
+    const remove = async (id, name) => {
+        try {
+            await deleteSchool(id);
+            toast.success("Escuela '" + name + "' eliminada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err);
+        }
+    };
+
+    const duplicate = async (school) => {
+        try {
+            const newSchool = {
+                ...school,
+                id: school.id + "-copia",
+                name: school.name + "-copia",
+            };
+
+            await createSchool(newSchool);
+            toast.success("Escuela '" + school.name + "' duplicada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -31,8 +53,8 @@ export default function RubricList() {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Código</th>
                     <th>Nombre</th>
+                    <th>Municipio</th>
                     <th>Acciones rápidas</th>
                 </tr>
                 </thead>
@@ -49,15 +71,15 @@ export default function RubricList() {
                 ))
                 : data.map((o) => (
                     <tr key={o.id}>
-                    <td>{o.id}</td>
                     <td>{o.name}</td>
+                    <td>{o.town}</td>
                     <td>
                         <div className="table-button-container with-duplicate">
                         <OlympULLIconButton
                             text="Duplicar"
                             title="Duplicar"
                             buttonClass="table-button"
-                            route="/admin/schools"
+                            onClick={() => duplicate(o)}
                             icon="fa-solid fa-clone"
                         />
 
@@ -65,7 +87,7 @@ export default function RubricList() {
                             text="Editar"
                             title="Editar"
                             buttonClass="table-button"
-                            route="/admin/schools"
+                            route={`/admin/schools/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
 
@@ -73,7 +95,7 @@ export default function RubricList() {
                             text="Eliminar"
                             title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/schools"
+                            onClick={() => remove(o.id, o.name)}
                             icon="fa-regular fa-trash-can"
                         />
                         </div>

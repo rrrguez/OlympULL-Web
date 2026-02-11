@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getUserByType } from "../../api/usersApi";
+import { useNavigate, useParams} from "react-router-dom";
+import { updateTeam, getTeam } from "../../api/teamsApi";
+import { getAllSchools } from "../../api/schoolsApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 import { toast } from "react-toastify";
 
-export default function NewTeam() {
+export default function EditTeam() {
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         id: "",
-        exercise: "",
-        olympiad: "",
+        name: "",
+        school: "",
         itinerary: "",
     });
 
     const [loading, setLoading] = useState(false);
 
-    const [organizers, setOrganizers] = useState([]);
-
+    const [schools, setSchools] = useState([]);
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
@@ -39,32 +40,33 @@ export default function NewTeam() {
         setLoading(true);
 
         try {
-        await createOrganizer(formData);
-        navigate("/admin/teams");
+            await updateTeam(id, formData);
+            navigate("/admin/teams");
         } catch (err) {
-        toast.error(err.response?.data?.error || "Error al crear la asignación");
+            toast.error(err.response?.data?.error || "Error al crear el equipo");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
     useEffect(() => {
-        async function loadOrganizers() {
+        async function loadSchools() {
             try {
-                const data = await getUserByType("ORGANIZER");
-                setOrganizers(data.data);
+                const data = await getAllSchools();
+                setSchools(data.data);
             } catch (err) {
-                console.error("Error cargando la lista de organizeres", err);
-                toast.error("Error cargando la lista de organizadores");
+                console.error("Error cargando las escuelas", err);
+                toast.error("Error cargando las escuelas");
             }
         }
-        loadOrganizers();
+        loadSchools();
+
         async function loadOlympiads() {
             try {
             const data = await getAllOlympiads();
             setOlympiads(data.data);
             } catch (err) {
-            console.error("Error cargando olimpiadas", err);
+            console.error("Error cargando las olimpiadas", err);
             toast.error("Error cargando las olimpiadas");
             }
         }
@@ -95,29 +97,42 @@ export default function NewTeam() {
         }
     }, [formData.olympiad]);
 
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await getTeam(id);
+                const o = res.data;
+
+                setFormData({
+                    ...o,
+                });
+            } catch(err) {
+                console.log(err);
+                toast.error("Error al cargar el equipo");
+                navigate("/admin/teams");
+            }
+        };
+
+        load();
+    }, [id]);
+
     return (
         <div className="element-container">
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>
-                        <label className="form-label">Organizer</label>
-                        <select
-                            name="organizer"
-                            className="form-control"
-                            value={formData.school}
+                        <label className="form-label">ID</label>
+                        <input
+                            type="text"
+                            name="id"
+                            className="form-control read-only-field"
+                            value={formData.id}
                             onChange={handleChange}
-                            required
-                            >
-                            <option value="">-- Seleccione un organizer --</option>
-                            {organizers.map((o) => (
-                                <option key={o.id} value={o.id}>
-                                {o.id} - {o.name}
-                                </option>
-                            ))}
-                        </select>
+                            disabled
+                        />
                     </div>
                     <div>
-                        <label className="form-label">Ejercicio</label>
+                        <label className="form-label">Nombre</label>
                         <input
                             type="text"
                             name="name"
@@ -126,6 +141,23 @@ export default function NewTeam() {
                             onChange={handleChange}
                             required
                         />
+                    </div>
+                    <div>
+                        <label className="form-label">Escuela</label>
+                        <select
+                            name="school"
+                            className="form-control"
+                            value={formData.school}
+                            onChange={handleChange}
+                            required
+                            >
+                            <option value="">-- Seleccione una escuela --</option>
+                            {schools.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                {o.id} - {o.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="form-label">Olimpiada</label>
@@ -176,11 +208,10 @@ export default function NewTeam() {
                 <div className="element-form">
                     <h1></h1>
                     <button className="new-button" disabled={loading}>
-                        {loading ? "Creando..." : "Crear asignación"}
+                        {loading ? "Editando..." : "Editar equipo"}
                     </button>
                 </div>
             </form>
         </div>
     );
 }
-

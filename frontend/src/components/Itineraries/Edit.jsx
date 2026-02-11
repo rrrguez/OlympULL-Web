@@ -35,7 +35,6 @@ export default function EditItinerary() {
 
                 setFormData({
                     ...o,
-                    oldId: o.id,
                 });
             } catch(err) {
                 console.log(err);

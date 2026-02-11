@@ -16,7 +16,6 @@ export default function OlympULLIconButton({ text, buttonClass, route, icon, onC
             className = { buttonClass }
             onClick={handleClick}
             title={title}
-            route={ route }
         >
             {icon && <i className={`${icon} me-2`}></i>}
             <span className="button-text">{text}</span>

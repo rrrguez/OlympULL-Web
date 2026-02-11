@@ -1,4 +1,7 @@
 import * as model from "../../models/teamsModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -14,7 +17,7 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getById(id);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Equipo no encontrado" });
@@ -51,7 +54,7 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -70,10 +73,10 @@ export const importCsv = async (req, res) => {
     const results = [];
 
     fs.createReadStream(req.file.path)
-        .pipe(csv())
-        .on("data", (data) => {
-            console.log(data);
-            results.push(data);
+        .pipe(csv({ separator: ',', quote: '"' }))
+        .on("data", (row) => {
+            console.log(row);
+            results.push(row);
         })
         .on("end", async () => {
             const client = await pool.connect();
@@ -114,11 +117,11 @@ export const exportCsv = async (req, res) => {
     let csv = "id,name,school,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}","${o.school},"${o.itinerary}"\n`;
+        csv += `${o.id},"${o.name}","${o.school}","${o.itinerary}"\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=teams.csv");
     res.send(csv);
 };
 

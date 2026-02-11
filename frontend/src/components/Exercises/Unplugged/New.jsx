@@ -68,11 +68,13 @@ export default function NewExercise() {
                         value={formData.id}
                         onChange={handleChange}
                         required
+                        pattern="[A-Za-z0-9\-.]{2,30}"
+                        title="Este campo solo puede contener números, letras, guiones o puntos"
                     />
                 </div>
 
                 <div>
-                    <label className="form-label">Título</label>
+                    <label className="form-label">Nombre</label>
                     <input
                         type="text"
                         name="name"
@@ -80,6 +82,8 @@ export default function NewExercise() {
                         value={formData.name}
                         onChange={handleChange}
                         required
+                        pattern="[A-Za-z0-9\s\-]{5,30}"
+                        title="Este campo solo puede contener números, letras, guiones o espacios"
                     />
                 </div>
 

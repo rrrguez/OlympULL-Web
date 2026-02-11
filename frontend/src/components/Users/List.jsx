@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { deleteUser, getAllUsers } from "../../api/usersApi";
+import { deleteUser, getAllUsers, createUser } from "../../api/usersApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function UsersList() {
     const [data, setData] = useState([]);
@@ -21,9 +22,18 @@ export default function UsersList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteUser(id);
-        load();
+    const remove = async (id, username) => {
+        if (id === localStorage.getItem("id")) {
+            toast.error("Acción no permitida - Contacta con otro administrador para borrar tu cuenta usuario");
+        } else {
+            try {
+                await deleteUser(id);
+                toast.success("Usuario '" + username + "' eliminado con éxito");
+                load();
+            } catch (err) {
+                toast.error(err)
+            }
+        }
     };
 
     return (
@@ -57,15 +67,17 @@ export default function UsersList() {
                     <div className="table-button-container">
                         <OlympULLIconButton
                             text="Editar"
+                            title="Editar"
                             buttonClass="table-button"
-                            route="/admin/olympiads"
+                            route={`/admin/users/edit/${o.id}`}
                             icon="fa-solid fa-pen-to-square"
                         />
 
                         <OlympULLIconButton
                             text="Eliminar"
+                            title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/olympiads"
+                            onClick={() => remove(o.id, o.username)}
                             icon="fa-regular fa-trash-can"
                         />
                     </div>

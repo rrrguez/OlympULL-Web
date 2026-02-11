@@ -3,16 +3,35 @@ import pool from "../db.js";
 // EJERCICIOS DESENCHUFADOS
 
 // Obtener todos
-export const getAllUnplugged = () => pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_UNPLUGGED_EXERCISES u ON e.id = u.id ORDER BY name;");
+export const getAllUnplugged = () =>
+    pool.query(
+        `
+        SELECT
+            e.*,
+            u.*,
+            r.name AS rubric_name
+        FROM T_EXERCISES e
+        JOIN T_UNPLUGGED_EXERCISES u
+            ON e.id = u.id
+        JOIN t_rubrics r
+            ON u.rubric=r.id
+        ORDER BY e.name;
+        `
+    );
 
 // Obtener uno por ID
 export const getUnpluggedByid = (id) =>
-  pool.query(
-    `SELECT e.*, u.rubric
+    pool.query(
+        `
+        SELECT
+            e.*,
+            u.rubric
         FROM t_exercises e
-        JOIN t_unplugged_exercises u ON e.id = u.id
+        JOIN t_unplugged_exercises u
+            ON e.id = u.id
         WHERE e.id = $1
-    `, [id]);
+        `,[id]
+    );
 
 // Crear uno nuevo
 export const createUnplugged = async (data) => {

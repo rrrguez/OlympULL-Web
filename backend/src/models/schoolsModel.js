@@ -13,8 +13,8 @@ export const create = (data) =>
 
 export const update = (data) =>
     pool.query(
-        "UPDATE t_schools SET name=$1 WHERE id=$2 RETURNING *",
-        [data.name, data.id]
+        "UPDATE t_schools SET name=$1, town=$2 WHERE id=$3 RETURNING *",
+        [data.name, data.town, data.id]
     );
 
 export const remove = (id) =>

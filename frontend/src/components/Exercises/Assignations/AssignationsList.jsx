@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { getAllAssignations } from "../../../api/assignationsApi";
+import { getAllAssignations, deleteAssignation } from "../../../api/assignationsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function AssignationsList() {
     const [data, setData] = useState([]);
@@ -19,6 +20,16 @@ export default function AssignationsList() {
             setLoading(false);
         }
         loadData();
+    };
+
+    const remove = async (exercise, olympiad, itinerary) => {
+        try {
+            await deleteAssignation(exercise, olympiad, itinerary);
+            toast.success("Asignación eliminada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -44,23 +55,17 @@ export default function AssignationsList() {
                         </tr>
                     ))
                     : data.map((o) => (
-                    <tr key={o.exercise}>
-                        <td>{o.exercise}</td>
-                        <td>{o.olympiad}</td>
-                        <td>{o.itinerary}</td>
+                    <tr key={`${o.exercise}-${o.olympiad}-${o.itinerary}`}>
+                        <td>{o.exercise_name}</td>
+                        <td>{o.olympiad_name}</td>
+                        <td>{o.itinerary_name}</td>
                         <td>
-                            <div className="table-button-container">
-                                <OlympULLIconButton
-                                    text="Editar"
-                                    buttonClass="table-button"
-                                    route="/admin/rubrics"
-                                    icon="fa-solid fa-pen-to-square"
-                                />
-
+                            <div className="table-button-container only-delete">
                                 <OlympULLIconButton
                                     text="Eliminar"
+                                    title="Eliminar"
                                     buttonClass="table-button"
-                                    route="/admin/rubrics"
+                                    onClick={() => remove(o.exercise, o.olympiad, o.itinerary)}
                                     icon="fa-regular fa-trash-can"
                                 />
                             </div>

@@ -15,7 +15,7 @@ export const createSchool = (data) => axios.post(API, data, authHeaders());
 export const updateSchool = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 export const deleteSchool = (id) => axios.delete(`${API}/${id}`, authHeaders());
 export const importSchools = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportSchools = () => axios.post(`${API}/export`, {
+export const exportSchools = () => axios.get(`${API}/export`, {
     ...authHeaders(),
     responseType: "blob",
 });

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
+import { getOlympiad } from "../../api/olympiadsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
 
@@ -72,7 +73,7 @@ export default function ItinerariesList() {
             : data.map((o) => (
             <tr key={o.id}>
                 <td>{o.name}</td>
-                <td>{o.olympiad}</td>
+                <td>{o.olympiad_name}</td>
                 <td>
                 <div className="table-button-container with-duplicate">
                     <OlympULLIconButton

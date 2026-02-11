@@ -41,7 +41,7 @@ export default function AdminHome() {
 
                 <OlympULLButton
                     text="Asignación de ejercicios a olimpiadas"
-                    onClickAction={() => navigate("/admin/assignations/olympiads")}
+                    onClickAction={() => navigate("/admin/assignations/")}
                 />
             </div>
 

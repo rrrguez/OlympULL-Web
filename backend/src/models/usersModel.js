@@ -16,8 +16,8 @@ export const create = ( data ) =>
 
 export const update = (data) =>
     pool.query(
-        "UPDATE t_users SET id=$1 WHERE id=$2 RETURNING *",
-        [data.username, data.id]
+        "UPDATE t_users SET username=$2,password=$3,type=$4 WHERE id=$1 RETURNING *",
+        [data.id, data.username, data.password, data.type]
     );
 
 export const updatePassword = (data) =>

@@ -98,7 +98,7 @@ export default function UnpluggedExercisesList() {
                     {loading
                         ? Array.from({ length: 5 }).map((_, i) => (
                             <tr key={i} className="skeleton-row">
-                            {Array.from({ length: 7 }).map((_, j) => (
+                            {Array.from({ length: 5 }).map((_, j) => (
                                 <td key={j}>
                                 <div className="skeleton-cell"></div>
                                 </td>
@@ -110,7 +110,7 @@ export default function UnpluggedExercisesList() {
                     <td>{o.name}</td>
                     <td>{translateCategory(o.category)}</td>
                     <td>{o.resources}</td>
-                    <td>{o.rubric}</td>
+                    <td>{o.rubric_name}</td>
                     <td>
                         <div className="table-button-container with-duplicate">
                             <OlympULLIconButton

@@ -9,7 +9,7 @@ router.get("/export", exerciseAssignationsController.exportCsv);
 router.get("/olympiads/:exercise", exerciseAssignationsController.getOlympiads);
 router.get("/itineraries/:exercise/:olympiad", exerciseAssignationsController.getItineraries);
 router.post("/", exerciseAssignationsController.create);
-router.delete("/", exerciseAssignationsController.remove);
+router.delete("/:exercise/:olympiad/:itinerary", exerciseAssignationsController.remove);
 router.post("/import", upload.single("file"), exerciseAssignationsController.importCsv);
 
 export default router;

@@ -13,9 +13,9 @@ export const getAllAssignations = () => axios.get(API, authHeaders());
 export const getAssignationsOlympiads = (exercise) => axios.get(`${API}/olympiads/${exercise}`, authHeaders());
 export const getAssignationsItineraries = (exercise, olympiad) => axios.get(`${API}/itineraries/${exercise}/${olympiad}`, authHeaders());
 export const createAssignation = (data) => axios.post(API, data, authHeaders());
-export const deleteAssignation = (id) => axios.delete(`${API}/${id}`, authHeaders());
+export const deleteAssignation = (exercise, olympiad, itinerary) => axios.delete(`${API}/${exercise}/${olympiad}/${itinerary}`, authHeaders());
 export const importAssignations = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportAssignations = () => axios.post(`${API}/export`, {
+export const exportAssignations = () => axios.get(`${API}/export`, {
     ...authHeaders(),
     responseType: "blob",
 });

@@ -1,6 +1,6 @@
+import * as model from "../../models/olympiadsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import * as model from "../../models/olympiadsModel.js";
 import pool from "../../db.js";
 
 // GET: obtener todas

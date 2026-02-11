@@ -1,11 +1,11 @@
 import pool from "../db.js";
 
-export const getAll = () => pool.query("SELECT * FROM t_itineraries");
+export const getAll = () => pool.query("SELECT i.*, o.name AS olympiad_name FROM t_itineraries i JOIN t_olympiads o ON i.olympiad=o.id");
 export const getByid = (id) =>
-  pool.query("SELECT * FROM t_itineraries WHERE id = $1", [id]);
+  pool.query("SELECT i.*, o.name as olympiad_name FROM t_itineraries i JOIN t_olympiads o ON i.olympiad=o.id WHERE i.id = $1", [id]);
 export const getByOlympiad = (olympiadId) =>
     pool.query(
-      "SELECT * FROM t_itineraries WHERE olympiad = $1",
+      "SELECT i.*, o.name as olympiad_name FROM t_itineraries i JOIN t_olympiads o ON i.olympiad=o.id WHERE i.olympiad = $1",
       [olympiadId]
     );
 export const create = (data) =>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteMonitor, getAllMonitors } from "../../api/monitorsApi";
+import { deleteAssignation, getAllMonitors } from "../../api/monitorsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function MonitorList() {
     const [data, setData] = useState([]);
@@ -21,9 +22,14 @@ export default function MonitorList() {
         loadData();
     };
 
-    const remove = async (id) => {
-        await deleteMonitor(id);
-        load();
+    const remove = async (id, exercise, olympiad, itinerary) => {
+        try {
+            await deleteAssignation(id, exercise, olympiad, itinerary);
+            toast.success("Asignación eliminada con éxito");
+            load();
+        } catch (err) {
+            toast.error(err)
+        }
     };
 
     return (
@@ -50,24 +56,18 @@ export default function MonitorList() {
                     </tr>
                 ))
                 : data.map((o) => (
-                    <tr key={o.id}>
+                    <tr key={`${o.id}-${o.exercise}-${o.olympiad}-${o.itinerary}`}>
                     <td>{o.id}</td>
-                    <td>{o.exercise}</td>
-                    <td>{o.olympiad}</td>
-                    <td>{o.itinerary}</td>
+                    <td>{o.exercise_name}</td>
+                    <td>{o.olympiad_name}</td>
+                    <td>{o.itinerary_name}</td>
                     <td>
-                        <div className="table-button-container">
-                        <OlympULLIconButton
-                            text="Editar"
-                            buttonClass="table-button"
-                            route="/admin/monitors"
-                            icon="fa-solid fa-pen-to-square"
-                        />
-
+                        <div className="table-button-container only-delete">
                         <OlympULLIconButton
                             text="Eliminar"
+                            title="Eliminar"
                             buttonClass="table-button"
-                            route="/admin/monitors"
+                            onClick={() => remove(o.id, o.exercise, o.olympiad, o.itinerary)}
                             icon="fa-regular fa-trash-can"
                         />
                         </div>

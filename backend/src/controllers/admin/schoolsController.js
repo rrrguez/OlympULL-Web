@@ -1,4 +1,7 @@
 import * as model from "../../models/schoolsModel.js";
+import pool from "../../db.js";
+import fs from "fs";
+import csv from "csv-parser";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -14,7 +17,7 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getById(id);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: "Escuela no encontrada" });
@@ -51,7 +54,7 @@ export const update = async (req, res) => {
 export const remove = async (req, res) => {
   try {
     const { id } = req.params;
-    await model.delete(id);
+    await model.remove(id);
     res.json({ message: "Eliminado correctamente" });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -85,13 +88,15 @@ export const importCsv = async (req, res) => {
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_schools (id, name)
-                        VALUES ($1,$2)
+                        `INSERT INTO t_schools (id, name, town)
+                        VALUES ($1,$2,$3)
                         ON CONFLICT (id) DO UPDATE SET
-                            name=EXCLUDED.name`,
+                            name=EXCLUDED.name,
+                            town=EXCLUDED.town`,
                         [
                             o.id,
                             o.name,
+                            o.town || null
                         ]
                     );
                 }
@@ -111,10 +116,10 @@ export const importCsv = async (req, res) => {
 export const exportCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM t_schools");
 
-    let csv = "id,name\n";
+    let csv = "id,name,town\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}"\n`;
+        csv += `${o.id},"${o.name}","${o.town}"\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
