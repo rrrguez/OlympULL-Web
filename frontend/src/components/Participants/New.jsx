@@ -3,20 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { getUserByType } from "../../api/usersApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
-import { createOrganizer } from "../../api/organizersApi";
+import { getAllSchools } from "../../api/schoolsApi";
+import { createParticipant } from "../../api/participantsApi";
 import { toast } from "react-toastify";
 
-export default function NewOrganizerAssignation() {
+export default function NewParticipantAssignation() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         id: "",
+        school: "",
         itinerary: "",
     });
 
     const [loading, setLoading] = useState(false);
 
-    const [organizers, setOrganizers] = useState([]);
+    const [participants, setParticipants] = useState([]);
+
+    const [schools, setSchools] = useState([]);
 
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
@@ -38,8 +42,8 @@ export default function NewOrganizerAssignation() {
         setLoading(true);
 
         try {
-            await createOrganizer(formData);
-            navigate("/admin/organizers");
+            await createParticipant(formData);
+            navigate("/admin/participants");
         } catch (err) {
             toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
@@ -48,23 +52,35 @@ export default function NewOrganizerAssignation() {
     }
 
     useEffect(() => {
-        async function loadOrganizers() {
+        async function loadParticipants() {
             try {
-                const data = await getUserByType("ORGANIZER");
-                setOrganizers(data.data);
+                const data = await getUserByType("PARTICIPANT");
+                setParticipants(data.data);
             } catch (err) {
-                console.error("Error cargando la lista de organizadores", err);
-                toast.error("Error cargando la lista de organizadores");
+                console.error("Error cargando la lista de participantes", err);
+                toast.error("Error cargando la lista de participantes");
             }
         }
-        loadOrganizers();
+        loadParticipants();
+
+        async function loadSchools() {
+            try {
+                const data = await getAllSchools();
+                setSchools(data.data);
+            } catch (err) {
+                console.error("Error cargando escuelas", err);
+                toast.error("Error cargando las escuelas");
+            }
+        }
+        loadSchools();
+
         async function loadOlympiads() {
             try {
-            const data = await getAllOlympiads();
-            setOlympiads(data.data);
+                const data = await getAllOlympiads();
+                setOlympiads(data.data);
             } catch (err) {
-            console.error("Error cargando olimpiadas", err);
-            toast.error("Error cargando las olimpiadas");
+                console.error("Error cargando olimpiadas", err);
+                toast.error("Error cargando las olimpiadas");
             }
         }
         loadOlympiads();
@@ -99,7 +115,7 @@ export default function NewOrganizerAssignation() {
             <form onSubmit={handleSubmit}>
                 <div className="element-form">
                     <div>
-                        <label className="form-label">Organizador</label>
+                        <label className="form-label">Participante</label>
                         <select
                             name="id"
                             className="form-control"
@@ -107,8 +123,8 @@ export default function NewOrganizerAssignation() {
                             onChange={handleChange}
                             required
                             >
-                            <option value="">-- Seleccione un organizador --</option>
-                            {organizers.map((o) => (
+                            <option value="">-- Seleccione un participante --</option>
+                            {participants.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.username}
                                 </option>
@@ -116,6 +132,20 @@ export default function NewOrganizerAssignation() {
                         </select>
                     </div>
                     <div>
+                        <label className="form-label">Escuela</label>
+                        <select
+                            name="school"
+                            className="form-control"
+                            onChange={handleChange}
+                            required
+                            >
+                            <option value="">-- Seleccione una escuela --</option>
+                            {schools.map((o) => (
+                                <option key={o.id} value={o.id}>
+                                {o.id} - {o.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div>
                         <label className="form-label">Olimpiada</label>

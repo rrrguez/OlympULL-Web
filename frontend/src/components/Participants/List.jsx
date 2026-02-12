@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteOrganizer, getAllOrganizers } from "../../api/organizersApi";
+import { deleteParticipant, getAllParticipants } from "../../api/participantsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
 
-export default function OrganizerList() {
+export default function ParticipantsList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -15,16 +15,16 @@ export default function OrganizerList() {
     const load = async () => {
         async function loadData() {
             setLoading(true);
-            const res = await getAllOrganizers();
+            const res = await getAllParticipants();
             setData(res.data);
             setLoading(false);
         }
         loadData();
     };
 
-    const remove = async (id, itinerary) => {
+    const remove = async (id, school, itinerary) => {
         try {
-            await deleteOrganizer(id, itinerary);
+            await deleteParticipant(id, school, itinerary);
             toast.success("Asignación eliminada con éxito");
             load();
         } catch (err) {
@@ -37,7 +37,8 @@ export default function OrganizerList() {
             <Table striped bordered hover>
                 <thead>
                 <tr>
-                    <th>Organizador</th>
+                    <th>Participante</th>
+                    <th>Escuela</th>
                     <th>Olimpiada</th>
                     <th>Itinerario</th>
                     <th>Acciones rápidas</th>
@@ -47,7 +48,7 @@ export default function OrganizerList() {
                 {loading
                 ? Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i} className="skeleton-row">
-                    {Array.from({ length: 4 }).map((_, j) => (
+                    {Array.from({ length: 5 }).map((_, j) => (
                         <td key={j}>
                         <div className="skeleton-cell"></div>
                         </td>
@@ -57,6 +58,7 @@ export default function OrganizerList() {
                 : data.map((o) => (
                     <tr key={`${o.id}-${o.itinerary}`}>
                     <td>{o.id}</td>
+                    <td>{o.school_name}</td>
                     <td>{o.olympiad_name}</td>
                     <td>{o.itinerary_name}</td>
                     <td>
@@ -65,7 +67,7 @@ export default function OrganizerList() {
                                 text="Eliminar"
                                 title="Eliminar"
                                 buttonClass="table-button"
-                                onClick={() => remove(o.id, o.itinerary)}
+                                onClick={() => remove(o.id, o.school, o.itinerary)}
                                 icon="fa-regular fa-trash-can"
                             />
                         </div>

@@ -1,24 +1,24 @@
 import { Container } from "react-bootstrap";
-import OrganizersList from "../../components/Organizers/List";
+import ParticipantsList from "../../components/Participants/List";
 import PageHeader from "../../components/layouts/PageHeader";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import ImportModal from "../../components/modals/ImportModal";
-import { importOrganizers, exportOrganizers } from "../../api/organizersApi";
+import { importParticipants, exportParticipants } from "../../api/participantsApi";
 
 export default function AdminOrganizersPage() {
     const [importOpen, setImportOpen] = useState(false);
 
-    const exportOrganizersFunction = async () => {
+    const exportParticipantsFunction = async () => {
         try {
-            const res = await exportOrganizers();
+            const res = await exportParticipants();
 
             const blob = new Blob([res.data], { type: "text/csv" });
             const url = window.URL.createObjectURL(blob);
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "organizers.csv";
+            a.download = "participants.csv";
             a.click();
 
             window.URL.revokeObjectURL(url);
@@ -30,23 +30,23 @@ export default function AdminOrganizersPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de organizadores"
+                title="Gestión de participantes"
                 newButton={1}
                 importButton={1}
                 exportButton={1}
                 newButtonText="Nueva asignación"
-                newButtonRoute="/admin/organizers/new"
+                newButtonRoute="/admin/participants/new"
                 importButtonOnClick={() => setImportOpen(true)}
-                exportButtonOnClick={exportOrganizersFunction}
+                exportButtonOnClick={exportParticipantsFunction}
                 backButtonRoute="/admin"
             />
 
-            <OrganizersList/>
+            <ParticipantsList/>
 
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}
-                onImport={importOrganizers}
+                onImport={importParticipants}
                 title="Importar asignaciones"
                 successMessage="Asignaciones importadas con éxito"
             />

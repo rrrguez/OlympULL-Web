@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import EditSchool from "../../components/Participants/EditSchool"
+import EditSchool from "../../components/Schools/EditSchool"
 import PageHeader from "../../components/layouts/PageHeader";
 
 export default function SchoolsPage() {

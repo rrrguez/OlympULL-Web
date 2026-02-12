@@ -90,12 +90,12 @@ export default function NewAssignation() {
         setLoading(true);
 
         try {
-        await createAssignation(formData);
-        navigate("/admin/assignations");
+            await createAssignation(formData);
+            navigate("/admin/assignations");
         } catch (err) {
-        toast.error(err.response?.data?.error || "Error al crear la asignación");
+            toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 

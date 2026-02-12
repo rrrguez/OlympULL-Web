@@ -1,4 +1,7 @@
 import * as model from "../../models/participantsModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -49,13 +52,13 @@ export const update = async (req, res) => {
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.delete(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id, school, itinerary } = req.params;
+        await model.remove({id, school, itinerary});
+        res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
@@ -87,9 +90,7 @@ export const importCsv = async (req, res) => {
                     await pool.query(
                         `INSERT INTO t_participants (id, school, itinerary)
                         VALUES ($1,$2,$3)
-                        ON CONFLICT (id) DO UPDATE SET
-                            school=EXCLUDED.school,
-                            itinerary=EXCLUDED.itinerary`,
+                        ON CONFLICT (id, itinerary) DO NOTHING`,
                         [
                             o.id,
                             o.school,
@@ -116,11 +117,11 @@ export const exportCsv = async (req, res) => {
     let csv = "id,school,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}"\n`;
+        csv += `${o.id},${o.school},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=participants.csv");
     res.send(csv);
 };
 

@@ -1,4 +1,7 @@
 import * as model from "../../models/organizersModel.js";
+import csv from "csv-parser";
+import fs from "fs";
+import pool from "../../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -12,50 +15,50 @@ export const getAll = async (req, res) => {
 
 // GET: obtener una por código
 export const getById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getById(id);
+    try {
+        const { id } = req.params;
+        const result = await model.getById(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Organizador no encontrado" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
 // POST: crear nueva
 export const create = async (req, res) => {
-  try {
-    const data = await model.create(req.body);
-    res.status(201).json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.create(req.body);
+        res.status(201).json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.delete(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id, itinerary } = req.params;
+        await model.remove({ id, itinerary });
+        res.json({ message: "Asignación eliminada" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
@@ -85,8 +88,9 @@ export const importCsv = async (req, res) => {
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_olympiads (id, itinerary)
-                        VALUES ($1,$2)`,
+                        `INSERT INTO t_organizers (id, itinerary)
+                        VALUES ($1,$2)
+                        ON CONFLICT (id, itinerary) DO NOTHING`,
                         [
                             o.id,
                             o.itinerary,
@@ -112,7 +116,7 @@ export const exportCsv = async (req, res) => {
     let csv = "id,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.itinerary}"\n`;
+        csv += `${o.id},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

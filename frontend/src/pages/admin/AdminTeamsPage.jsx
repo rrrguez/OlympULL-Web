@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import TeamsList from "../../components/Participants/TeamsList"
+import TeamsList from "../../components/Teams/TeamsList"
 import PageHeader from "../../components/layouts/PageHeader";
 import { toast } from "react-toastify";
 import { useState } from "react";

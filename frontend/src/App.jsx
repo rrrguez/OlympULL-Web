@@ -55,6 +55,8 @@ import AdminMonitorsPage from "./pages/admin/AdminMonitorsPage";
 import AdminNewMonitorPage from "./pages/admin/AdminNewMonitorPage";
 import AdminOrganizersPage from "./pages/admin/AdminOrganizersPage";
 import AdminNewOrganizerPage from "./pages/admin/AdminNewOrganizerPage";
+import AdminParticipantPage from "./pages/admin/AdminParticipantsPage";
+import AdminNewParticipantPage from "./pages/admin/AdminNewParticipantPage";
 
 // ORGANIZER PAGES
 import OrganizerHome from "./pages/OrganizerHome";
@@ -347,6 +349,24 @@ export default function App() {
                 element={
                     <PrivateRoute type="ADMIN">
                         <AdminNewOrganizerPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
+                path="/admin/participants"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminParticipantPage />
+                    </PrivateRoute>
+                }
+                />
+
+                <Route
+                path="/admin/participants/new"
+                element={
+                    <PrivateRoute type="ADMIN">
+                        <AdminNewParticipantPage />
                     </PrivateRoute>
                 }
                 />

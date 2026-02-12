@@ -1,5 +1,5 @@
 import { Container } from "react-bootstrap";
-import SchoolsList from "../../components/Participants/SchoolsList";
+import SchoolsList from "../../components/Schools/SchoolsList";
 import PageHeader from "../../components/layouts/PageHeader";
 import { importSchools, exportSchools } from "../../api/schoolsApi";
 import { useState } from "react";
