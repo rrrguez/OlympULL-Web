@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getUnpluggedExercise, updateUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import { toast } from "react-toastify";
 import { getAllRubrics } from "../../../api/rubricsApi";
+import * as regex from "../../../utils/regex";
 
 export default function EditUnpluggedExercise() {
     const { id } = useParams();
@@ -44,12 +45,34 @@ export default function EditUnpluggedExercise() {
         setLoading(true);
 
         try {
-            // console.log(formData.category);
+            // Check if the description has the correct format
+            if (!regex.descPattern.test(formData.description)) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción contiene caracteres inválidos.
+                    `
+                };
+            } else if (formData.description.length > 100) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción debe tener un máximo de 100 caracteres.
+                    `
+                };
+            }
+
             await updateUnpluggedExercise(id, formData);
             navigate("/admin/exercises");
             toast.success("Ejercicio actualizado con éxito");
         } catch (err) {
-            console.error("Error completo:", err);
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
+            //console.error("Error completo:", err);
             toast.error(err.response?.data?.error || "Error al actualizar el ejercicio");
         } finally {
             setLoading(false);
@@ -101,6 +124,11 @@ export default function EditUnpluggedExercise() {
                         value={formData.name}
                         onChange={handleChange}
                         required
+                        pattern={regex.namePattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidName)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
@@ -140,6 +168,11 @@ export default function EditUnpluggedExercise() {
                         value={formData.resources}
                         onChange={handleChange}
                         required
+                        pattern={regex.resourcesPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidResources)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
             </div>

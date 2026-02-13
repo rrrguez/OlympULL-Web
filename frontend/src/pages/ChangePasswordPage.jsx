@@ -26,7 +26,7 @@ export default function ChangePasswordPage() {
     return (
         <div>
         <PageHeader
-            title="Cambio de contraseña"
+            title={"Cambio de contraseña de " + localStorage.getItem("id")}
             backButtonRoute={backButtonRouteText}
         />
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { createRubric, deleteRubric, getAllRubrics } from "../../api/rubricsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
-import { toast } from "react-toastify";
 
 export default function RubricList() {
     const [data, setData] = useState([]);
@@ -56,7 +56,7 @@ export default function RubricList() {
                     <th>Nombre</th>
                     <th>Puntos</th>
                     <th>Etiquetas</th>
-                    <th>Acciones rápidas</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>

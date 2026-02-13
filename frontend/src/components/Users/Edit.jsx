@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getUser, updateUser } from "../../api/usersApi";
 import { toast } from "react-toastify";
+import * as regex from "../../utils/regex";
 
 export default function EditUser() {
     const { id } = useParams();

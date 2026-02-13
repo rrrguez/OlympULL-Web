@@ -6,7 +6,7 @@ export default function NewOrganizerPage() {
     return (
         <Container>
             <PageHeader
-                title="Nueva asignación"
+                title="Nueva asignación (Organizador ➜ Itinerario)"
                 backButtonRoute="/admin/organizers"
             />
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
+import { toast } from "react-toastify";
 import { deleteParticipant, getAllParticipants } from "../../api/participantsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
-import { toast } from "react-toastify";
 
 export default function ParticipantsList() {
     const [data, setData] = useState([]);
@@ -41,7 +41,7 @@ export default function ParticipantsList() {
                     <th>Escuela</th>
                     <th>Olimpiada</th>
                     <th>Itinerario</th>
-                    <th>Acciones rápidas</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>

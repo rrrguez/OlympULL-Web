@@ -1,14 +1,14 @@
 import pool from "../db.js";
 
-export const getAll = () => pool.query("SELECT * FROM t_schools");
+export const getAll = () => pool.query("SELECT * FROM t_schools ORDER BY name");
 
 export const getById = (id) =>
     pool.query("SELECT * FROM t_schools WHERE id = $1", [id]);
 
 export const create = (data) =>
     pool.query(
-        "INSERT INTO t_schools (id, name) VALUES ($1, $2) RETURNING *",
-        [data.id, data.name]
+        "INSERT INTO t_schools (id, name, town) VALUES ($1, $2, $3) RETURNING *",
+        [data.id, data.name, data.town]
     );
 
 export const update = (data) =>

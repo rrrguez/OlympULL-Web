@@ -119,7 +119,7 @@ export const exportCsv = async (req, res) => {
     let csv = "id,name,town\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}","${o.town}"\n`;
+        csv += `${o.id},${o.name},${o.town}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

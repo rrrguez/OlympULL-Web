@@ -5,6 +5,7 @@ import { getAllSchools } from "../../api/schoolsApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 import { toast } from "react-toastify";
+import * as regex from "../../utils/regex";
 
 export default function NewTeam() {
     const navigate = useNavigate();
@@ -109,6 +110,11 @@ export default function NewTeam() {
                             value={formData.id}
                             onChange={handleChange}
                             required
+                            pattern={regex.idPattern}
+                            onInvalid={e =>
+                                e.target.setCustomValidity(regex.onInvalidId)
+                            }
+                            onInput={e => e.target.setCustomValidity("")}
                         />
                     </div>
                     <div>
@@ -120,6 +126,11 @@ export default function NewTeam() {
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            pattern={regex.namePattern}
+                            onInvalid={e =>
+                                e.target.setCustomValidity(regex.onInvalidName)
+                            }
+                            onInput={e => e.target.setCustomValidity("")}
                         />
                     </div>
                     <div>
@@ -134,7 +145,7 @@ export default function NewTeam() {
                             <option value="">-- Seleccione una escuela --</option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
-                                {o.id} - {o.name}
+                                {o.id} - {o.name} ({o.town})
                                 </option>
                             ))}
                         </select>

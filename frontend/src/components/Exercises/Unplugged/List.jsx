@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteUnpluggedExercise, getAllUnpluggedExercises, importUnpluggedExercises, exportUnpluggedExercises, createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
-import OlympULLIconButton from "../../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
+import { createUnpluggedExercise, deleteUnpluggedExercise, exportUnpluggedExercises, getAllUnpluggedExercises, importUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
 import translateCategory from "../../../utils/categories";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 import ExercisesHeader from "../../layouts/ExercisesHeader";
 import ImportModal from "../../modals/ImportModal";
-import { toast } from "react-toastify";
 
 export default function UnpluggedExercisesList() {
     const [data, setData] = useState([]);
@@ -91,7 +91,7 @@ export default function UnpluggedExercisesList() {
                     <th>Categoría</th>
                     <th>Recursos</th>
                     <th>Rúbrica</th>
-                    <th>Acciones rápidas</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>

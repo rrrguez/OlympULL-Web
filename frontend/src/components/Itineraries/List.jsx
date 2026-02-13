@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
-import { getOlympiad } from "../../api/olympiadsApi";
-import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
+import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function ItinerariesList() {
     const [data, setData] = useState([]);
@@ -56,7 +55,7 @@ export default function ItinerariesList() {
             <tr>
                 <th>Nombre</th>
                 <th>Olimpiada</th>
-                <th>Acciones rápidas</th>
+                <th>Acciones</th>
             </tr>
             </thead>
             <tbody>

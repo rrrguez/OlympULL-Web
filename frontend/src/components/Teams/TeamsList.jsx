@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deleteTeam, getAllTeams, createTeam } from "../../api/teamsApi";
-import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
+import { createTeam, deleteTeam, getAllTeams } from "../../api/teamsApi";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function TeamsList() {
     const [data, setData] = useState([]);
@@ -57,7 +57,7 @@ export default function TeamsList() {
                     <th>Escuela</th>
                     <th>Olimpiada</th>
                     <th>Itinerario</th>
-                    <th>Acciones rápidas</th>
+                    <th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@ export default function TeamsList() {
                 : data.map((o) => (
                     <tr key={o.id}>
                     <td>{o.name}</td>
-                    <td>{o.school_name}</td>
+                    <td>{`${o.school_name} (${o.school_town})`}</td>
                     <td>{o.olympiad_name}</td>
                     <td>{o.itinerary_name}</td>
                     <td>

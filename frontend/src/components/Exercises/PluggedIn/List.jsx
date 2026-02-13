@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { deletePluggedInExercise, getAllPluggedInExercises, importPluggedInExercises, exportPluggedInExercises, createPluggedInExercise } from "../../../api/pluggedInExercisesApi";
-import OlympULLIconButton from "../../buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
+import { createPluggedInExercise, deletePluggedInExercise, exportPluggedInExercises, getAllPluggedInExercises, importPluggedInExercises } from "../../../api/pluggedInExercisesApi";
 import translateCategory from "../../../utils/categories";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 import ExercisesHeader from "../../layouts/ExercisesHeader";
 import ImportModal from "../../modals/ImportModal";
-import { toast } from "react-toastify";
 
 export default function PluggedInExercisesList() {
     const [data, setData] = useState([]);
@@ -91,7 +91,7 @@ export default function PluggedInExercisesList() {
               <th>Inputs</th>
               <th>Tiempo (segundos)</th>
               <th>Puntos por testcase</th>
-              <th>Acciones rápidas</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>

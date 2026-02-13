@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPluggedInExercise, updatePluggedInExercise } from "../../../api/pluggedInExercisesApi";
 import { toast } from "react-toastify";
+import * as regex from "../../../utils/regex";
 
 export default function NewExercise() {
     const { id } = useParams();
@@ -32,13 +33,52 @@ export default function NewExercise() {
         setLoading(true);
 
         try {
-            // console.log(formData.category);
-            await updatePluggedInExercise(id, formData);
+            // Check if the description has the correct format
+            if (!regex.descPattern.test(formData.description)) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción contiene caracteres inválidos.
+                    `
+                };
+            } else if (formData.description.length > 200) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción debe tener un máximo de 100 caracteres.
+                    `
+                };
+            }
+
+            const fd = new FormData();
+            fd.append("id", formData.id);
+            fd.append("name", formData.name);
+            fd.append("description", formData.description || null);
+            fd.append("category", formData.category);
+            fd.append("resources", formData.resources);
+            fd.append("inputs", formData.inputs);
+            console.log(formData.time_limit);
+            if (formData.time_limit !== "" && formData.time_limit !== null) {
+                fd.append("time_limit", formData.time_limit);
+            }
+            fd.append("testcase_value", formData.testcase_value);
+
+            if (formData.wording) {
+                fd.append("wording", formData.wording);
+            }
+
+            await updatePluggedInExercise(id, fd);
             navigate("/admin/exercises");
-            toast.success("Ejercicio actualizado con éxito");
+            toast.success("Ejercicio creado con éxito");
         } catch (err) {
-            console.error("Error completo:", err);
-            toast.error(err.response?.data?.error || "Error al actualizar el ejercicio");
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
+            //console.error("Error completo:", err);
+            toast.error(err.response?.data?.error || "Error al crear el ejercicio");
         } finally {
             setLoading(false);
         }
@@ -89,6 +129,11 @@ export default function NewExercise() {
                         value={formData.name}
                         onChange={handleChange}
                         required
+                        pattern={regex.namePattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidName)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
@@ -128,6 +173,11 @@ export default function NewExercise() {
                         value={formData.resources}
                         onChange={handleChange}
                         required
+                        pattern={regex.resourcesPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidResources)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
             </div>
@@ -141,17 +191,28 @@ export default function NewExercise() {
                         className="form-control"
                         value={formData.inputs}
                         onChange={handleChange}
+                        required
+                        pattern={regex.numericPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidNumeric)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
                 <div>
-                    <label className="form-label">Límite de tiempo (segundos)</label>
+                    <label className="form-label">Límite de tiempo (segundos)<span className="optional"> - Opcional</span></label>
                     <input
                         type="number"
                         name="time_limit"
                         className="form-control"
                         value={formData.time_limit}
                         onChange={handleChange}
+                        pattern={regex.numericPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidNumeric)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
@@ -164,6 +225,12 @@ export default function NewExercise() {
                         className="form-control"
                         value={formData.testcase_value}
                         onChange={handleChange}
+                        required
+                        pattern={regex.numericPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidNumeric)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
                 <div>
@@ -180,7 +247,7 @@ export default function NewExercise() {
             </div>
 
             <div>
-            <label className="form-label">Descripción</label>
+            <label className="form-label">Descripción<span className="optional"> - Opcional</span></label>
             <textarea
                 name="description"
                 className="form-control wide-description-field"

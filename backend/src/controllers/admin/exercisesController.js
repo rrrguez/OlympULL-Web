@@ -277,7 +277,7 @@ export const exportPluggedInCsv = async (req, res) => {
     let csv = "id,name,description,category,resources,inputs,time_limit,testcase_value\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},"${o.name}","${o.description}",${o.category},${o.resources},${o.inputs},${o.time_limit},${o.testcase_value}\n`;
+        csv += `${o.id},${o.name},"${o.description}",${o.category},${o.resources},${o.inputs},${o.time_limit},${o.testcase_value}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getSchool, updateSchool } from "../../api/schoolsApi";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
+import * as regex from "../../utils/regex";
 
 export default function EditSchool() {
     const { id } = useParams();
@@ -49,7 +50,7 @@ export default function EditSchool() {
 
         try {
             await updateSchool(id, formData);
-            toast.success("Escuela actualizada con éxito");
+            toast.success("Escuela '" + formData.name + "' actualizada con éxito");
             navigate("/admin/schools");
         } catch (err) {
             toast.error(err.response?.data?.error || "Error al actualizar la escuela");
@@ -82,6 +83,11 @@ export default function EditSchool() {
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            pattern={regex.schoolPattern}
+                            onInvalid={e =>
+                                e.target.setCustomValidity(regex.onInvalidExDesc)
+                            }
+                            onInput={e => e.target.setCustomValidity("")}
                         />
                     </div>
 
@@ -93,6 +99,11 @@ export default function EditSchool() {
                             className="form-control"
                             value={formData.town}
                             onChange={handleChange}
+                            pattern={regex.schoolPattern}
+                            onInvalid={e =>
+                                e.target.setCustomValidity(regex.onInvalidExDesc)
+                            }
+                            onInput={e => e.target.setCustomValidity("")}
                         />
                     </div>
                 </div>

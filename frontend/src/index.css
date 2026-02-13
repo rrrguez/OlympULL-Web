@@ -8,6 +8,11 @@
     src: url("./assets/fonts/hinted-ArgentumSans-SemiBold.ttf") format("ttf");
   }
 
+@font-face {
+    font-family: "Argentum Sans Italic";
+    src: url("./assets/fonts/hinted-ArgentumSans-LightItalic.ttf") format("truetype");
+}
+
 * {
     font-family: 'Argentum Sans Semibold', sans-serif;
     width: 100%;
@@ -68,6 +73,11 @@ h2.section-title {
     margin-top: 2.5%;
     margin-bottom: 2.5%;
 }
+
+.optional {
+    font-family: "Argentum Sans Italic", sans-serif !important;
+    color: gray;
+  }
 
 button {
     border-radius: 5px;
@@ -407,7 +417,7 @@ tr {
 
 .page-header-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: auto auto;
 }
 
 .page-header-buttons {

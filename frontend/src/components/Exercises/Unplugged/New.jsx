@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import { getAllRubrics } from "../../../api/rubricsApi";
 import { toast } from "react-toastify";
+import * as regex from "../../../utils/regex";
 
 export default function NewExercise() {
     const navigate = useNavigate();
@@ -44,11 +45,33 @@ export default function NewExercise() {
         setLoading(true);
 
         try {
-            // console.log(formData.category);
+            // Check if the description has the correct format
+            if (!regex.descPattern.test(formData.description)) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción contiene caracteres inválidos.
+                    `
+                };
+            } else if (formData.description.length > 100) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción debe tener un máximo de 100 caracteres.
+                    `
+                };
+            }
+
             await createUnpluggedExercise(formData);
             navigate("/admin/exercises");
             toast.success("Ejercicio creado con éxito");
         } catch (err) {
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
             console.error("Error completo:", err);
             toast.error(err.response?.data?.error || "Error al crear el ejercicio");
         }
@@ -68,8 +91,11 @@ export default function NewExercise() {
                         value={formData.id}
                         onChange={handleChange}
                         required
-                        pattern="[A-Za-z0-9\-.]{2,30}"
-                        title="Este campo solo puede contener números, letras, guiones o puntos"
+                        pattern={regex.idPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidId)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
@@ -82,8 +108,11 @@ export default function NewExercise() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        pattern="[A-Za-z0-9\s\-]{5,30}"
-                        title="Este campo solo puede contener números, letras, guiones o espacios"
+                        pattern={regex.namePattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidName)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
 
@@ -123,6 +152,11 @@ export default function NewExercise() {
                         value={formData.resources}
                         onChange={handleChange}
                         required
+                        pattern={regex.resourcesPattern}
+                        onInvalid={e =>
+                            e.target.setCustomValidity(regex.onInvalidResources)
+                        }
+                        onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
             </div>

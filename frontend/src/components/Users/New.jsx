@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createUser } from "../../api/usersApi";
 import { toast } from "react-toastify";
+import * as regex from "../../utils/regex";
 
 export default function NewOlympiad() {
     const navigate = useNavigate();
@@ -52,6 +53,11 @@ export default function NewOlympiad() {
                 value={formData.id}
                 onChange={handleChange}
                 required
+                pattern={regex.idPattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidId)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
             <div>
@@ -63,6 +69,11 @@ export default function NewOlympiad() {
                 value={formData.username}
                 onChange={handleChange}
                 required
+                pattern={regex.idPattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidId)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
 
@@ -75,6 +86,11 @@ export default function NewOlympiad() {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                pattern={regex.namePattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidName)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
 

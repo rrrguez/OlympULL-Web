@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { getItinerary, updateItinerary } from "../../api/itinerariesApi";
 import { useEffect } from "react";
 import { getAllOlympiads } from "../../api/olympiadsApi";
+import * as regex from "../../utils/regex";
 
 export default function EditItinerary() {
     const { id } = useParams();
@@ -61,10 +62,33 @@ export default function EditItinerary() {
         setLoading(true);
 
         try {
+            // Check if the description has the correct format
+            if (!regex.descPattern.test(formData.description)) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción contiene caracteres inválidos.
+                    `
+                };
+            } else if (formData.description.length > 100) {
+                throw {
+                    type: "warn",
+                    message:
+                    `
+                    La descripción debe tener un máximo de 100 caracteres.
+                    `
+                };
+            }
+
             await updateItinerary(id, formData);
             toast.success("Itinerario actualizado con éxito");
             navigate("/admin/itineraries");
         } catch (err) {
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
             toast.error(err.response?.data?.error || "Error al actualizar el itinerario");
         } finally {
             setLoading(false);
@@ -95,6 +119,11 @@ export default function EditItinerary() {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    pattern={regex.namePattern}
+                    onInvalid={e =>
+                        e.target.setCustomValidity(regex.onInvalidName)
+                    }
+                    onInput={e => e.target.setCustomValidity("")}
                 />
             </div>
 
@@ -118,7 +147,7 @@ export default function EditItinerary() {
             </div>
 
             <div>
-                <label className="form-label">Descripción</label>
+                <label className="form-label">Descripción<span className="optional"> - Opcional</span></label>
                 <textarea
                     name="description"
                     className="form-control wide-description-field"

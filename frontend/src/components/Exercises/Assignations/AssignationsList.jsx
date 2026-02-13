@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
-import { getAllAssignations, deleteAssignation } from "../../../api/assignationsApi";
-import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
+import { deleteAssignation, getAllAssignations } from "../../../api/assignationsApi";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function AssignationsList() {
     const [data, setData] = useState([]);
@@ -40,7 +40,7 @@ export default function AssignationsList() {
                     <th>Ejercicio</th>
                     <th>Olimpiada</th>
                     <th>Itinerario</th>
-                    <th>Acciones rápidas</th>
+                    <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>

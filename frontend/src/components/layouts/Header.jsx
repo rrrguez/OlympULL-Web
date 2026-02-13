@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import OlympULLIconButton from "../../components/buttons/OlympULLIconButton";
+import { toast } from "react-toastify";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
@@ -12,6 +13,7 @@ export default function Header() {
         localStorage.removeItem("token");
         localStorage.removeItem("type");
         localStorage.removeItem("id");
+        toast.info("Se ha cerrado la sesión. ¡Hasta pronto!");
     }
 
     return (

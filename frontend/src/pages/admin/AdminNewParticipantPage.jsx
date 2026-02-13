@@ -6,7 +6,7 @@ export default function NewParticipantPage() {
     return (
         <Container>
             <PageHeader
-                title="Nueva asignación"
+                title="Nueva asignación (Participante ➜ Itinerario)"
                 backButtonRoute="/admin/participants"
             />
 

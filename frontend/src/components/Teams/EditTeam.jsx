@@ -5,6 +5,7 @@ import { getAllSchools } from "../../api/schoolsApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 import { toast } from "react-toastify";
+import * as regex from "../../utils/regex";
 
 export default function EditTeam() {
     const { id } = useParams();
@@ -140,6 +141,11 @@ export default function EditTeam() {
                             value={formData.name}
                             onChange={handleChange}
                             required
+                            pattern={regex.namePattern}
+                            onInvalid={e =>
+                                e.target.setCustomValidity(regex.onInvalidName)
+                            }
+                            onInput={e => e.target.setCustomValidity("")}
                         />
                     </div>
                     <div>

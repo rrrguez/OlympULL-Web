@@ -6,7 +6,7 @@ export default function NewMonitorPage() {
     return (
         <Container>
             <PageHeader
-                title="Nueva asignación"
+                title="Nueva asignación (Monitor ➜ Ejercicio)"
                 backButtonRoute="/admin/monitors"
             />
 

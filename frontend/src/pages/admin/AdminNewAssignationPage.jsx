@@ -6,13 +6,7 @@ export default function AssignationsPage() {
     return (
         <Container>
             <PageHeader
-                title={
-                    <>
-                        Nueva asignación
-                        <br />
-                        Ejercicio ➜ Olimpiada
-                    </>
-                }
+                title="Nueva asignación (Ejercicio ➜ Olimpiada)"
                 backButtonRoute={"/admin/assignations/"}
             />
 

@@ -5,7 +5,7 @@ export const getAll = () =>
         `
         SELECT
             t.*,
-            s.name AS school_name,
+            s.name AS school_name, s.town as school_town,
             o.name AS olympiad_name,
             i.name AS itinerary_name
         FROM t_teams t

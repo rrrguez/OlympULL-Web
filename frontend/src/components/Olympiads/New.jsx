@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createOlympiad } from "../../api/olympiadsApi";
 import { toast } from "react-toastify";
+import * as regex from "../../utils/regex";
 
 export default function NewOlympiad() {
     const navigate = useNavigate();
@@ -48,12 +49,52 @@ export default function NewOlympiad() {
         setLoading(true);
 
         try {
-        await createOlympiad(formData);
-        navigate("/admin/olympiads");
+            // Check if the dates are correct
+            const start = new Date(formData.start);
+            const stop  = new Date(formData.stop);
+            const startYear = start.getFullYear();
+            const stopYear  = stop.getFullYear();
+            if (start > stop) {
+                throw {
+                    type: "warn",
+                    message: "La fecha de comienzo no puede ser posterior a la fecha de fin"
+                };
+            }
+
+            if (startYear < 1900 || startYear > 2200 || isNaN(startYear)) {
+                throw {
+                    type: "warn",
+                    message: "Año de comienzo no válido"
+                };
+            }
+            if (stopYear < 1900 || stopYear > 2200 || isNaN(stopYear)) {
+                throw {
+                    type: "warn",
+                    message: "Año de fin no válido"
+                };
+            }
+
+            // Check if the description has the correct format
+            if (!regex.descPattern.test(formData.description)) {
+                toast.warn(
+                    `
+                    La descripción contiene caracteres inválidos.
+                    `
+                );
+                return;
+            }
+
+            await createOlympiad(formData);
+            toast.success("Olimpiada '" + formData.name + "' creada con éxito");
+            navigate("/admin/olympiads");
         } catch (err) {
-        toast.error(err.response?.data?.error || "Error al crear la olimpiada");
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
+            toast.error(err.response?.data?.error || "Error al crear la olimpiada");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
@@ -71,6 +112,11 @@ export default function NewOlympiad() {
                 value={formData.id}
                 onChange={handleChange}
                 required
+                pattern={regex.idPattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidId)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
             <div>
@@ -82,6 +128,11 @@ export default function NewOlympiad() {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                pattern={regex.namePattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidName)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
 
@@ -97,7 +148,7 @@ export default function NewOlympiad() {
             </div>
 
             <div>
-            <label className="form-label">Zona horaria</label>
+            <label className="form-label">Zona horaria<span className="optional"> - Opcional</span></label>
             <input
                 type="text"
                 name="timezone"
@@ -133,7 +184,7 @@ export default function NewOlympiad() {
             </div>
 
             <div>
-            <label className="form-label">Descripción</label>
+            <label className="form-label">Descripción<span className="optional"> - Opcional</span></label>
             <textarea
                 name="description"
                 className="form-control wide-description-field"

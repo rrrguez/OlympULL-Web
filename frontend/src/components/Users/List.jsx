@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { deleteUser, getAllUsers, createUser } from "../../api/usersApi";
-import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
+import { deleteUser, getAllUsers } from "../../api/usersApi";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function UsersList() {
     const [data, setData] = useState([]);
@@ -44,7 +44,7 @@ export default function UsersList() {
                 <th>Usuario</th>
                 <th>Nombre</th>
                 <th>Tipo de usuario</th>
-                <th>Acciones rápidas</th>
+                <th>Acciones</th>
             </tr>
             </thead>
             <tbody>

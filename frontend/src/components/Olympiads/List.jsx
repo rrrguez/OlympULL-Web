@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import { deleteOlympiad, getAllOlympiads, createOlympiad } from "../../api/olympiadsApi";
-import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import { toast } from "react-toastify";
+import { createOlympiad, deleteOlympiad, getAllOlympiads } from "../../api/olympiadsApi";
 import formatDate from "../../utils/dates";
 import getOlympiadStatus from "../../utils/olympiads";
+import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
 export default function OlympiadsList() {
     const [data, setData] = useState([]);
@@ -60,7 +60,7 @@ export default function OlympiadsList() {
                 <th>Fecha de inicio</th>
                 <th>Fecha de final</th>
                 <th>Zona horaria</th>
-                <th>Acciones rápidas</th>
+                <th>Acciones</th>
             </tr>
             </thead>
             <tbody>
