@@ -356,6 +356,10 @@ button.new-button {
     height: 90%;
 }
 
+.table-wrap {
+    overflow-x: auto;
+}
+
 .table {
     width: auto;
     table-layout: fixed;
@@ -368,6 +372,21 @@ button.new-button {
     width: 1%;
     text-align: left;
     vertical-align: middle;
+    padding-inline: 7.5px;
+}
+
+.table th:first-child,
+.table td:first-child {
+    padding-inline-start: 0px;
+}
+
+.table th:last-child,
+.table td:last-child {
+    padding-inline-end: 0px;
+}
+
+.table td.olympiad-status-icon {
+    text-align: center;
 }
 
 tr {

@@ -1,6 +1,6 @@
 import pool from "../db.js";
 
-export const getAll = () => pool.query("SELECT * FROM T_RUBRICS");
+export const getAll = () => pool.query("SELECT * FROM T_RUBRICS ORDER BY name");
 export const getById = (id) =>
   pool.query("SELECT * FROM T_RUBRICS WHERE id = $1", [id]);
 export const create = (data) =>

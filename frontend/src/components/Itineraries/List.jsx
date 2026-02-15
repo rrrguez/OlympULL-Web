@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
@@ -50,59 +50,61 @@ export default function ItinerariesList() {
 
     return (
         <Container>
-        <Table striped bordered hover>
-            <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Olimpiada</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            {loading
-            ? Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i} className="skeleton-row">
-                {Array.from({ length: 4 }).map((_, j) => (
-                    <td key={j}>
-                    <div className="skeleton-cell"></div>
-                    </td>
-                ))}
-                </tr>
-            ))
-            : data.map((o) => (
-            <tr key={o.id}>
-                <td>{o.name}</td>
-                <td>{o.olympiad_name}</td>
-                <td>
-                <div className="table-button-container with-duplicate">
-                    <OlympULLIconButton
-                        text="Duplicar"
-                        title="Duplicar"
-                        buttonClass="table-button"
-                        onClick={() => duplicate(o)}
-                        icon="fa-solid fa-clone"
-                    />
-                    <OlympULLIconButton
-                        text="Editar"
-                        title="Editar"
-                        buttonClass="table-button"
-                        route={`/admin/itineraries/edit/${o.id}`}
-                        icon="fa-solid fa-pen-to-square"
-                    />
+            <div className="table-wrap">
+                <table className="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Olimpiada</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loading
+                    ? Array.from({ length: 5 }).map((_, i) => (
+                        <tr key={i} className="skeleton-row">
+                        {Array.from({ length: 3 }).map((_, j) => (
+                            <td key={j}>
+                            <div className="skeleton-cell"></div>
+                            </td>
+                        ))}
+                        </tr>
+                    ))
+                    : data.map((o) => (
+                    <tr key={o.id}>
+                        <td>{o.name}</td>
+                        <td>{o.olympiad_name}</td>
+                        <td>
+                        <div className="table-button-container with-duplicate">
+                            <OlympULLIconButton
+                                text="Duplicar"
+                                title="Duplicar"
+                                buttonClass="table-button"
+                                onClick={() => duplicate(o)}
+                                icon="fa-solid fa-clone"
+                            />
+                            <OlympULLIconButton
+                                text="Editar"
+                                title="Editar"
+                                buttonClass="table-button"
+                                route={`/admin/itineraries/edit/${o.id}`}
+                                icon="fa-solid fa-pen-to-square"
+                            />
 
-                    <OlympULLIconButton
-                        text="Eliminar"
-                        title="Eliminar"
-                        buttonClass="table-button"
-                        onClick={() => remove(o.id, o.name)}
-                        icon="fa-regular fa-trash-can"
-                    />
-                </div>
-                </td>
-            </tr>
-            ))}
-            </tbody>
-        </Table>
+                            <OlympULLIconButton
+                                text="Eliminar"
+                                title="Eliminar"
+                                buttonClass="table-button"
+                                onClick={() => remove(o.id, o.name)}
+                                icon="fa-regular fa-trash-can"
+                            />
+                        </div>
+                        </td>
+                    </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
         </Container>
     );
 }

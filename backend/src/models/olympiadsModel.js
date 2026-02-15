@@ -1,6 +1,6 @@
 import pool from "../db.js";
 
-export const getAll = () => pool.query("SELECT * FROM t_olympiads");
+export const getAll = () => pool.query("SELECT * FROM t_olympiads ORDER BY name");
 
 export const getById = (id) =>
     pool.query("SELECT * FROM t_olympiads WHERE id = $1", [id]);

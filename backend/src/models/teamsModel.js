@@ -15,7 +15,7 @@ export const getAll = () =>
             ON t.itinerary = i.id
         JOIN t_olympiads o
             ON i.olympiad = o.id
-        ORDER BY t.name;
+        ORDER BY t.name, s.name, o.name, i.name;
         `
     );
 

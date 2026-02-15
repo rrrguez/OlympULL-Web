@@ -17,7 +17,8 @@ export const getAll = () =>
         JOIN t_olympiads o
             ON i.olympiad = o.id
         JOIN t_users u
-            ON p.id = u.id;
+            ON p.id = u.id
+        ORDER BY p.id;
         `
     );
 
