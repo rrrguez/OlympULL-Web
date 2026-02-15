@@ -4,7 +4,7 @@ import { createUser } from "../../api/usersApi";
 import { toast } from "react-toastify";
 import * as regex from "../../utils/regex";
 
-export default function NewOlympiad() {
+export default function NewUser() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

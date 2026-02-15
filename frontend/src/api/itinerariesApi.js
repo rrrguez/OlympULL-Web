@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/itineraries";
 
@@ -9,15 +9,29 @@ function authHeaders() {
     };
 }
 
-export const getAllItineraries = () => axios.get(API, authHeaders());
-export const getItinerary = (id) => axios.get(`${API}/${id}`, authHeaders());
+export const getAllItineraries = () =>
+    apiClient.get(API, authHeaders());
+
+export const getItinerary = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
 export const getItineraryByOlympiad = (olympiadId) =>
-    axios.get(`${API}/olympiad/${olympiadId}`, authHeaders());
-export const createItinerary = (data) => axios.post(API, data, authHeaders());
-export const updateItinerary = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
-export const deleteItinerary = (id) => axios.delete(`${API}/${id}`, authHeaders());
-export const importItineraries = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportItineraries = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+    apiClient.get(`${API}/olympiad/${olympiadId}`, authHeaders());
+
+export const createItinerary = (data) =>
+    apiClient.post(API, data, authHeaders());
+
+export const updateItinerary = (id, data) =>
+    apiClient.put(`${API}/${id}`, data, authHeaders());
+
+export const deleteItinerary = (id) =>
+    apiClient.delete(`${API}/${id}`, authHeaders());
+
+export const importItineraries = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportItineraries = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });

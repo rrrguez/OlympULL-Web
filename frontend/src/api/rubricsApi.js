@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/rubrics";
 
@@ -10,13 +10,26 @@ function authHeaders() {
 }
 
 // Ejercicios enchufados
-export const getAllRubrics = () => axios.get(API, authHeaders());
-export const getRubric = (id) => axios.get(`${API}/${id}`, authHeaders());
-export const createRubric = (data) => axios.post(API, data, authHeaders());
-export const updateRubric = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
-export const deleteRubric = (id) => axios.delete(`${API}/${id}`, authHeaders());
-export const importRubrics = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportRubrics = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+export const getAllRubrics = () =>
+    apiClient.get(API, authHeaders());
+
+export const getRubric = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
+export const createRubric = (data) =>
+    apiClient.post(API, data, authHeaders());
+
+export const updateRubric = (id, data) =>
+    apiClient.put(`${API}/${id}`, data, authHeaders());
+
+export const deleteRubric = (id) =>
+    apiClient.delete(`${API}/${id}`, authHeaders());
+
+export const importRubrics = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportRubrics = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });

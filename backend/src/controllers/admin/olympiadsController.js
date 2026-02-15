@@ -9,6 +9,7 @@ export const getAll = async (req, res) => {
     const result = await model.getAll();
     res.json(result.rows);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -35,6 +36,13 @@ export const create = async (req, res) => {
     const data = await model.create(req.body);
     res.status(201).json(data.rows[0]);
   } catch (err) {
+    console.log(err);
+    if (err.code === '23505') { // Duplicate key
+        res.status(400).json({
+            error: "Ya existe una olimpiada con el 'ID' o 'Nombre' proporcionados",
+            code: err.code
+        });
+    }
     res.status(500).json({ error: err.message });
   }
 };

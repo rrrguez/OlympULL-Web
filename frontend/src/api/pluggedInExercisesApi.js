@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/plugged-in-exercises";
 
@@ -10,31 +10,42 @@ function authHeaders() {
 }
 
 // Ejercicios enchufados
-export const getAllPluggedInExercises = () => axios.get(API, authHeaders());
-export const getPluggedInExercise = (id) => axios.get(`${API}/${id}`, authHeaders());
+export const getAllPluggedInExercises = () =>
+    apiClient.get(API, authHeaders());
+
+export const getPluggedInExercise = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
 export const createPluggedInExercise = (data) => {
     if (data instanceof FormData) {
-        return axios.post(API, data, {
+        return apiClient.post(API, data, {
             headers: {
                 ...authHeaders().headers
             }
         });
     }
-    return axios.post(API, data, authHeaders());
+    return apiClient.post(API, data, authHeaders());
 }
+
 export const updatePluggedInExercise = (id, data) => {
     if (data instanceof FormData) {
-        return axios.put(`${API}/${id}`, data, {
+        return apiClient.put(`${API}/${id}`, data, {
             headers: {
                 ...authHeaders().headers
             }
         });
     }
-    return axios.put(`${API}/${id}`, data, authHeaders());
+    return apiClient.put(`${API}/${id}`, data, authHeaders());
 }
-export const deletePluggedInExercise = (id) => axios.delete(`${API}/${id}`, authHeaders());
-export const importPluggedInExercises = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportPluggedInExercises = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+
+export const deletePluggedInExercise = (id) =>
+    apiClient.delete(`${API}/${id}`, authHeaders());
+
+export const importPluggedInExercises = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportPluggedInExercises = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });

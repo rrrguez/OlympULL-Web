@@ -92,7 +92,11 @@ export default function NewOlympiad() {
                 toast.warn(err.message);
                 return;
             }
-            toast.error(err.response?.data?.error || "Error al crear la olimpiada");
+            if (err.response?.data?.code === '23505') {
+                toast.error(err.response?.data?.error);
+            } else {
+                toast.error("Ha ocurrido un error inesperado");
+            }
         } finally {
             setLoading(false);
         }

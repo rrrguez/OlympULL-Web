@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/participants";
 
@@ -9,13 +9,25 @@ function authHeaders() {
     };
 }
 
-export const getAllParticipants = () => axios.get(API, authHeaders());
-export const getParticipant = (id) => axios.get(`${API}/${id}`, authHeaders());
-export const createParticipant = (data) => axios.post(API, data, authHeaders());
-//export const updateParticipant = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
-export const deleteParticipant = (id, school, itinerary) => axios.delete(`${API}/${id}/${school}/${itinerary}`, authHeaders());
-export const importParticipants = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportParticipants = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+export const getAllParticipants = () =>
+    apiClient.get(API, authHeaders());
+
+export const getParticipant = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
+export const createParticipant = (data) =>
+    apiClient.post(API, data, authHeaders());
+
+//export const updateParticipant = (id, data) => apiClient.put(`${API}/${id}`, data, authHeaders());
+
+export const deleteParticipant = (id, school, itinerary) =>
+    apiClient.delete(`${API}/${id}/${school}/${itinerary}`, authHeaders());
+
+export const importParticipants = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportParticipants = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });

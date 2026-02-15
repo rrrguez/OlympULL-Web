@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/unplugged-exercises";
 
@@ -10,13 +10,26 @@ function authHeaders() {
 }
 
 // Ejercicios desenchufados
-export const getAllUnpluggedExercises = () => axios.get(API, authHeaders());
-export const getUnpluggedExercise = (id) => axios.get(`${API}/${id}`, authHeaders());
-export const createUnpluggedExercise = (data) => axios.post(API, data, authHeaders());
-export const updateUnpluggedExercise = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
-export const deleteUnpluggedExercise = (id) => axios.delete(`${API}/${id}`, authHeaders());
-export const importUnpluggedExercises = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportUnpluggedExercises = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+export const getAllUnpluggedExercises = () =>
+    apiClient.get(API, authHeaders());
+
+export const getUnpluggedExercise = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
+export const createUnpluggedExercise = (data) =>
+    apiClient.post(API, data, authHeaders());
+
+export const updateUnpluggedExercise = (id, data) =>
+    apiClient.put(`${API}/${id}`, data, authHeaders());
+
+export const deleteUnpluggedExercise = (id) =>
+    apiClient.delete(`${API}/${id}`, authHeaders());
+
+export const importUnpluggedExercises = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportUnpluggedExercises = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });

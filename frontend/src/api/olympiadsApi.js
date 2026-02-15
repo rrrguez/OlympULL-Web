@@ -1,4 +1,4 @@
-import axios from "axios";
+import apiClient from "./apiClient";
 
 const API = "http://localhost:3000/api/admin/olympiads";
 
@@ -10,13 +10,26 @@ function authHeaders() {
     };
 }
 
-export const getAllOlympiads = () => axios.get(API, authHeaders());
-export const getOlympiad = (id) => axios.get(`${API}/${id}`, authHeaders());
-export const createOlympiad = (data) => axios.post(API, data, authHeaders());
-export const updateOlympiad = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
-export const deleteOlympiad = (id) => axios.delete(`${API}/${id}`, authHeaders());
-export const importOlympiads = (formData) => axios.post(`${API}/import`, formData, authHeaders());
-export const exportOlympiads = () => axios.get(`${API}/export`, {
-    ...authHeaders(),
-    responseType: "blob",
-});
+export const getAllOlympiads = () =>
+    apiClient.get(API, authHeaders());
+
+export const getOlympiad = (id) =>
+    apiClient.get(`${API}/${id}`, authHeaders());
+
+export const createOlympiad = (data) =>
+    apiClient.post(API, data, authHeaders());
+
+export const updateOlympiad = (id, data) =>
+    apiClient.put(`${API}/${id}`, data, authHeaders());
+
+export const deleteOlympiad = (id) =>
+    apiClient.delete(`${API}/${id}`, authHeaders());
+
+export const importOlympiads = (formData) =>
+    apiClient.post(`${API}/import`, formData, authHeaders());
+
+export const exportOlympiads = () =>
+    apiClient.get(`${API}/export`, {
+        ...authHeaders(),
+        responseType: "blob",
+    });
