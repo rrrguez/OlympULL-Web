@@ -9,8 +9,8 @@ const router = express.Router();
 router.get("/", exercisesController.getAllPluggedIn);
 router.get("/export", exercisesController.exportPluggedInCsv);
 router.get("/:id", exercisesController.getOnePluggedIn);
-router.post("/", uploadWording.single("wording"), exercisesController.createPluggedIn);
-router.put("/:id", exercisesController.updatePluggedIn);
+router.post("/", uploadWording.single("wording_file"), exercisesController.createPluggedIn);
+router.put("/:id", uploadWording.single("wording_file"), exercisesController.updatePluggedIn);
 router.delete("/:id", exercisesController.removePluggedIn);
 router.post("/import", upload.single("file"), exercisesController.importPluggedInCsv);
 

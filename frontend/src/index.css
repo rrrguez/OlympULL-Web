@@ -529,6 +529,22 @@ tr {
     outline: 0px solid black;
 }
 
+.current-wording {
+    font-family: "Argentum Sans Light";
+    display: inline-flex;
+    align-items: center;
+}
+
+.current-wording * {
+    width: auto;
+    margin-right: 10px;
+    align-self: center;
+}
+
+.current-wording a {
+    margin-left: 5px;
+}
+
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -594,3 +610,16 @@ tr {
     align-items: center;
 }
 
+.wording-div {
+    display: flex;
+    gap: 10px;
+}
+
+.wording-div button {
+    height: auto;
+    width: 25%;
+    padding-top: 6.5px;
+    padding-bottom: 6.5px;
+    align-self: flex-start;
+    margin: 0px;
+}

@@ -39,36 +39,36 @@ export const createUnplugged = async (data) => {
     const client = await pool.connect();
 
     try {
-      await client.query("BEGIN");
+        await client.query("BEGIN");
 
-      // 1. Insertar en T_EXERCISES
-      const exerciseRes = await client.query(
-        `INSERT INTO t_exercises (id, name, description, category, resources)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING *`,
-        [data.id, data.name, data.description, data.category, data.resources]
-      );
+        // 1. Insertar en T_EXERCISES
+        const exerciseRes = await client.query(
+            `INSERT INTO t_exercises (id, name, description, category, resources)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *`,
+            [data.id, data.name, data.description, data.category, data.resources]
+        );
 
-      // 2. Insertar en T_UNPLUGGED_EXERCISES
-      const unpluggedRes = await client.query(
-        `INSERT INTO t_unplugged_exercises (id, rubric)
-         VALUES ($1, $2)
-         RETURNING *`,
-        [exerciseRes.rows[0].id, data.rubric]
-      );
+        // 2. Insertar en T_UNPLUGGED_EXERCISES
+        const unpluggedRes = await client.query(
+            `INSERT INTO t_unplugged_exercises (id, rubric)
+            VALUES ($1, $2)
+            RETURNING *`,
+            [exerciseRes.rows[0].id, data.rubric]
+        );
 
-      await client.query("COMMIT");
+        await client.query("COMMIT");
 
-      return {
-        ...exerciseRes.rows[0],
-        ...unpluggedRes.rows[0]
-      };
+        return {
+            ...exerciseRes.rows[0],
+            ...unpluggedRes.rows[0]
+        };
 
     } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
+        await client.query("ROLLBACK");
+        throw error;
     } finally {
-      client.release();
+        client.release();
     }
 };
 
@@ -137,36 +137,36 @@ export const createPluggedIn = async (data) => {
     const value = data.testcase_value ? Number(data.testcase_value) : null;
 
     try {
-      await client.query("BEGIN");
+        await client.query("BEGIN");
 
-      // 1. Insertar en T_EXERCISES
-      const exerciseRes = await client.query(
-        `INSERT INTO t_exercises (id, name, description, category, resources)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING *`,
-        [data.id, data.name, data.description, data.category, data.resources]
-      );
+        // 1. Insertar en T_EXERCISES
+        const exerciseRes = await client.query(
+            `INSERT INTO t_exercises (id, name, description, category, resources)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *`,
+            [data.id, data.name, data.description, data.category, data.resources]
+        );
 
-      // 2. Insertar en T_PLUGGED_IN_EXERCISES
-      const PluggedInRes = await client.query(
-        `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value)
-         VALUES ($1, $2, $3, $4)
-         RETURNING *`,
-        [exerciseRes.rows[0].id, inputs, timeLimit, value]
-      );
+        // 2. Insertar en T_PLUGGED_IN_EXERCISES
+        const PluggedInRes = await client.query(
+            `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value, wording_file)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING *`,
+            [exerciseRes.rows[0].id, inputs, timeLimit, value, data.wording_file]
+        );
 
-      await client.query("COMMIT");
+        await client.query("COMMIT");
 
-      return {
-        ...exerciseRes.rows[0],
-        ...PluggedInRes.rows[0]
-      };
+        return {
+            ...exerciseRes.rows[0],
+            ...PluggedInRes.rows[0]
+        };
 
     } catch (error) {
-      await client.query("ROLLBACK");
-      throw error;
+        await client.query("ROLLBACK");
+        throw error;
     } finally {
-      client.release();
+        client.release();
     }
 };
 
@@ -177,33 +177,41 @@ export const updatePluggedIn = async (data) => {
     try {
         await client.query("BEGIN");
 
-        const result = await client.query(`
+        const result = await client.query(
+            `
             UPDATE t_exercises
             SET name = $1,
                 description = $2,
                 category = $3,
                 resources = $4
             WHERE id = $5 RETURNING *
-        `, [
+            `,
+            [
             data.name,
             data.description,
             data.category,
             data.resources,
             data.id,
-        ]);
+            ]
+        );
 
-        await client.query(`
-        UPDATE t_plugged_in_exercises
-        SET inputs = $1,
-            time_limit = $2,
-            testcase_value = $3
-        WHERE id = $4 RETURNING *
-        `, [
-            data.inputs,
-            data.time_limit,
-            data.testcase_value,
-            data.id
-        ]);
+        await client.query(
+            `
+            UPDATE t_plugged_in_exercises
+            SET inputs = $1,
+                time_limit = $2,
+                testcase_value = $3,
+                wording_file = COALESCE($4, wording_file)
+            WHERE id = $5 RETURNING *
+            `,
+            [
+                data.inputs,
+                data.time_limit,
+                data.testcase_value,
+                data.wording_file,
+                data.id
+            ]
+        );
 
         await client.query("COMMIT");
 

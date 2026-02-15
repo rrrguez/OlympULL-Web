@@ -172,10 +172,15 @@ export const getOnePluggedIn = async (req, res) => {
 // POST: crear nuevo
 export const createPluggedIn = async (req, res) => {
     try {
-    const data = await model.createPluggedIn(req.body);
-    res.status(201).json(data);
+        const wordingFile = req.file ? req.file.filename : null;
+
+        const data = await model.createPluggedIn({
+            ...req.body,
+            wording_file: wordingFile
+    });
+        res.status(201).json(data);
     } catch (err) {
-    res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -183,7 +188,17 @@ export const createPluggedIn = async (req, res) => {
 export const updatePluggedIn = async (req, res) => {
     try {
         const { id } = req.params;
-        const data = await model.updatePluggedIn({ id, ...req.body });
+
+        const wordingFile = req.file
+            ? req.file.filename
+            : req.body.wording_file || null;
+
+        const data = await model.updatePluggedIn({
+            id,
+            ...req.body,
+            wording_file: wordingFile
+        });
+
         res.json(data.rows[0]);
     } catch (err) {
         res.status(500).json({ error: err.message });

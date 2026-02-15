@@ -16,7 +16,7 @@ export default function NewExercise() {
         inputs: null,
         time_limit: null,
         testcase_value: null,
-        wording: null,
+        wording_file: null,
     });
 
     const [loading, setLoading] = useState(false);
@@ -65,8 +65,8 @@ export default function NewExercise() {
             }
             fd.append("testcase_value", formData.testcase_value);
 
-            if (formData.wording) {
-                fd.append("wording", formData.wording);
+            if (formData.wording_file) {
+                fd.append("wording_file", formData.wording_file);
             }
 
             await createPluggedInExercise(fd);
@@ -224,13 +224,13 @@ export default function NewExercise() {
                     <input
                         className="form-control file-input"
                         type="file"
-                        name="wording"
+                        name="wording_file"
                         id="pdf-upload"
                         accept="application/pdf"
                         onChange={e =>
                             setFormData({
                                 ...formData,
-                                wording: e.target.files[0]
+                                wording_file: e.target.files[0]
                             })
                         }
                         required

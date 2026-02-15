@@ -3,12 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getPluggedInExercise, updatePluggedInExercise } from "../../../api/pluggedInExercisesApi";
 import { toast } from "react-toastify";
 import * as regex from "../../../utils/regex";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function NewExercise() {
     const { id } = useParams();
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
+
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const [formData, setFormData] = useState({
         id: "",
@@ -19,14 +22,25 @@ export default function NewExercise() {
         inputs: null,
         time_limit: null,
         testcase_value: null,
+        wording_file: null,
     });
+
+    const [showCurrentWording, setShowCurrentWording] = useState(true);
 
     function handleChange(e) {
         setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
+            ...formData,
+            [e.target.name]: e.target.value,
         });
     }
+
+    const handleFileChange = e => {
+        setSelectedFile(e.target.files[0]);
+    };
+
+    function toggleWording() {
+        setShowCurrentWording(prev => !prev);
+      }
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -55,23 +69,22 @@ export default function NewExercise() {
             const fd = new FormData();
             fd.append("id", formData.id);
             fd.append("name", formData.name);
-            fd.append("description", formData.description || null);
+            fd.append("description", formData.description);
             fd.append("category", formData.category);
             fd.append("resources", formData.resources);
             fd.append("inputs", formData.inputs);
-            console.log(formData.time_limit);
             if (formData.time_limit !== "" && formData.time_limit !== null) {
                 fd.append("time_limit", formData.time_limit);
             }
             fd.append("testcase_value", formData.testcase_value);
 
-            if (formData.wording) {
-                fd.append("wording", formData.wording);
+            if (selectedFile) {
+                fd.append("wording_file", selectedFile);
             }
 
             await updatePluggedInExercise(id, fd);
             navigate("/admin/exercises");
-            toast.success("Ejercicio creado con éxito");
+            toast.success("Ejercicio '" + formData.name + "' actualizado con éxito");
         } catch (err) {
             if (err.type === "warn") {
                 toast.warn(err.message);
@@ -235,14 +248,52 @@ export default function NewExercise() {
                 </div>
                 <div>
                     <label className="form-label">Enunciado</label>
-                    <input
-                        className="form-control file-input"
-                        type="file"
-                        id="pdf-upload"
-                        accept="application/pdf"
-                        onChange={handleChange}
-                        //required
-                    />
+                    {formData.wording_file && showCurrentWording ? (
+                        <div className="wording-div">
+                            <div className="current-wording">
+                                <i className="fa-regular fa-file"/>
+                                Enunciado actual:
+                                <a
+                                    href={`http://localhost:3000/wordings/${formData.wording_file}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {formData.wording_file}
+                                </a>
+                            </div>
+                            <OlympULLIconButton
+                                text="Cambiar"
+                                title="Cambiar"
+                                type="button"
+                                buttonClass="table-button"
+                                onClick={toggleWording}
+                                icon="fa-solid fa-arrows-rotate"
+                            />
+                        </div>
+                    ) : (
+                        <div className="wording-div">
+                            <input
+                                className="form-control file-input"
+                                type="file"
+                                id="pdf-upload"
+                                accept="application/pdf"
+                                onChange={handleFileChange}
+                                //required
+                            />
+                            {formData.wording_file ? (
+                                <OlympULLIconButton
+                                    text="Cancelar"
+                                    title="Cancelar"
+                                    type="button"
+                                    buttonClass="table-button"
+                                    onClick={toggleWording}
+                                    icon="fa-solid fa-xmark"
+                                />
+                            ) : (<></>)}
+
+                        </div>
+                    )}
+
                 </div>
             </div>
 
