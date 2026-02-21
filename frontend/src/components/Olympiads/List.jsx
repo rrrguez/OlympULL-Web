@@ -6,13 +6,13 @@ import formatDate from "../../utils/dates";
 import getOlympiadStatus from "../../utils/olympiads";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function OlympiadsList() {
+export default function OlympiadsList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

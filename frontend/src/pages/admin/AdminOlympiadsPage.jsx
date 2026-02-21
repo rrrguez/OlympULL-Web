@@ -8,6 +8,7 @@ import { importOlympiads, exportOlympiads } from "../../api/olympiadsApi";
 
 export default function OlympiadsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportOlympiadsFunction = async () => {
         try {
@@ -40,13 +41,14 @@ export default function OlympiadsPage() {
                 exportButtonOnClick={exportOlympiadsFunction}
                 backButtonRoute="/admin"
             />
-            <OlympiadsList/>
+            <OlympiadsList refreshKey={refreshKey}/>
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}
                 onImport={importOlympiads}
                 title="Importar olimpiadas"
                 successMessage="Olimpiadas importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
 

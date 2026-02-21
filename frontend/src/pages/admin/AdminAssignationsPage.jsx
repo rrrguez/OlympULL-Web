@@ -8,6 +8,7 @@ import { importAssignations, exportAssignations } from "../../api/assignationsAp
 
 export default function AssignationsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportAssignationsFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function AssignationsPage() {
                 backButtonRoute="/admin"
             />
 
-            <AssignationsList/>
+            <AssignationsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function AssignationsPage() {
                 onImport={importAssignations}
                 title="Importar asignaciones"
                 successMessage="Asignaciones importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
 

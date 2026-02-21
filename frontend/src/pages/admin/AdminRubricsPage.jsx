@@ -8,6 +8,7 @@ import { importRubrics, exportRubrics } from "../../api/rubricsApi";
 
 export default function RubricsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportRubricsFunction = async () => {
         try {
@@ -40,13 +41,14 @@ export default function RubricsPage() {
                 exportButtonOnClick={exportRubricsFunction}
                 backButtonRoute="/admin"
             />
-            <RubricsList/>
+            <RubricsList refreshKey={refreshKey}/>
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}
                 onImport={importRubrics}
                 title="Importar rúbricas"
                 successMessage="Rúbricas importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { createItinerary, deleteItinerary, getAllItineraries } from "../../api/itinerariesApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function ItinerariesList() {
+export default function ItinerariesList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

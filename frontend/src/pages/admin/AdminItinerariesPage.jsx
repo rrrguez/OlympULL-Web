@@ -8,6 +8,7 @@ import { importItineraries, exportItineraries } from "../../api/itinerariesApi";
 
 export default function ItinerariesPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportItinerariesFunction = async () => {
         try {
@@ -41,13 +42,15 @@ export default function ItinerariesPage() {
                 backButtonRoute="/admin"
             />
 
-            <ItinerariesList/>
+            <ItinerariesList refreshKey={refreshKey}/>
+            
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}
                 onImport={importItineraries}
                 title="Importar itinerarios"
                 successMessage="Itinerarios importados con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
 

@@ -8,6 +8,7 @@ import ImportModal from "../../components/modals/ImportModal";
 
 export default function SchoolsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportSchoolsFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function SchoolsPage() {
                 backButtonRoute="/admin"
             />
 
-            <SchoolsList/>
+            <SchoolsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function SchoolsPage() {
                 onImport={importSchools}
                 title="Importar escuelas"
                 successMessage="Escuelas importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

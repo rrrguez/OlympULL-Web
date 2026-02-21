@@ -12,6 +12,7 @@ export default function PluggedInExercisesList() {
     const [loading, setLoading] = useState(true);
 
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportPluggedInExercisesFunction = async () => {
         try {
@@ -33,7 +34,7 @@ export default function PluggedInExercisesList() {
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {
@@ -149,6 +150,7 @@ export default function PluggedInExercisesList() {
             onImport={importPluggedInExercises}
             title="Importar ejercicios enchufados"
             successMessage="Ejercicios importados con éxito"
+            onSuccess={() => setRefreshKey(prev => prev + 1)}
         />
       </Container>
     );

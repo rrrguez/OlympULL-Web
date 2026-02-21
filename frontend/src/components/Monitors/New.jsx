@@ -65,7 +65,7 @@ export default function NewMonitor() {
                 }
             await createMonitor(formData);
             navigate("/admin/monitors");
-            toast("Monitor '" + formData.id + "' asignado al ejercicio '" + formData.exercise + "' con éxito")
+            toast.success("Monitor asignado con éxito")
         } catch (err) {
             if (err.type === "warn") {
                 toast.warn(err.message);

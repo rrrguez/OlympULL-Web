@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { createSchool, deleteSchool, getAllSchools } from "../../api/schoolsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function RubricList() {
+export default function RubricList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

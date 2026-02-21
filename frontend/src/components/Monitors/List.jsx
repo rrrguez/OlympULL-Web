@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { deleteAssignation, getAllMonitors } from "../../api/monitorsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function MonitorList() {
+export default function MonitorList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

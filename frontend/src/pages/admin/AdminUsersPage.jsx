@@ -8,6 +8,7 @@ import { importUsers, exportUsers } from "../../api/usersApi";
 
 export default function AdminUsersPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportUsersFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function AdminUsersPage() {
                 backButtonRoute="/admin"
             />
 
-            <UsersList/>
+            <UsersList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function AdminUsersPage() {
                 onImport={importUsers}
                 title="Importar usuarios"
                 successMessage="Usuarios importados con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

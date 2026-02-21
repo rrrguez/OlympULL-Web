@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { createTeam, deleteTeam, getAllTeams } from "../../api/teamsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function TeamsList() {
+export default function TeamsList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {
@@ -75,7 +75,10 @@ export default function TeamsList() {
                     : data.map((o) => (
                         <tr key={o.id}>
                         <td>{o.name}</td>
-                        <td>{`${o.school_name} (${o.school_town})`}</td>
+                        <td>
+                            {o.school_name}
+                            {o.school_town && ` (${o.school_town})`}
+                        </td>
                         <td>{o.olympiad_name}</td>
                         <td>{o.itinerary_name}</td>
                         <td>

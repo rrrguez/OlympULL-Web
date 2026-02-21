@@ -5,13 +5,13 @@ import { deleteUser, getAllUsers } from "../../api/usersApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 import translateUserType from "../../utils/users";
 
-export default function UsersList() {
+export default function UsersList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

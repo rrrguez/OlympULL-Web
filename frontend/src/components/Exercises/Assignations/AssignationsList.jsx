@@ -4,13 +4,13 @@ import { toast } from "react-toastify";
 import { deleteAssignation, getAllAssignations } from "../../../api/assignationsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
-export default function AssignationsList() {
+export default function AssignationsList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {

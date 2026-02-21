@@ -8,6 +8,7 @@ import { importParticipants, exportParticipants } from "../../api/participantsAp
 
 export default function AdminOrganizersPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportParticipantsFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function AdminOrganizersPage() {
                 backButtonRoute="/admin"
             />
 
-            <ParticipantsList/>
+            <ParticipantsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function AdminOrganizersPage() {
                 onImport={importParticipants}
                 title="Importar asignaciones"
                 successMessage="Asignaciones importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

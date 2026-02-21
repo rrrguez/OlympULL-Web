@@ -8,6 +8,7 @@ import { importMonitors, exportMonitors } from "../../api/monitorsApi";
 
 export default function AdminMonitorsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportMonitorsFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function AdminMonitorsPage() {
                 backButtonRoute="/admin"
             />
 
-            <MonitorsList/>
+            <MonitorsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function AdminMonitorsPage() {
                 onImport={importMonitors}
                 title="Importar asignaciones"
                 successMessage="Asignaciones importadas con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

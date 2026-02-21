@@ -12,6 +12,7 @@ export default function UnpluggedExercisesList() {
     const [loading, setLoading] = useState(true);
 
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportUnpluggedExercisesFunction = async () => {
         try {
@@ -33,7 +34,7 @@ export default function UnpluggedExercisesList() {
 
     useEffect(() => {
         load();
-    }, []);
+    }, [refreshKey]);
 
     const load = async () => {
         async function loadData() {
@@ -150,6 +151,7 @@ export default function UnpluggedExercisesList() {
                 onImport={importUnpluggedExercises}
                 title="Importar ejercicios desenchufados"
                 successMessage="Ejercicios importados con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

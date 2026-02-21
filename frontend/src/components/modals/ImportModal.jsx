@@ -21,7 +21,7 @@ export default function ImportModal({ open, onClose, onImport, title ="Importar 
             setLoading(true);
             await onImport(formData);
             toast.success(successMessage);
-            await window.location.reload(); // CAMBIAR
+            if (onSuccess) onSuccess();
             onClose();
         } catch (err) {
             toast.error(

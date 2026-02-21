@@ -8,6 +8,7 @@ import { importTeams, exportTeams } from "../../api/teamsApi";
 
 export default function TeamsPage() {
     const [importOpen, setImportOpen] = useState(false);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     const exportTeamsFunction = async () => {
         try {
@@ -41,7 +42,7 @@ export default function TeamsPage() {
                 backButtonRoute="/admin"
             />
 
-            <TeamsList/>
+            <TeamsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
@@ -49,6 +50,7 @@ export default function TeamsPage() {
                 onImport={importTeams}
                 title="Importar equipos"
                 successMessage="Equipos importados con éxito"
+                onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
     );

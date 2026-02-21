@@ -23,15 +23,14 @@ export default function NewTeam() {
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
-    const disabledSchools = schools.length === 0;
-    const disabledOlympiads = olympiads.length === 0;
-    const itineraryDisabled =
-    !formData.olympiad || loadingItineraries || itineraries.length === 0;
-
     const [loadingSchools, setLoadingSchools] = useState(false);
     const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
+    const disabledSchools = schools.length === 0;
+    const disabledOlympiads = olympiads.length === 0;
+    const itineraryDisabled =
+    !formData.olympiad || loadingItineraries || itineraries.length === 0
 
     function handleChange(e) {
         setFormData({
@@ -176,7 +175,8 @@ export default function NewTeam() {
                             </option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
-                                {o.id} - {o.name} ({o.town})
+                                    {o.id} - {o.name}
+                                    {o.town && ` (${o.town})`}
                                 </option>
                             ))}
                         </select>
