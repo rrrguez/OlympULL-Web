@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createTeam } from "../../api/teamsApi";
-import { getAllSchools } from "../../api/schoolsApi";
-import { getAllOlympiads } from "../../api/olympiadsApi";
-import { getItineraryByOlympiad } from "../../api/itinerariesApi";
 import { toast } from "react-toastify";
+import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { getAllOlympiads } from "../../api/olympiadsApi";
+import { getAllSchools } from "../../api/schoolsApi";
+import { createTeam } from "../../api/teamsApi";
 import * as regex from "../../utils/regex";
 
 export default function NewTeam() {
@@ -23,10 +23,15 @@ export default function NewTeam() {
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
-    const [loadingItineraries, setLoadingItineraries] = useState(false);
-
+    const disabledSchools = schools.length === 0;
+    const disabledOlympiads = olympiads.length === 0;
     const itineraryDisabled =
     !formData.olympiad || loadingItineraries || itineraries.length === 0;
+
+    const [loadingSchools, setLoadingSchools] = useState(false);
+    const [loadingOlympiads, setLoadingOlympiads] = useState(false);
+    const [loadingItineraries, setLoadingItineraries] = useState(false);
+
 
     function handleChange(e) {
         setFormData({
@@ -40,51 +45,72 @@ export default function NewTeam() {
         setLoading(true);
 
         try {
-        await createTeam(formData);
-        navigate("/admin/teams");
+            if (disabledSchools) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una escuela"
+                }
+            }
+            if (disabledOlympiads || itineraryDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una olimpiada y un itinerario"
+                }
+            }
+            await createTeam(formData);
+            navigate("/admin/teams");
+            toast.success("Equipo '" + formData.name + "' creado con éxito")
         } catch (err) {
-        toast.error(err.response?.data?.error || "Error al crear el equipo");
+            if (err.type === "warn") {
+                toast.warning(err.message)
+                return
+            }
+            toast.error(err.response?.data?.error || "Error al crear el equipo");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         async function loadSchools() {
             try {
+                setLoadingSchools(true)
                 const data = await getAllSchools();
                 setSchools(data.data);
             } catch (err) {
                 console.error("Error cargando las escuelas", err);
                 toast.error("Error cargando las escuelas");
+            } finally {
+                setLoadingSchools(false)
             }
         }
         loadSchools();
 
         async function loadOlympiads() {
             try {
-            const data = await getAllOlympiads();
-            setOlympiads(data.data);
+                setLoadingOlympiads(true)
+                const data = await getAllOlympiads();
+                setOlympiads(data.data);
             } catch (err) {
-            console.error("Error cargando las olimpiadas", err);
-            toast.error("Error cargando las olimpiadas");
+                console.error("Error cargando las olimpiadas", err);
+                toast.error("Error cargando las olimpiadas");
+            } finally {
+                setLoadingOlympiads(false)
             }
         }
         loadOlympiads();
-    })
+    }, [])
 
     async function loadItineraries(olympiadId) {
         try {
-        setLoadingItineraries(true);
-
-        const res = await getItineraryByOlympiad(olympiadId);
-
-        setItineraries(res.data);
+            setLoadingItineraries(true);
+            const res = await getItineraryByOlympiad(olympiadId);
+            setItineraries(res.data);
         } catch (err) {
-        console.error("Error cargando itinerarios", err);
-        toast.error("Error cargando los itinerarios");
+            console.error("Error cargando itinerarios", err);
+            toast.error("Error cargando los itinerarios");
         } finally {
-        setLoadingItineraries(false);
+            setLoadingItineraries(false);
         }
     }
 
@@ -141,8 +167,13 @@ export default function NewTeam() {
                             value={formData.school}
                             onChange={handleChange}
                             required
+                            disabled={disabledSchools}
                             >
-                            <option value="">-- Seleccione una escuela --</option>
+                            <option value="">
+                                {
+                                    loadingSchools ? "Cargando escuelas..." : disabledSchools ? "No hay escuelas disponibles" : "-- Selecciona una escuela --"
+                                }
+                            </option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name} ({o.town})
@@ -158,8 +189,13 @@ export default function NewTeam() {
                             value={formData.olympiad}
                             onChange={handleChange}
                             required
+                            disabled={disabledOlympiads}
                             >
-                            <option value="">-- Seleccione una olimpiada --</option>
+                            <option value="">
+                                {
+                                    loadingOlympiads ? "Cargando olimpiadas..." : disabledOlympiads ? "No hay olimpiadas disponibles" : "-- Selecciona una olimpiada --"
+                                }
+                            </option>
                             {olympiads.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -181,10 +217,10 @@ export default function NewTeam() {
                                 {loadingItineraries
                                 ? "Cargando itinerarios..."
                                 : !formData.olympiad
-                                ? "-- Seleccione primero una olimpiada --"
+                                ? "-- Selecciona primero una olimpiada --"
                                 : itineraries.length === 0
                                 ? "No hay itinerarios disponibles"
-                                : "-- Seleccione un itinerario --"}
+                                : "-- Selecciona un itinerario --"}
                             </option>
 
                             {itineraries.map((i) => (

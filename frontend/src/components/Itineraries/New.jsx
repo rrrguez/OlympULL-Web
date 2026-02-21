@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createItinerary } from "../../api/itinerariesApi";
 import { getAllOlympiads } from "../../api/olympiadsApi";
-import { toast } from "react-toastify";
 import * as regex from "../../utils/regex";
 
 export default function NewItinerary() {
@@ -18,6 +18,10 @@ export default function NewItinerary() {
     const [olympiads, setOlympiads] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [loadingOlympiads, setLoadingOlympiads] = useState([]);
+
+    const olympiadDisabled = olympiads.length === 0;
+
     function handleChange(e) {
         setFormData({
         ...formData,
@@ -27,13 +31,16 @@ export default function NewItinerary() {
 
     useEffect(() => {
         async function loadOlympiads() {
-        try {
-            const data = await getAllOlympiads();
-            setOlympiads(data.data);
-        } catch (err) {
-            console.error("Error cargando itinerarios", err);
-            toast.error("No se pudieron cargar las itinerarios");
-        }
+            try {
+                setLoadingOlympiads(true);
+                const data = await getAllOlympiads();
+                setOlympiads(data.data);
+            } catch (err) {
+                console.error("Error cargando olimpiadas", err);
+                toast.error("No se pudieron cargar las olimpiadas");
+            } finally {
+                setLoadingOlympiads(false);
+            }
         }
         loadOlympiads();
     }, []);
@@ -43,6 +50,12 @@ export default function NewItinerary() {
         setLoading(true);
 
         try {
+            if (olympiadDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una olimpiada"
+                }
+            }
             // Check if the description has the correct format
             if (!regex.descPattern.test(formData.description)) {
                 throw {
@@ -121,8 +134,12 @@ export default function NewItinerary() {
                     value={formData.olympiad}
                     onChange={handleChange}
                     required
+                    disabled={olympiadDisabled}
                 >
-                    <option value="">-- Seleccione una olimpiada --</option>
+                    <option value="">
+                        {loadingOlympiads ? "Cargando olimpiadas..." : olympiadDisabled ? "No hay olimpiadas disponibles" : "-- Selecciona una olimpiada --"
+                        }
+                    </option>
                     {olympiads.map((o) => (
                     <option key={o.id} value={o.id}>
                         {o.id} - {o.name}

@@ -35,12 +35,21 @@ export const getItineraries = async (req, res) => {
 
 // POST: crear nuevo
 export const create = async (req, res) => {
-  try {
-    const data = await model.create(req.body);
-    res.status(201).json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.create(req.body);
+        res.status(201).json(data.rows[0]);
+    } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_exercises_olympiad_itinerary_pkey') {
+                res.status(400).json({
+                    error: "El 'Ejercicio' seleccionado ya forma parte de ese 'Itinerario' en la 'Olimpiada' elegida",
+                    code: err.code
+                });
+            }
+        }
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE

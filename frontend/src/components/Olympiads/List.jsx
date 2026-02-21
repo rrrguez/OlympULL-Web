@@ -17,9 +17,15 @@ export default function OlympiadsList() {
     const load = async () => {
         async function loadData() {
             setLoading(true);
-            const res = await getAllOlympiads();
-            setData(res.data);
-            setLoading(false);
+            try {
+                const res = await getAllOlympiads();
+                setData(res.data);
+            } catch (err) {
+                console.log(err);
+                return;
+            } finally{
+                setLoading(false);
+            }
         }
         loadData();
     };

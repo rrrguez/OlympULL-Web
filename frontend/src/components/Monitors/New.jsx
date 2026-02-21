@@ -1,12 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserByType } from "../../api/usersApi";
-import { getAssignationsOlympiads } from "../../api/assignationsApi";
-import { getAssignationsItineraries } from "../../api/assignationsApi";
+import { toast } from "react-toastify";
+import { getAssignationsItineraries, getAssignationsOlympiads } from "../../api/assignationsApi";
+import { createMonitor } from "../../api/monitorsApi";
 import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
-import { createMonitor } from "../../api/monitorsApi";
-import { toast } from "react-toastify";
+import { getUserByType } from "../../api/usersApi";
 
 export default function NewMonitor() {
     const navigate = useNavigate();
@@ -25,9 +24,13 @@ export default function NewMonitor() {
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
+    const [loadingExercises, setLoadingExercises] = useState(false);
+    const [loadingMonitors, setLoadingMonitors] = useState(false);
     const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
+    const monitorDisabled = monitors.length === 0;
+    const exerciseDisabled = exercises.length === 0;
     const olympiadDisabled =
     !formData.exercise || loadingOlympiads || olympiads.length === 0;
     const itineraryDisabled =
@@ -45,29 +48,53 @@ export default function NewMonitor() {
         setLoading(true);
 
         try {
-        await createMonitor(formData);
-        navigate("/admin/monitors");
+            if (monitorDisabled)
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un monitor"
+                }
+            if (exerciseDisabled)
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un ejercicio"
+                }
+            if (olympiadDisabled || itineraryDisabled)
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una olimpiada y un itinerario"
+                }
+            await createMonitor(formData);
+            navigate("/admin/monitors");
+            toast("Monitor '" + formData.id + "' asignado al ejercicio '" + formData.exercise + "' con éxito")
         } catch (err) {
-        toast.error(err.response?.data?.error || "Error al crear la asignación");
+            if (err.type === "warn") {
+                toast.warn(err.message);
+                return;
+            }
+            toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
-        setLoading(false);
+            setLoading(false);
         }
     }
 
     useEffect(() => {
         async function loadMonitors() {
             try {
+                setLoadingMonitors(true)
                 const data = await getUserByType("MONITOR");
                 setMonitors(data.data);
             } catch (err) {
                 console.error("Error cargando la lista de monitores", err);
                 toast.error("Error cargando la lista de monitores")
+            } finally {
+                setLoadingMonitors(false)
             }
         }
         loadMonitors();
 
         async function loadExercises() {
             try {
+                setLoadingExercises(true)
                 const dataPluggedIn = await getAllPluggedInExercises();
                 const dataUnplugged = await getAllUnpluggedExercises();
                 setExercises([
@@ -77,10 +104,12 @@ export default function NewMonitor() {
             } catch (err) {
                 console.error("Error cargando ejercicios", err);
                 toast.error("Error cargando los ejercicios");
+            } finally {
+                setLoadingExercises(false)
             }
         }
         loadExercises();
-    })
+    }, [])
 
     async function loadOlympiads(exercise) {
         try {
@@ -144,8 +173,11 @@ export default function NewMonitor() {
                             value={formData.id}
                             onChange={handleChange}
                             required
+                            disabled={monitorDisabled}
                             >
-                            <option value="">-- Seleccione un monitor --</option>
+                            <option value="">
+                                {loadingMonitors ? "Cargando monitores..." : monitorDisabled ? "No hay monitores disponibles" : "-- Selecciona un monitor --"}
+                            </option>
                             {monitors.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.username}
@@ -161,8 +193,11 @@ export default function NewMonitor() {
                             value={formData.exercise}
                             onChange={handleChange}
                             required
+                            disabled={exerciseDisabled}
                             >
-                            <option value="">-- Seleccione un ejercicio --</option>
+                            <option value="">
+                                {loadingExercises ? "Cargando ejercicios..." : exerciseDisabled ? "No hay ejercicios disponibles" : "-- Selecciona un ejercicio --"}
+                            </option>
                             {exercises.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -184,10 +219,10 @@ export default function NewMonitor() {
                                 {loadingOlympiads
                                 ? "Cargando olimpiadas..."
                                 : !formData.exercise
-                                ? "-- Seleccione primero un ejercicio --"
+                                ? "-- Selecciona primero un ejercicio --"
                                 : olympiads.length === 0
                                 ? "No hay olimpiadas disponibles"
-                                : "-- Seleccione una olimpiada --"}
+                                : "-- Selecciona una olimpiada --"}
                             </option>
                             {olympiads.map((o) => (
                                 <option key={o.olympiad} value={o.olympiad}>
@@ -210,10 +245,10 @@ export default function NewMonitor() {
                                 {loadingItineraries
                                 ? "Cargando itinerarios..."
                                 : !formData.olympiad
-                                ? "-- Seleccione primero una olimpiada --"
+                                ? "-- Selecciona primero una olimpiada --"
                                 : itineraries.length === 0
                                 ? "No hay itinerarios disponibles"
-                                : "-- Seleccione un itinerario --"}
+                                : "-- Selecciona un itinerario --"}
                             </option>
 
                             {itineraries.map((i) => (

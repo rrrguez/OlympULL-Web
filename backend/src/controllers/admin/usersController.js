@@ -42,12 +42,21 @@ export const getByType = async (req, res) => {
 
 // POST: crear nueva
 export const create = async (req, res) => {
-  try {
-    const data = await model.create(req.body);
-    res.status(201).json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.create(req.body);
+        res.status(201).json(data.rows[0]);
+    } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_users_pkey') {
+                res.status(400).json({
+                    error: "Ya existe un usuario con el 'Usuario' proporcionado",
+                    code: err.code
+                });
+            }
+        }
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar

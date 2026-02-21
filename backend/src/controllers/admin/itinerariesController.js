@@ -46,6 +46,20 @@ export const create = async (req, res) => {
     const data = await model.create(req.body);
     res.status(201).json(data.rows[0]);
   } catch (err) {
+    console.log(err);
+    if (err.code === '23505') { // Duplicate key
+        if (err.constraint === 't_itineraries_pkey') {
+            res.status(400).json({
+                error: "Ya existe un itinerario con el 'ID' proporcionado",
+                code: err.code
+            });
+        } else if (err.constraint === 't_itineraries_name_olympiad_key') {
+            res.status(400).json({
+                error: "Ya existe un itinerario con el 'Nombre' proporcionado en la 'Olimpiada' seleccionada",
+                code: err.code
+            });
+        }
+    }
     res.status(500).json({ error: err.message });
   }
 };

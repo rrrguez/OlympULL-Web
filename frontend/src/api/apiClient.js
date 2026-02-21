@@ -1,6 +1,7 @@
 import axios from "axios";
 import { logout } from "../services/authService";
 import { toast } from "react-toastify";
+import { redirectToLogin } from "../utils/redirect";
 
 const apiClient = axios.create({
     baseURL: "http://localhost:3000",
@@ -22,9 +23,10 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401 || error.response?.status === 403) {
+            document.body.style.cursor = "wait";
             logout();
-            toast.info("La sesión ha expirado. Por favor, vuelve a iniciar sesión.");
-            window.location.href = "/login";
+            toast.info("La sesión ha expirado. Vuelve a iniciar sesión.");
+            redirectToLogin();
         }
         return Promise.reject(error);
     }

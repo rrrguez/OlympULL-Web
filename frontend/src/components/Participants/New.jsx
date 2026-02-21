@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUserByType } from "../../api/usersApi";
-import { getAllOlympiads } from "../../api/olympiadsApi";
-import { getItineraryByOlympiad } from "../../api/itinerariesApi";
-import { getAllSchools } from "../../api/schoolsApi";
-import { createParticipant } from "../../api/participantsApi";
 import { toast } from "react-toastify";
+import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { getAllOlympiads } from "../../api/olympiadsApi";
+import { createParticipant } from "../../api/participantsApi";
+import { getAllSchools } from "../../api/schoolsApi";
+import { getUserByType } from "../../api/usersApi";
 
 export default function NewParticipantAssignation() {
     const navigate = useNavigate();
@@ -19,16 +19,20 @@ export default function NewParticipantAssignation() {
     const [loading, setLoading] = useState(false);
 
     const [participants, setParticipants] = useState([]);
-
     const [schools, setSchools] = useState([]);
-
     const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
 
+    const [loadingParticipants, setLoadingParticipants] = useState(false);
+    const [loadingSchools, setLoadingSchools] = useState(false);
+    const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
+    const participantDisabled = loadingParticipants || participants.length === 0;
+    const schoolDisabled = loadingSchools || schools.length === 0;
+    const olympiadDisabled = loadingOlympiads || olympiads.length === 0;
     const itineraryDisabled =
-    !formData.olympiad || loadingItineraries || itineraries.length === 0;
+        !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
     function handleChange(e) {
         setFormData({
@@ -42,9 +46,31 @@ export default function NewParticipantAssignation() {
         setLoading(true);
 
         try {
+            if (participantDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un participante"
+                }
+            }
+            if (schoolDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una escuela"
+                }
+            }
+            if (olympiadDisabled || itineraryDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una olimpiada y un itinerario"
+                }
+            }
             await createParticipant(formData);
             navigate("/admin/participants");
         } catch (err) {
+            if (err.type === "warn") {
+                toast.warning(err.message)
+                return
+            }
             toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
             setLoading(false);
@@ -54,59 +80,66 @@ export default function NewParticipantAssignation() {
     useEffect(() => {
         async function loadParticipants() {
             try {
+                setLoadingParticipants(true)
                 const data = await getUserByType("PARTICIPANT");
                 setParticipants(data.data);
             } catch (err) {
                 console.error("Error cargando la lista de participantes", err);
                 toast.error("Error cargando la lista de participantes");
+            } finally {
+                setLoadingParticipants(false)
             }
         }
         loadParticipants();
 
         async function loadSchools() {
             try {
+                setLoadingSchools(true)
                 const data = await getAllSchools();
                 setSchools(data.data);
             } catch (err) {
                 console.error("Error cargando escuelas", err);
                 toast.error("Error cargando las escuelas");
+            } finally {
+                setLoadingSchools(false)
             }
         }
         loadSchools();
 
         async function loadOlympiads() {
             try {
+                setLoadingOlympiads(true)
                 const data = await getAllOlympiads();
                 setOlympiads(data.data);
             } catch (err) {
                 console.error("Error cargando olimpiadas", err);
                 toast.error("Error cargando las olimpiadas");
+            } finally {
+                setLoadingOlympiads(false)
             }
         }
         loadOlympiads();
-    })
+    }, [])
 
     async function loadItineraries(olympiadId) {
         try {
-        setLoadingItineraries(true);
-
-        const res = await getItineraryByOlympiad(olympiadId);
-
-        setItineraries(res.data);
+            setLoadingItineraries(true);
+            const res = await getItineraryByOlympiad(olympiadId);
+            setItineraries(res.data);
         } catch (err) {
-        console.error("Error cargando itinerarios", err);
-        toast.error("Error cargando los itinerarios");
+            console.error("Error cargando itinerarios", err);
+            toast.error("Error cargando los itinerarios");
         } finally {
-        setLoadingItineraries(false);
+            setLoadingItineraries(false);
         }
     }
 
     useEffect(() => {
         if (formData.olympiad) {
-        loadItineraries(formData.olympiad);
-        setFormData(prev => ({ ...prev, itinerary: "" }));
+            loadItineraries(formData.olympiad);
+            setFormData(prev => ({ ...prev, itinerary: "" }));
         } else {
-        setItineraries([]);
+            setItineraries([]);
         }
     }, [formData.olympiad]);
 
@@ -122,8 +155,11 @@ export default function NewParticipantAssignation() {
                             value={formData.id}
                             onChange={handleChange}
                             required
+                            disabled={participantDisabled}
                             >
-                            <option value="">-- Seleccione un participante --</option>
+                            <option value="">
+                                {loadingParticipants ? "Cargando participantes..." : participantDisabled ? "No hay participantes disponibles" : "-- Selecciona un participante --"}
+                            </option>
                             {participants.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.username}
@@ -138,8 +174,11 @@ export default function NewParticipantAssignation() {
                             className="form-control"
                             onChange={handleChange}
                             required
+                            disabled={schoolDisabled}
                             >
-                            <option value="">-- Seleccione una escuela --</option>
+                            <option value="">
+                                {loadingSchools ? "Cargando escuelas..." : schoolDisabled ? "No hay escuelas disponibles" : "-- Selecciona una escuela --"}
+                            </option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -154,8 +193,11 @@ export default function NewParticipantAssignation() {
                             className="form-control"
                             onChange={handleChange}
                             required
+                            disabled={olympiadDisabled}
                             >
-                            <option value="">-- Seleccione una olimpiada --</option>
+                            <option value="">
+                                {loadingOlympiads ? "Cargando olimpiadas..." : olympiadDisabled ? "No hay olimpiadas disponibles" : "-- Selecciona una olimpiada --"}
+                            </option>
                             {olympiads.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -177,10 +219,10 @@ export default function NewParticipantAssignation() {
                                 {loadingItineraries
                                 ? "Cargando itinerarios..."
                                 : !formData.olympiad
-                                ? "-- Seleccione primero una olimpiada --"
+                                ? "-- Selecciona primero una olimpiada --"
                                 : itineraries.length === 0
                                 ? "No hay itinerarios disponibles"
-                                : "-- Seleccione un itinerario --"}
+                                : "-- Selecciona un itinerario --"}
                             </option>
 
                             {itineraries.map((i) => (

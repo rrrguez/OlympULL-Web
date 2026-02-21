@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUser } from "../../api/usersApi";
 import { toast } from "react-toastify";
+import { createUser } from "../../api/usersApi";
 import * as regex from "../../utils/regex";
 
 export default function NewUser() {
@@ -32,6 +32,7 @@ export default function NewUser() {
         try {
             await createUser(formData);
             navigate("/admin/users");
+            toast.success("Usuario '" + formData.id + "' creado con éxito")
             } catch (err) {
             toast.error(err.response?.data?.error || "Error al crear el usuario");
             } finally {

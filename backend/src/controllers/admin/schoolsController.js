@@ -31,23 +31,37 @@ export const getById = async (req, res) => {
 
 // POST: crear nueva
 export const create = async (req, res) => {
-  try {
-    const data = await model.create(req.body);
-    res.status(201).json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.create(req.body);
+        res.status(201).json(data.rows[0]);
+    } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_schools_pkey') {
+                res.status(400).json({
+                    error: "Ya existe una escuela con el 'ID' proporcionado",
+                    code: err.code
+                });
+            } else if (err.constraint === 't_schools_name_town_key') {
+                res.status(400).json({
+                    error: "Ya existe una escuela con el 'Nombre' proporcionado en el 'Municipio' establecido",
+                    code: err.code
+                });
+            }
+        }
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE

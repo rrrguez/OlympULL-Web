@@ -35,6 +35,15 @@ export const create = async (req, res) => {
         const data = await model.create(req.body);
         res.status(201).json(data.rows[0]);
     } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_monitors_pkey') {
+                res.status(400).json({
+                    error: "El 'Monitor' seleccionado ya está asignado al 'Ejercicio' elegido en ese 'Itinerario'",
+                    code: err.code
+                });
+            }
+        }
         res.status(500).json({ error: err.message });
     }
 };

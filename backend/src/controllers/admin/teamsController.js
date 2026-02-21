@@ -31,12 +31,26 @@ export const getById = async (req, res) => {
 
 // POST: crear nueva
 export const create = async (req, res) => {
-  try {
-    const data = await model.create(req.body);
-    res.status(201).json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.create(req.body);
+        res.status(201).json(data.rows[0]);
+    } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_teams_pkey') {
+                res.status(400).json({
+                    error: "Ya existe un equipo con el 'ID' proporcionado",
+                    code: err.code
+                });
+            } else if (err.constraint === 't_teams_id_itinerary_key') {
+                res.status(400).json({
+                    error: "Ya existe un equipo con el 'Nombre' proporcionado en el 'Itinerario' elegido",
+                    code: err.code
+                });
+            }
+        }
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar

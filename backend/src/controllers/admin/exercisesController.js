@@ -32,12 +32,21 @@ export const getOneUnplugged = async (req, res) => {
 
 // POST: crear nuevo
 export const createUnplugged = async (req, res) => {
-  try {
-    const data = await model.createUnplugged(req.body);
-    res.status(201).json(data);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const data = await model.createUnplugged(req.body);
+        res.status(201).json(data);
+    } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_exercises_pkey') {
+                res.status(400).json({
+                    error: "Ya existe un ejercicio con el 'ID' proporcionado",
+                    code: err.code
+                });
+            }
+        }
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar
@@ -180,6 +189,20 @@ export const createPluggedIn = async (req, res) => {
     });
         res.status(201).json(data);
     } catch (err) {
+        console.log(err);
+        if (err.code === '23505') { // Duplicate key
+            if (err.constraint === 't_exercises_pkey') {
+                res.status(400).json({
+                    error: "Ya existe un ejercicio con el 'ID' proporcionado",
+                    code: err.code
+                });
+            } else if (err.constraint === 't_plugged_in_exercises_pkey') {
+                res.status(400).json({
+                    error: "Ya existe un ejercicio enchufado con el 'ID' proporcionado",
+                    code: err.code
+                });
+            }
+        }
         res.status(500).json({ error: err.message });
     }
 };

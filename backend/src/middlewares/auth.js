@@ -15,7 +15,7 @@ export function authenticateToken(req, res, next) {
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
         if (err) {
-            return res.status(403).json({ error: "Token inválido" });
+            return res.status(403).json({ error: "La sesión ha expirado. Vuelve a iniciar sesión." });
         }
 
         req.user = user; // <- hacemos disponible los datos del usuario

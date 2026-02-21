@@ -43,13 +43,11 @@ export const getItineraries = (data) =>
     );
 
 // Crear uno nuevo
-export const create = async (data) => {
-
-  pool.query(
-    "INSERT INTO t_exercises_olympiad_itinerary (exercise, olympiad, itinerary) VALUES ($1, $2, $3) RETURNING *",
-    [data.exercise, data.olympiad, data.itinerary]
-  );
-}
+export const create = async (data) =>
+    pool.query(
+        "INSERT INTO t_exercises_olympiad_itinerary (exercise, olympiad, itinerary) VALUES ($1, $2, $3) RETURNING *",
+        [data.exercise, data.olympiad, data.itinerary]
+    );
 
 // Eliminar uno
 export const remove = (data) => {

@@ -38,10 +38,17 @@ export const create = async (req, res) => {
   } catch (err) {
     console.log(err);
     if (err.code === '23505') { // Duplicate key
-        res.status(400).json({
-            error: "Ya existe una olimpiada con el 'ID' o 'Nombre' proporcionados",
-            code: err.code
-        });
+        if (err.constraint === 't_olympiads_name_key') {
+            res.status(400).json({
+                error: "Ya existe una olimpiada con el 'Nombre' proporcionado",
+                code: err.code
+            });
+        } else if (err.constraint === 't_olympiads_pkey') {
+            res.status(400).json({
+                error: "Ya existe una olimpiada con el 'ID' proporcionado",
+                code: err.code
+            });
+        }
     }
     res.status(500).json({ error: err.message });
   }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
-import { getAllRubrics } from "../../../api/rubricsApi";
 import { toast } from "react-toastify";
+import { getAllRubrics } from "../../../api/rubricsApi";
+import { createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import * as regex from "../../../utils/regex";
 
 export default function NewExercise() {
@@ -20,6 +20,10 @@ export default function NewExercise() {
     const [rubrics, setRubrics] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [loadingRubrics, setLoadingRubrics] = useState([]);
+
+    const disabledRubric = rubrics.length === 0;
+
     function handleChange(e) {
         setFormData({
         ...formData,
@@ -29,13 +33,16 @@ export default function NewExercise() {
 
     useEffect(() => {
         async function loadRubrics() {
-        try {
-            const data = await getAllRubrics();
-            setRubrics(data.data);
-        } catch (err) {
-            console.error("Error cargando rúbricas", err);
-            toast.error("Error cargando las rúbricas");
-        }
+            try {
+                setLoadingRubrics(true)
+                const data = await getAllRubrics();
+                setRubrics(data.data);
+            } catch (err) {
+                console.error("Error cargando rúbricas", err);
+                toast.error("Error cargando las rúbricas");
+            } finally {
+                setLoadingRubrics(false)
+            }
         }
         loadRubrics();
     }, []);
@@ -45,6 +52,12 @@ export default function NewExercise() {
         setLoading(true);
 
         try {
+            if (disabledRubric) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una rúbrica"
+                }
+            }
             // Check if the description has the correct format
             if (!regex.descPattern.test(formData.description)) {
                 throw {
@@ -66,7 +79,7 @@ export default function NewExercise() {
 
             await createUnpluggedExercise(formData);
             navigate("/admin/exercises");
-            toast.success("Ejercicio creado con éxito");
+            toast.success("Ejercicio '" + formData.name + "' creado con éxito");
         } catch (err) {
             if (err.type === "warn") {
                 toast.warn(err.message);
@@ -74,6 +87,8 @@ export default function NewExercise() {
             }
             console.error("Error completo:", err);
             toast.error(err.response?.data?.error || "Error al crear el ejercicio");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -170,8 +185,11 @@ export default function NewExercise() {
                     value={formData.rubric}
                     onChange={handleChange}
                     required
+                    disabled={disabledRubric}
                     >
-                    <option value="">-- Seleccione una rúbrica --</option>
+                    <option value="">
+                        {loadingRubrics ? "Cargando rúbricas..." : disabledRubric ? "No hay rúbricas disponibles" : "-- Selecciona una rúbrica --"}
+                    </option>
                     {rubrics.map((o) => (
                         <option key={o.id} value={o.id}>
                         {o.id} - {o.name}

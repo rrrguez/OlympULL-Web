@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getItinerary, updateItinerary } from "../../api/itinerariesApi";
-import { useEffect } from "react";
 import { getAllOlympiads } from "../../api/olympiadsApi";
 import * as regex from "../../utils/regex";
 
@@ -136,7 +135,7 @@ export default function EditItinerary() {
                     onChange={handleChange}
                     required
                 >
-                    <option value="">-- Seleccione una olimpiada --</option>
+                    <option value="">-- Selecciona una olimpiada --</option>
                     {olympiads.map((o) => (
                     <option key={o.id} value={o.id}>
                         {o.id} - {o.name}

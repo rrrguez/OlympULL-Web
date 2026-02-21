@@ -71,7 +71,7 @@ export default function NewExercise() {
 
             await createPluggedInExercise(fd);
             navigate("/admin/exercises");
-            toast.success("Ejercicio creado con éxito");
+            toast.success("Ejercicio '" + formData.name + "' creado con éxito");
         } catch (err) {
             if (err.type === "warn") {
                 toast.warn(err.message);

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { createAssignation } from "../../../api/assignationsApi";
 import { getItineraryByOlympiad } from "../../../api/itinerariesApi";
 import { getAllOlympiads } from "../../../api/olympiadsApi";
 import { getAllPluggedInExercises } from "../../../api/pluggedInExercisesApi";
 import { getAllUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
-import { toast } from "react-toastify";
 
 export default function NewAssignation() {
     const navigate = useNavigate();
@@ -21,10 +21,14 @@ export default function NewAssignation() {
     const [itineraries, setItineraries] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    const [loadingExercises, setLoadingExercises] = useState(false);
+    const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
+    const exerciseDisabled = loadingExercises || olympiads.length === 0;
+    const olympiadDisabled = loadingOlympiads || olympiads.length === 0;
     const itineraryDisabled =
-    !formData.olympiad || loadingItineraries || itineraries.length === 0;
+        !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
     function handleChange(e) {
         setFormData({
@@ -36,6 +40,7 @@ export default function NewAssignation() {
     useEffect(() => {
         async function loadExercises() {
             try {
+                setLoadingExercises(true)
                 const dataPluggedIn = await getAllPluggedInExercises();
                 const dataUnplugged = await getAllUnpluggedExercises();
                 setExercises([
@@ -45,17 +50,22 @@ export default function NewAssignation() {
             } catch (err) {
                 console.error("Error cargando ejercicios", err);
                 toast.error("Error cargando los ejercicios");
+            } finally {
+                setLoadingExercises(false)
             }
         }
         loadExercises();
 
         async function loadOlympiads() {
             try {
+                setLoadingOlympiads(true)
                 const data = await getAllOlympiads();
                 setOlympiads(data.data);
             } catch (err) {
                 console.error("Error cargando olimpiadas", err);
                 toast.error("Error cargando las olimpiadas");
+            } finally {
+                setLoadingOlympiads(false)
             }
         }
         loadOlympiads();
@@ -90,9 +100,26 @@ export default function NewAssignation() {
         setLoading(true);
 
         try {
+            if (exerciseDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un ejercicio"
+                }
+            }
+            if (olympiadDisabled || itineraryDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una olimpiada y un itinerario"
+                }
+            }
             await createAssignation(formData);
             navigate("/admin/assignations");
+            toast.success("Ejercicio '" + formData.exercise + "' asignado con éxito al itinerario '" + formData.itinerary + "'")
         } catch (err) {
+            if (err.type === "warn") {
+                toast.warning(err.message);
+                return
+            }
             toast.error(err.response?.data?.error || "Error al crear la asignación");
         } finally {
             setLoading(false);
@@ -112,8 +139,13 @@ export default function NewAssignation() {
                                 value={formData.exercise}
                                 onChange={handleChange}
                                 required
+                                disabled={exerciseDisabled}
                                 >
-                                <option value="">-- Seleccione un ejercicio --</option>
+                                    <option value="">
+                                        {loadingExercises ? "Cargando ejercicios" : exerciseDisabled ?
+                                            "No hay ejercicios disponibles" : "-- Selecciona un ejercicio --"
+                                        }
+                                    </option>
                                 {exercises.map((o) => (
                                     <option key={o.id} value={o.id}>
                                     {o.id} - {o.name}
@@ -129,8 +161,15 @@ export default function NewAssignation() {
                                 value={formData.olympiad}
                                 onChange={handleChange}
                                 required
+                                disabled={olympiadDisabled}
                                 >
-                                <option value="">-- Seleccione una olimpiada --</option>
+                                    <option value="">
+                                        {loadingOlympiads ? "Cargando olimpiadas" : olympiads.length > 0 ?
+                                            "-- Selecciona una olimpiada --" :
+                                            "No hay olimpiadas disponibles"
+                                        }
+                                    </option>
+
                                 {olympiads.map((o) => (
                                     <option key={o.id} value={o.id}>
                                     {o.id} - {o.name}
@@ -152,10 +191,10 @@ export default function NewAssignation() {
                                     {loadingItineraries
                                     ? "Cargando itinerarios..."
                                     : !formData.olympiad
-                                    ? "-- Seleccione primero una olimpiada --"
+                                    ? "-- Selecciona primero una olimpiada --"
                                     : itineraries.length === 0
                                     ? "No hay itinerarios disponibles"
-                                    : "-- Seleccione un itinerario --"}
+                                    : "-- Selecciona un itinerario --"}
                                 </option>
 
                                 {itineraries.map((i) => (

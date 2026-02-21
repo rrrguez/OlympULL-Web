@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams} from "react-router-dom";
-import { updateTeam, getTeam } from "../../api/teamsApi";
-import { getAllSchools } from "../../api/schoolsApi";
-import { getAllOlympiads } from "../../api/olympiadsApi";
-import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getItineraryByOlympiad } from "../../api/itinerariesApi";
+import { getAllOlympiads } from "../../api/olympiadsApi";
+import { getAllSchools } from "../../api/schoolsApi";
+import { getTeam, updateTeam } from "../../api/teamsApi";
 import * as regex from "../../utils/regex";
 
 export default function EditTeam() {
@@ -157,7 +157,7 @@ export default function EditTeam() {
                             onChange={handleChange}
                             required
                             >
-                            <option value="">-- Seleccione una escuela --</option>
+                            <option value="">-- Selecciona una escuela --</option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -174,7 +174,7 @@ export default function EditTeam() {
                             onChange={handleChange}
                             required
                             >
-                            <option value="">-- Seleccione una olimpiada --</option>
+                            <option value="">-- Selecciona una olimpiada --</option>
                             {olympiads.map((o) => (
                                 <option key={o.id} value={o.id}>
                                 {o.id} - {o.name}
@@ -196,10 +196,10 @@ export default function EditTeam() {
                                 {loadingItineraries
                                 ? "Cargando itinerarios..."
                                 : !formData.olympiad
-                                ? "-- Seleccione primero una olimpiada --"
+                                ? "-- Selecciona primero una olimpiada --"
                                 : itineraries.length === 0
                                 ? "No hay itinerarios disponibles"
-                                : "-- Seleccione un itinerario --"}
+                                : "-- Selecciona un itinerario --"}
                             </option>
 
                             {itineraries.map((i) => (

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUnpluggedExercise, updateUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import { toast } from "react-toastify";
 import { getAllRubrics } from "../../../api/rubricsApi";
+import { getUnpluggedExercise, updateUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditUnpluggedExercise() {
@@ -187,7 +187,7 @@ export default function EditUnpluggedExercise() {
                     onChange={handleChange}
                     required
                     >
-                    <option value="">-- Seleccione una rúbrica --</option>
+                    <option value="">-- Selecciona una rúbrica --</option>
                     {rubrics.map((o) => (
                         <option key={o.id} value={o.id}>
                         {o.id} - {o.name}
