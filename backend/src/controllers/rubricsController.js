@@ -1,7 +1,7 @@
-import * as model from "../../models/rubricsModel.js";
+import * as model from "../models/rubricsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import pool from "../../db.js";
+import pool from "../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {

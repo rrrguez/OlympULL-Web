@@ -1,7 +1,7 @@
-import pool from "../../db.js";
+import pool from "../db.js";
 import csv from "csv-parser";
 import fs from "fs";
-import * as model from "../../models/exercisesModel.js";
+import * as model from "../models/exercisesModel.js";
 
 // DESENCHUFADOS
 // GET: obtener todos

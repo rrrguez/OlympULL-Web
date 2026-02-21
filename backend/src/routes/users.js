@@ -1,6 +1,6 @@
 import express from "express";
-import usersController from "../../controllers/admin/usersController.js";
-import upload from "../../middlewares/uploadCsv.js";
+import usersController from "../controllers/usersController.js";
+import upload from "../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

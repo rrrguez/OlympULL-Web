@@ -1,6 +1,6 @@
 import express from "express";
-import organizersController from "../../controllers/admin/organizersController.js";
-import upload from "../../middlewares/uploadCsv.js";
+import organizersController from "../controllers/organizersController.js";
+import upload from "../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

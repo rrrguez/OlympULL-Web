@@ -1,8 +1,8 @@
 // src/routes/olympiadsRoutes.js
 import express from "express";
-import olympController from "../../controllers/admin/olympiadsController.js";
-import olympiadsController from "../../controllers/admin/olympiadsController.js";
-import upload from "../../middlewares/uploadCsv.js";
+import olympController from "../controllers/olympiadsController.js";
+import olympiadsController from "../controllers/olympiadsController.js";
+import upload from "../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

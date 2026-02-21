@@ -1,6 +1,6 @@
 import express from "express";
-import teamsController from "../../controllers/admin/teamsController.js";
-import upload from "../../middlewares/uploadCsv.js";
+import teamsController from "../controllers/teamsController.js";
+import upload from "../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

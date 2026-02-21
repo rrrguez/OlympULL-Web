@@ -1,7 +1,7 @@
-import * as model from "../../models/monitorsModel.js";
+import * as model from "../models/usersModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import pool from "../../db.js";
+import pool from "../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -15,15 +15,26 @@ export const getAll = async (req, res) => {
 
 // GET: obtener una por código
 export const getById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await model.getById(id);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// GET: obtener una por código
+export const getByType = async (req, res) => {
     try {
-        const { id } = req.params;
-        const result = await model.getById(id);
-
-        if (result.rows.length === 0) {
-        return res.status(404).json({ message: "Usuario no encontrado" });
-        }
-
-        res.json(result.rows[0]);
+        const { type } = req.params;
+        const result = await model.getByType(type);
+        res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -37,9 +48,9 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_monitors_pkey') {
+            if (err.constraint === 't_users_pkey') {
                 res.status(400).json({
-                    error: "El 'Monitor' seleccionado ya está asignado al 'Ejercicio' elegido en ese 'Itinerario'",
+                    error: "Ya existe un usuario con el 'Usuario' proporcionado",
                     code: err.code
                 });
             }
@@ -50,24 +61,35 @@ export const create = async (req, res) => {
 
 // PUT: actualizar
 export const update = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const data = await model.update({ id, ...req.body });
-        res.json(data.rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const { id } = req.params;
+    const data = await model.update({ id, ...req.body });
+    res.json(data.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
+
+// PUT: actualizar
+export const updatePassword = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = await model.updatePassword({ id, ...req.body });
+      res.json(data.rows[0]);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
 
 // DELETE
 export const remove = async (req, res) => {
-    try {
-        const { id, exercise, olympiad, itinerary } = req.params;
-        await model.remove({id, exercise, olympiad, itinerary});
-        res.json({ message: "Eliminado correctamente" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const { id } = req.params;
+    await model.remove(id);
+    res.json({ message: "Eliminado correctamente" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // POST: Importar datos desde CSV
@@ -77,7 +99,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    //console.log("CSV: ", req.file);
+    // console.log("CSV: ", req.file);
 
     const results = [];
 
@@ -92,19 +114,22 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.exercise || !o.itinerary || !o.olympiad) {
+                    if (!o.id || !o.username || !o.password || !o.type) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_monitors (id,exercise,itinerary,olympiad)
+                        `INSERT INTO t_users (id, username, password, type)
                         VALUES ($1,$2,$3,$4)
-                        ON CONFLICT (id,exercise,itinerary,olympiad) DO NOTHING`,
+                        ON CONFLICT (id) DO UPDATE SET
+                            username=EXCLUDED.username,
+                            password=EXCLUDED.password,
+                            type=EXCLUDED.type`,
                         [
                             o.id,
-                            o.exercise,
-                            o.itinerary,
-                            o.olympiad,
+                            o.username,
+                            o.password,
+                            o.type,
                         ]
                     );
                 }
@@ -122,24 +147,26 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_monitors");
+    const { rows } = await pool.query("SELECT * FROM t_users");
 
-    let csv = "id,exercise,itinerary,olympiad\n";
+    let csv = "id,username,password,type\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.exercise},${o.itinerary},${o.olympiad}\n`;
+        csv += `${o.id},${o.username},${o.password},${o.type}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=monitors.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=users.csv");
     res.send(csv);
 };
 
 export default {
     getAll,
     getById,
+    getByType,
     create,
     update,
+    updatePassword,
     remove,
     importCsv,
     exportCsv,

@@ -1,6 +1,6 @@
 import express from "express";
-import monitorsController from "../../controllers/admin/monitorsController.js";
-import upload from "../../middlewares/uploadCsv.js";
+import monitorsController from "../controllers/monitorsController.js";
+import upload from "../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

@@ -1,6 +1,6 @@
 import apiClient from "./apiClient";
 
-const API = "http://localhost:3000/api/admin/users";
+const API = "http://localhost:3000/api/users";
 
 function authHeaders() {
     const token = localStorage.getItem("token");

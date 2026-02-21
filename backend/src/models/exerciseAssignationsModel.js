@@ -20,6 +20,31 @@ export const getAll = () =>
         `
     );
 
+// Obtener todas las asignaciones de un determinado itinerario
+export const getAllForOrganizer = (organizer) =>
+    pool.query(
+        `
+        SELECT
+            c.*,
+            e.name AS exercise_name,
+            o.name AS olympiad_name,
+            i.name AS itinerary_name
+        FROM T_EXERCISES_OLYMPIAD_ITINERARY c
+        JOIN t_exercises e
+            ON c.exercise = e.id
+        JOIN t_olympiads o
+            ON c.olympiad = o.id
+        JOIN t_itineraries i
+            ON c.itinerary = i.id
+        WHERE c.itinerary IN (
+            SELECT oi.itinerary
+            FROM t_organizers oi
+            WHERE oi.id = $1
+        )
+        ORDER BY e.name, o.name, i.name
+        `, [organizer]
+    );
+
 export const getOlympiads = (exercise) =>
     pool.query(
         `SELECT

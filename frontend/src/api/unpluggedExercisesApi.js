@@ -1,6 +1,6 @@
 import apiClient from "./apiClient";
 
-const API = "http://localhost:3000/api/admin/unplugged-exercises";
+const API = "http://localhost:3000/api/unplugged-exercises";
 
 function authHeaders() {
     const token = localStorage.getItem("token");

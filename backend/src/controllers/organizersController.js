@@ -1,7 +1,7 @@
-import * as model from "../../models/schoolsModel.js";
-import pool from "../../db.js";
-import fs from "fs";
+import * as model from "../models/organizersModel.js";
 import csv from "csv-parser";
+import fs from "fs";
+import pool from "../db.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -15,18 +15,18 @@ export const getAll = async (req, res) => {
 
 // GET: obtener una por código
 export const getById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getById(id);
+    try {
+        const { id } = req.params;
+        const result = await model.getById(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Escuela no encontrada" });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Organizador no encontrado" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
 // POST: crear nueva
@@ -37,14 +37,9 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_schools_pkey') {
+            if (err.constraint === 't_organizers_pkey') {
                 res.status(400).json({
-                    error: "Ya existe una escuela con el 'ID' proporcionado",
-                    code: err.code
-                });
-            } else if (err.constraint === 't_schools_name_town_key') {
-                res.status(400).json({
-                    error: "Ya existe una escuela con el 'Nombre' proporcionado en el 'Municipio' establecido",
+                    error: "El 'Organizador' seleccionado ya está asignado al 'Itinerario' elegido",
                     code: err.code
                 });
             }
@@ -66,13 +61,13 @@ export const update = async (req, res) => {
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.remove(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id, itinerary } = req.params;
+        await model.remove({ id, itinerary });
+        res.json({ message: "Asignación eliminada" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
@@ -82,7 +77,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    // console.log("CSV: ", req.file);
+    //console.log("CSV: ", req.file);
 
     const results = [];
 
@@ -97,20 +92,17 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name) {
+                    if (!o.id || !o.itinerary) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_schools (id, name, town)
-                        VALUES ($1,$2,$3)
-                        ON CONFLICT (id) DO UPDATE SET
-                            name=EXCLUDED.name,
-                            town=EXCLUDED.town`,
+                        `INSERT INTO t_organizers (id, itinerary)
+                        VALUES ($1,$2)
+                        ON CONFLICT (id, itinerary) DO NOTHING`,
                         [
                             o.id,
-                            o.name,
-                            o.town || null
+                            o.itinerary,
                         ]
                     );
                 }
@@ -128,12 +120,12 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_schools");
+    const { rows } = await pool.query("SELECT * FROM t_organizers");
 
-    let csv = "id,name,town\n";
+    let csv = "id,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},${o.town}\n`;
+        csv += `${o.id},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

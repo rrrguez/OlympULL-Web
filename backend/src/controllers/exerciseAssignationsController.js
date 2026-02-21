@@ -1,35 +1,48 @@
-import * as model from "../../models/organizersModel.js";
+import * as model from "../models/exerciseAssignationsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import pool from "../../db.js";
+import pool from "../db.js";
 
-// GET: obtener todas
+// GET: obtener todos
 export const getAll = async (req, res) => {
-  try {
-    const result = await model.getAll();
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-};
-
-// GET: obtener una por código
-export const getById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const result = await model.getById(id);
-
-        if (result.rows.length === 0) {
-        return res.status(404).json({ message: "Organizador no encontrado" });
-        }
-
-        res.json(result.rows[0]);
+        const result = await model.getAll();
+        res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-// POST: crear nueva
+export const getAllForOrganizer = async (req, res) => {
+    try {
+        const result = await model.getAllForOrganizer();
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
+export const getOlympiads = async (req, res) => {
+    try {
+        const { exercise } = req.params;
+        const result = await model.getOlympiads(exercise);
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const getItineraries = async (req, res) => {
+    try {
+        const { exercise, olympiad } = req.params;
+        const result = await model.getItineraries({exercise, olympiad});
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// POST: crear nuevo
 export const create = async (req, res) => {
     try {
         const data = await model.create(req.body);
@@ -37,9 +50,9 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_organizers_pkey') {
+            if (err.constraint === 't_exercises_olympiad_itinerary_pkey') {
                 res.status(400).json({
-                    error: "El 'Organizador' seleccionado ya está asignado al 'Itinerario' elegido",
+                    error: "El 'Ejercicio' seleccionado ya forma parte de ese 'Itinerario' en la 'Olimpiada' elegida",
                     code: err.code
                 });
             }
@@ -48,22 +61,11 @@ export const create = async (req, res) => {
     }
 };
 
-// PUT: actualizar
-export const update = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const data = await model.update({ id, ...req.body });
-        res.json(data.rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
 // DELETE
 export const remove = async (req, res) => {
     try {
-        const { id, itinerary } = req.params;
-        await model.remove({ id, itinerary });
+        const { exercise, olympiad, itinerary } = req.params;
+        await model.remove({ exercise, olympiad, itinerary });
         res.json({ message: "Asignación eliminada" });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -77,7 +79,7 @@ export const importCsv = async (req, res) => {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    //console.log("CSV: ", req.file);
+    // console.log("CSV: ", req.file);
 
     const results = [];
 
@@ -92,16 +94,17 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.itinerary) {
+                    if (!o.exercise || !o.olympiad || !o.itinerary) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_organizers (id, itinerary)
-                        VALUES ($1,$2)
-                        ON CONFLICT (id, itinerary) DO NOTHING`,
+                        `INSERT INTO t_exercises_olympiad_itinerary (exercise, olympiad, itinerary)
+                        VALUES ($1,$2,$3)
+                        ON CONFLICT (exercise, olympiad, itinerary) DO NOTHING`,
                         [
-                            o.id,
+                            o.exercise,
+                            o.olympiad,
                             o.itinerary,
                         ]
                     );
@@ -120,25 +123,25 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_organizers");
+    const { rows } = await pool.query("SELECT * FROM t_exercises_olympiad_itinerary");
 
-    let csv = "id,itinerary\n";
+    let csv = "exercise,olympiad,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.itinerary}\n`;
+        csv += `${o.exercise},${o.olympiad},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=exercises-olympiads-itineraries.csv");
     res.send(csv);
 };
 
 export default {
     getAll,
-    getById,
+    getOlympiads,
+    getItineraries,
     create,
-    update,
     remove,
     importCsv,
-    exportCsv,
+    exportCsv
 };
