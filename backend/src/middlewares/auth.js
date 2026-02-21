@@ -18,28 +18,7 @@ export function authenticateToken(req, res, next) {
             return res.status(403).json({ error: "La sesión ha expirado. Vuelve a iniciar sesión." });
         }
 
-        req.user = user; // <- hacemos disponible los datos del usuario
+        req.user = user;
         next();
     });
 }
-
-/**
- * Middleware: solo permite acceso a ADMIN
- */
-export function isAdmin(req, res, next) {
-    if (!req.user || req.user.type !== "ADMIN") {
-        return res.status(403).json({ error: "Acceso solo para administradores" });
-    }
-    next();
-}
-
-/**
- * Middleware: solo permite acceso a ORGANIZER
- */
-export function isOrganizer(req, res, next) {
-    if (!req.user || req.user.type !== "ORGANIZER") {
-        return res.status(403).json({ error: "Acceso solo para organizadores" });
-    }
-    next();
-}
-
