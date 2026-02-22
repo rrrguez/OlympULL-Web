@@ -69,6 +69,12 @@ import OrganizerHome from "./pages/organizer/Home";
 import OrganizerExerciseAssignationsListPage from "./pages/organizer/Assignations/ListPage";
 import OrganizerNewExerciseAssignation from "./pages/organizer/Assignations/NewPage";
 
+// MONITOR PAGES -------------------------------------------------------------------------------------------------------
+import MonitorHome from "./pages/monitor/Home";
+import MonitorPunctuationsListPage from "./pages/monitor/Punctuations/ListPage";
+import MonitorNewPunctuationPage from "./pages/monitor/Punctuations/NewPage";
+import MonitorEditPunctuationPage from "./pages/monitor/Punctuations/EditPage";
+
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
 
@@ -403,6 +409,42 @@ export default function App() {
                         element={
                             <PrivateRoute type="ORGANIZER">
                                 <OrganizerNewExerciseAssignation />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/monitor"
+                        element={
+                            <PrivateRoute type="MONITOR">
+                                <MonitorHome />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/monitor/punctuations"
+                        element={
+                            <PrivateRoute type="MONITOR">
+                                <MonitorPunctuationsListPage />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/monitor/punctuations/new"
+                        element={
+                            <PrivateRoute type="MONITOR">
+                                <MonitorNewPunctuationPage />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/monitor/punctuations/new"
+                        element={
+                            <PrivateRoute type="MONITOR">
+                                <MonitorEditPunctuationPage />
                             </PrivateRoute>
                         }
                     />

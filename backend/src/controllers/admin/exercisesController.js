@@ -108,7 +108,7 @@ export const importUnpluggedCsv = async (req, res) => {
                         [
                             o.id,
                             o.name,
-                            o.description || null,
+                            o.description || "",
                             o.category,
                             o.resources,
                         ]
@@ -276,7 +276,7 @@ export const importPluggedInCsv = async (req, res) => {
                         [
                             o.id,
                             o.name,
-                            o.description || null,
+                            o.description || "",
                             o.category,
                             o.resources,
                         ]

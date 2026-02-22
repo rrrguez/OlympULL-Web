@@ -107,7 +107,7 @@ export const importCsv = async (req, res) => {
                         [
                             o.id,
                             o.name || null,
-                            o.description || null,
+                            o.description || "",
                             o.points,
                             o.labels || null,
                         ]

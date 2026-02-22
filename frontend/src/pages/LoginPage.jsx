@@ -17,16 +17,19 @@ export default function LoginPage() {
         // Redirección según tipo de usuario
         switch (data.type) {
             case "ADMIN":
-            navigate("/admin");
-            break;
+                navigate("/admin");
+                break;
             case "ORGANIZER":
-            navigate("/organizer");
-            break;
+                navigate("/organizer");
+                break;
+            case "MONITOR":
+                navigate("/monitor");
+                break;
             default:
-            navigate("/public");
+                navigate("/public");
         }
         } catch (err) {
-        toast.error(err.message);
+            toast.error(err.message);
         }
     };
 
@@ -35,34 +38,34 @@ export default function LoginPage() {
             <h1>Inicio de sesión</h1>
 
             <div className="login-container">
-            <form className="login-form" onSubmit={handleSubmit}>
-                <div>
+                <form className="login-form" onSubmit={handleSubmit}>
                     <div>
-                    <p className="form-label">Usuario</p>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={id}
-                        onChange={(e) => setId(e.target.value)}
-                        required
-                    />
-                    </div>
+                        <div>
+                            <p className="form-label">Usuario</p>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={id}
+                                onChange={(e) => setId(e.target.value)}
+                                required
+                            />
+                        </div>
 
-                    <div>
-                    <p className="form-label">Contraseña</p>
-                    <input
-                        type="password"
-                        className="form-control"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+                        <div>
+                            <p className="form-label">Contraseña</p>
+                            <input
+                                type="password"
+                                className="form-control"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
-                </div>
-                <button className="login-button">
-                Entrar
-                </button>
-            </form>
+                    <button className="login-button">
+                        Entrar
+                    </button>
+                </form>
             </div>
         </div>
     );
