@@ -70,7 +70,6 @@ export default function NewExerciseAssignation() {
                 setLoadingItineraries(true);
 
                 const res = await getAssignationsItineraries(organizer);
-                console.log(res.data)
 
                 setItineraries(res.data);
             } catch (err) {
