@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createAssignation } from "../../../api/organizer/assignationsApi";
-import { getItineraryByOlympiad } from "../../../api/admin/itinerariesApi";
-import { getAllOlympiads } from "../../../api/admin/olympiadsApi";
-import { getAllPluggedInExercises } from "../../../api/admin/pluggedInExercisesApi";
-import { getAllUnpluggedExercises } from "../../../api/admin/unpluggedExercisesApi";
+import { getAssignationsItineraries } from "../../../api/organizer/assignationsApi";
+import { getAllPluggedInExercises, getAllUnpluggedExercises } from "../../../api/organizer/exercisesApi";
 
 export default function NewExerciseAssignation() {
     const navigate = useNavigate();
@@ -17,18 +15,14 @@ export default function NewExerciseAssignation() {
     });
 
     const [exercises, setExercises] = useState([]);
-    const [olympiads, setOlympiads] = useState([]);
     const [itineraries, setItineraries] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const [loadingExercises, setLoadingExercises] = useState(false);
-    const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
-    const exerciseDisabled = loadingExercises || olympiads.length === 0;
-    const olympiadDisabled = loadingOlympiads || olympiads.length === 0;
-    const itineraryDisabled =
-        !formData.olympiad || loadingItineraries || itineraries.length === 0;
+    const exerciseDisabled = loadingExercises || exercises.length === 0;
+    const itineraryDisabled = loadingItineraries || itineraries.length === 0;
 
     function handleChange(e) {
         setFormData({
@@ -36,6 +30,21 @@ export default function NewExerciseAssignation() {
         [e.target.name]: e.target.value
         });
     }
+
+    useEffect(() => {
+        if (formData.itinerary) {
+            const selected = itineraries.find(
+                i => i.itinerary_id === formData.itinerary
+            );
+
+            if (selected) {
+                setFormData(prev => ({
+                    ...prev,
+                    olympiad: selected.olympiad_id
+                }));
+            }
+        }
+    }, [formData.itinerary, itineraries])
 
     useEffect(() => {
         async function loadExercises() {
@@ -56,44 +65,23 @@ export default function NewExerciseAssignation() {
         }
         loadExercises();
 
-        async function loadOlympiads() {
+        async function loadItineraries(organizer) {
             try {
-                setLoadingOlympiads(true)
-                const data = await getAllOlympiads();
-                setOlympiads(data.data);
+                setLoadingItineraries(true);
+
+                const res = await getAssignationsItineraries(organizer);
+                console.log(res.data)
+
+                setItineraries(res.data);
             } catch (err) {
-                console.error("Error cargando olimpiadas", err);
-                toast.error("Error cargando las olimpiadas");
+                console.error("Error cargando itinerarios", err);
+                toast.error("Error cargando los itinerarios");
             } finally {
-                setLoadingOlympiads(false)
+                setLoadingItineraries(false);
             }
         }
-        loadOlympiads();
+        loadItineraries(localStorage.getItem("id"))
     }, []);
-
-    async function loadItineraries(olympiadId) {
-        try {
-            setLoadingItineraries(true);
-
-            const res = await getItineraryByOlympiad(olympiadId);
-
-            setItineraries(res.data);
-        } catch (err) {
-            console.error("Error cargando itinerarios", err);
-            toast.error("Error cargando los itinerarios");
-        } finally {
-            setLoadingItineraries(false);
-        }
-    }
-
-    useEffect(() => {
-        if (formData.olympiad) {
-            loadItineraries(formData.olympiad);
-            setFormData(prev => ({ ...prev, itinerary: "" }));
-        } else {
-            setItineraries([]);
-        }
-    }, [formData.olympiad]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -106,14 +94,14 @@ export default function NewExerciseAssignation() {
                     message: "Se debe seleccionar un ejercicio"
                 }
             }
-            if (olympiadDisabled || itineraryDisabled) {
+            if (itineraryDisabled) {
                 throw {
                     type: "warn",
-                    message: "Se debe seleccionar una olimpiada y un itinerario"
+                    message: "Se debe seleccionar un itinerario"
                 }
             }
             await createAssignation(formData);
-            navigate("/admin/assignations");
+            navigate("/organizer/assignations");
             toast.success("Ejercicio '" + formData.exercise + "' asignado con éxito al itinerario '" + formData.itinerary + "'")
         } catch (err) {
             if (err.type === "warn") {
@@ -154,30 +142,6 @@ export default function NewExerciseAssignation() {
                             </select>
                         </div>
                         <div>
-                            <label className="form-label">Olimpiada</label>
-                            <select
-                                name="olympiad"
-                                className="form-control"
-                                value={formData.olympiad}
-                                onChange={handleChange}
-                                required
-                                disabled={olympiadDisabled}
-                                >
-                                    <option value="">
-                                        {loadingOlympiads ? "Cargando olimpiadas" : olympiads.length > 0 ?
-                                            "-- Selecciona una olimpiada --" :
-                                            "No hay olimpiadas disponibles"
-                                        }
-                                    </option>
-
-                                {olympiads.map((o) => (
-                                    <option key={o.id} value={o.id}>
-                                    {o.id} - {o.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div>
                             <label className="form-label">Itinerario</label>
                             <select
                                 name="itinerary"
@@ -190,17 +154,14 @@ export default function NewExerciseAssignation() {
                                 <option value="">
                                     {loadingItineraries
                                     ? "Cargando itinerarios..."
-                                    : !formData.olympiad
-                                    ? "-- Selecciona primero una olimpiada --"
                                     : itineraries.length === 0
                                     ? "No hay itinerarios disponibles"
                                     : "-- Selecciona un itinerario --"}
                                 </option>
 
                                 {itineraries.map((i) => (
-                                    <option key={i.id} value={i.id}>
-                                    {i.id} - {i.name}
-                                    </option>
+                                    <option key={i.itinerary_id} value={i.itinerary_id}>
+                                    {i.itinerary_name} ({i.olympiad_name})                                    </option>
                                 ))}
                             </select>
                         </div>

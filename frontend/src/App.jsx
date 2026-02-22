@@ -67,7 +67,7 @@ import AdminNewParticipantAssignationPage from "./pages/admin/Participants/NewPa
 // ORGANIZER PAGES -----------------------------------------------------------------------------------------------------
 import OrganizerHome from "./pages/organizer/Home";
 import OrganizerExerciseAssignationsListPage from "./pages/organizer/Assignations/ListPage";
-import OrganizerNewExerciseAssignation from "./components/organizers/Assignations/New";
+import OrganizerNewExerciseAssignation from "./pages/organizer/Assignations/NewPage";
 
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";

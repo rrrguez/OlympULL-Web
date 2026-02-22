@@ -3,8 +3,8 @@ import exerciseAssignationsController from "../../controllers/organizer/exercise
 
 const router = express.Router();
 
-router.get("/:organizer", exerciseAssignationsController.getAllForOrganizer);
-router.get("/itineraries/:organizer", exerciseAssignationsController.getItinerariesForOrganizer);
+router.get("/:organizer", exerciseAssignationsController.getAll);
+router.get("/itineraries/:organizer", exerciseAssignationsController.getItineraries);
 router.post("/", exerciseAssignationsController.create);
 router.delete("/:exercise/:olympiad/:itinerary", exerciseAssignationsController.remove);
 

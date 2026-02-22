@@ -21,6 +21,7 @@ import adminOrganizersRoutes from "./routes/admin/organizers.js";
 import adminParticipantsRoutes from "./routes/admin/participants.js"
 
 import organizerAssignationsRoutes from "./routes/organizer/assignations.js"
+import organizerExercisesRoutes from "./routes/organizer/exercises.js"
 
 import { authenticateToken } from "./middlewares/auth.js";
 import { authorize } from "./middlewares/authorize.js";
@@ -46,5 +47,6 @@ app.use("/api/admin/organizers", authenticateToken, authorize("ADMIN"), adminOrg
 app.use("/api/admin/participants", authenticateToken, authorize("ADMIN"), adminParticipantsRoutes);
 
 app.use("/api/organizer/assignations", authenticateToken, authorize("ORGANIZER"), organizerAssignationsRoutes);
+app.use("/api/organizer/exercises", authenticateToken, authorize("ORGANIZER"), organizerExercisesRoutes);
 
 export default app;

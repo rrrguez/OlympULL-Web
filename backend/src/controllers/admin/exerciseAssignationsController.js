@@ -1,7 +1,7 @@
 import * as model from "../../models/exerciseAssignationsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import pool from "../db.js";
+import pool from "../../db.js";
 
 // GET: obtener todos
 export const getAll = async (req, res) => {
@@ -129,10 +129,8 @@ export const exportCsv = async (req, res) => {
 
 export default {
     getAll,
-    getAllForOrganizer,
     getOlympiads,
     getItineraries,
-    getItinerariesForOrganizer,
     create,
     remove,
     importCsv,

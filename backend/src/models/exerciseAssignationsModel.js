@@ -1,4 +1,4 @@
-import pool from "../db.js";
+import pool from "../db.js"
 
 // Obtener todos
 export const getAll = () =>
@@ -78,9 +78,9 @@ export const getItinerariesForOrganizer = (organizer) =>
             ON i.olympiad = o.id
         WHERE i.id IN (
             SELECT
-                itinerary
-            FROM t_organizers
-            WHERE id = $1
+                org.itinerary
+            FROM t_organizers org
+            WHERE org.id = $1
         )
         `, [organizer]
     );

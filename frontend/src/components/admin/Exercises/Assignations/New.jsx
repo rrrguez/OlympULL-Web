@@ -25,7 +25,7 @@ export default function NewExerciseAssignation() {
     const [loadingOlympiads, setLoadingOlympiads] = useState(false);
     const [loadingItineraries, setLoadingItineraries] = useState(false);
 
-    const exerciseDisabled = loadingExercises || olympiads.length === 0;
+    const exerciseDisabled = loadingExercises || exercises.length === 0;
     const olympiadDisabled = loadingOlympiads || olympiads.length === 0;
     const itineraryDisabled =
         !formData.olympiad || loadingItineraries || itineraries.length === 0;

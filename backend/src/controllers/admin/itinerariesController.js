@@ -1,7 +1,7 @@
-import * as model from "../../models/itinerariesModel.js";
-import pool from "../db.js";
 import csv from "csv-parser";
 import fs from "fs";
+import pool from "../../db.js";
+import * as model from "../../models/itinerariesModel.js";
 
 // GET: obtener todos
 export const getAll = async (req, res) => {

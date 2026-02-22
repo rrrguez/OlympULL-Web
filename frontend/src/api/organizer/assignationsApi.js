@@ -9,16 +9,16 @@ function authHeaders() {
     };
 }
 
-export const getAllAssignationsForOrganizer = (organizer) =>
+export const getAllAssignations = (organizer) =>
     apiClient.get(`${API}/${organizer}`, authHeaders());
 
 /**
 export const getAssignationsOlympiads = (exercise) =>
     apiClient.get(`${API}/olympiads/${exercise}`, authHeaders());
-
-export const getAssignationsItineraries = (exercise, olympiad) =>
-    apiClient.get(`${API}/itineraries/${exercise}/${olympiad}`, authHeaders());
 */
+
+export const getAssignationsItineraries = (organizer) =>
+    apiClient.get(`${API}/itineraries/${organizer}`, authHeaders());
 
 export const createAssignation = (data) =>
     apiClient.post(API, data, authHeaders());

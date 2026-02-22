@@ -1,7 +1,7 @@
-import * as model from "../../models/usersModel.js";
 import csv from "csv-parser";
 import fs from "fs";
-import pool from "../db.js";
+import pool from "../../db.js";
+import * as model from "../../models/usersModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {

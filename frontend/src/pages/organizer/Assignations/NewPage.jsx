@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
-import NewAssignation from "../../components/Exercises/Assignations/New";
-import PageHeader from "../../components/layouts/PageHeader";
+import PageHeader from "../../../components/layouts/PageHeader";
+import NewExerciseAssignation from "../../../components/organizer/Assignations/New";
 
 export default function AssignationsPage() {
     return (
@@ -10,7 +10,7 @@ export default function AssignationsPage() {
                 backButtonRoute={"/organizer/assignations/"}
             />
 
-            <NewAssignation />
+            <NewExerciseAssignation />
         </Container>
 
     );
