@@ -5,7 +5,7 @@ export default function NewPunctuationPage() {
     return (
         <Container>
             <PageHeader
-                title="Editar puntuación"
+                title="Puntuar equipo"
                 backButtonRoute={"/monitor/punctuations/"}
             />
 
