@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import OrganizerAssignationsList from "../../../components/Organizers/List";
+import OrganizerAssignationsList from "../../../components/admin/Organizers/List";
 import { importOrganizers, exportOrganizers } from "../../../api/organizersApi";
 
 export default function OrganizerAssignationsListPage() {

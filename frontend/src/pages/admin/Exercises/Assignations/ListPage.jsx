@@ -3,7 +3,7 @@ import PageHeader from "../../../../components/layouts/PageHeader";
 import ImportModal from "../../../../components/modals/ImportModal";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import ExerciseAssignationsList from "../../../../components/Exercises/Assignations/List";
+import ExerciseAssignationsList from "../../../../components/admin/Exercises/Assignations/List";
 import { importAssignations, exportAssignations } from "../../../../api/assignationsApi";
 
 export default function ExerciseAssignationsListPage() {

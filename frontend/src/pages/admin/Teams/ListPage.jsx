@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import TeamsList from "../../../components/Teams/List";
+import TeamsList from "../../../components/admin/Teams/List";
 import { importTeams, exportTeams } from "../../../api/teamsApi";
 
 export default function TeamsListPage() {

@@ -4,6 +4,8 @@ export default function NotFoundPage() {
     const backRouteFunction = () => {
         if (localStorage.getItem("type") === "ADMIN") {
             return "/admin"
+        } else if (localStorage.getItem("type") === "ORGANIZER") {
+            return "/organizer"
         }
         else {
             return "/login"

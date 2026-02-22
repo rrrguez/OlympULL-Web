@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewRubric from "../../../components/Rubrics/New";
+import NewRubric from "../../../components/admin/Rubrics/New";
 
 export default function NewRubricPage() {
     return (

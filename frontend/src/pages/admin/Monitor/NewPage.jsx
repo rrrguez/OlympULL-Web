@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewMonitorAssignation from "../../../components/Monitors/New";
+import NewMonitorAssignation from "../../../components/admin/Monitors/New";
 
 export default function NewMonitorAssignationPage() {
     return (

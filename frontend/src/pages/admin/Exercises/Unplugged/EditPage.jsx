@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../../components/layouts/PageHeader";
-import EditUnpluggedExercise from "../../../../components/Exercises/Unplugged/Edit"
+import EditUnpluggedExercise from "../../../../components/admin/Exercises/Unplugged/Edit"
 
 export default function EditUnpluggedExercisePage() {
     return (

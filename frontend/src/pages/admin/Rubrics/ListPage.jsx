@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import RubricsList from "../../../components/Rubrics/List";
+import RubricsList from "../../../components/admin/Rubrics/List";
 import { importRubrics, exportRubrics } from "../../../api/rubricsApi";
 
 export default function RubricsListPage() {
@@ -43,7 +43,7 @@ export default function RubricsListPage() {
             />
 
             <RubricsList refreshKey={refreshKey}/>
-            
+
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}

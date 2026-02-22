@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import ParticipantAssignationsList from "../../../components/Participants/List";
+import ParticipantAssignationsList from "../../../components/admin/Participants/List";
 import { importParticipants, exportParticipants } from "../../../api/participantsApi";
 
 export default function ParticipantAssignationsListPage() {

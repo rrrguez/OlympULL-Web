@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewParticipantAssignation from "../../../components/Participants/New";
+import NewParticipantAssignation from "../../../components/admin/Participants/New";
 
 export default function NewParticipantAssignationPage() {
     return (

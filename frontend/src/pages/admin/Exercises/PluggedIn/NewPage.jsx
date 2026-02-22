@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../../components/layouts/PageHeader";
-import NewPluggedInExercise from "../../../../components/Exercises/PluggedIn/New";
+import NewPluggedInExercise from "../../../../components/admin/Exercises/PluggedIn/New";
 
 export default function NewPluggedInExercisePage() {
     return (

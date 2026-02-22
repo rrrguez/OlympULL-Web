@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import EditRubric from "../../../components/Rubrics/Edit";
+import EditRubric from "../../../components/admin/Rubrics/Edit";
 
 export default function EditRubricPage() {
     return (

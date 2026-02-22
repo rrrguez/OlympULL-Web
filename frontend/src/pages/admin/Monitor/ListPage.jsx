@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import MonitorAssignationsList from "../../../components/Monitors/List";
+import MonitorAssignationsList from "../../../components/admin/Monitors/List";
 import { importMonitors, exportMonitors } from "../../../api/monitorsApi";
 
 export default function MonitorAssignationsListPage() {

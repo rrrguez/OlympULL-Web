@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import EditOlympiad from "../../../components/Olympiads/Edit"
+import EditOlympiad from "../../../components/admin/Olympiads/Edit"
 
 export default function EditOlympiadPage() {
     return (

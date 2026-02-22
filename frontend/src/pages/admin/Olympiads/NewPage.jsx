@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewOlympiad from "../../../components/Olympiads/New"
+import NewOlympiad from "../../../components/admin/Olympiads/New"
 
 export default function NewOlympiadPage() {
     return (

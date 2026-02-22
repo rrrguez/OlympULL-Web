@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../../components/layouts/PageHeader";
-import NewExerciseAssignation from "../../../../components/Exercises/Assignations/New";
+import NewExerciseAssignation from "../../../../components/admin/Exercises/Assignations/New";
 
 export default function NewExerciseAssignationPage() {
     return (

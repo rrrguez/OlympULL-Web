@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewOrganizerAssignation from "../../../components/Organizers/New";
+import NewOrganizerAssignation from "../../../components/admin/Organizers/New";
 
 export default function NewOrganizerAssignationPage() {
     return (

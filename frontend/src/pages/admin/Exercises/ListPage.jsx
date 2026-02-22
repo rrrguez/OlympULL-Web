@@ -1,7 +1,7 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import UnpluggedExercisesList from "../../../components/Exercises/Unplugged/List";
-import PluggedInExercisesList from "../../../components/Exercises/PluggedIn/List";
+import UnpluggedExercisesList from "../../../components/admin/Exercises/Unplugged/List";
+import PluggedInExercisesList from "../../../components/admin/Exercises/PluggedIn/List";
 
 export default function ExercisesListPage() {
     return (

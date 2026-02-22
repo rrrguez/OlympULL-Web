@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewSchool from "../../../components/Schools/New";
+import NewSchool from "../../../components/admin/Schools/New";
 
 export default function NewSchoolPage() {
     return (

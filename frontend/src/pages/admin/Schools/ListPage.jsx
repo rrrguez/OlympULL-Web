@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import SchoolsList from "../../../components/Schools/List";
+import SchoolsList from "../../../components/admin/Schools/List";
 import { importSchools, exportSchools } from "../../../api/schoolsApi";
 
 export default function SchoolsListPage() {

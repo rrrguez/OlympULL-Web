@@ -3,7 +3,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import ItinerariesList from "../../../components/Itineraries/List";
+import ItinerariesList from "../../../components/admin/Itineraries/List";
 import { importItineraries, exportItineraries } from "../../../api/itinerariesApi";
 
 export default function ItinerariesListPage() {

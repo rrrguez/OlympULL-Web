@@ -75,7 +75,7 @@ function PrivateRoute({ children, type }) {
     const userType = getUserType();
 
     if (!token) return <Navigate to="/login" />;
-    if (type && userType !== type) return <Navigate to="/login" />;
+    if (type && userType !== type) return <Navigate to="/404" />;
 
     return children;
 }

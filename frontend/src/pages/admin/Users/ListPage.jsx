@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import UsersList from "../../../components/Users/List";
+import UsersList from "../../../components/admin/Users/List";
 import { importUsers, exportUsers } from "../../../api/usersApi";
 
 export default function UsersListPage() {

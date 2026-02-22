@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import OlympiadsList from "../../../components/Olympiads/List";
+import OlympiadsList from "../../../components/admin/Olympiads/List";
 import { importOlympiads, exportOlympiads } from "../../../api/olympiadsApi";
 
 export default function OlympiadsListPage() {

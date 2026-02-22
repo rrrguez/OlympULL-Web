@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../../components/layouts/PageHeader";
-import EditPluggedInExercise from "../../../../components/Exercises/PluggedIn/Edit";
+import EditPluggedInExercise from "../../../../components/admin/Exercises/PluggedIn/Edit";
 
 export default function EditPluggedInExercisePage() {
     return (

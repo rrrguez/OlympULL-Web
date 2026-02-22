@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewTeam from "../../../components/Teams/New";
+import NewTeam from "../../../components/admin/Teams/New";
 
 export default function NewTeamPage() {
     return (

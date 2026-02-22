@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
 import PageHeader from "../../../components/layouts/PageHeader";
-import NewUser from "../../../components/Users/New";
+import NewUser from "../../../components/admin/Users/New";
 
 export default function NewUserPage() {
     return (
