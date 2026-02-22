@@ -5,7 +5,7 @@ import { getItinerary, updateItinerary } from "../../../api/admin/itinerariesApi
 import { getAllOlympiads } from "../../../api/admin/olympiadsApi";
 import * as regex from "../../../utils/regex";
 
-export default function EditItinerary() {
+export default function EditPunctuation() {
     /**
     const { id } = useParams();
     const navigate = useNavigate();

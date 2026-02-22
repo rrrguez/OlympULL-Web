@@ -18,6 +18,7 @@ export const getAllExercises = async (req, res) => {
             JOIN t_olympiads o
                 ON o.id = i.olympiad
             WHERE m.id = $1
+            ORDER BY e.name
             `
         , [monitor])
         res.json(result.rows);
@@ -32,7 +33,7 @@ export const getAllTeams = async (req, res) => {
         const result = await pool.query(
             `
             SELECT
-                t.id AS team_id,  t.name AS team_name
+                t.id AS team_id, t.name AS team_name
             FROM t_teams t
             WHERE t.itinerary = $1
             `

@@ -160,7 +160,8 @@ export default function NewExerciseAssignation() {
 
                                 {itineraries.map((i) => (
                                     <option key={i.itinerary_id} value={i.itinerary_id}>
-                                    {i.itinerary_name} ({i.olympiad_name})                                    </option>
+                                        {i.itinerary_name} ({i.olympiad_name})
+                                    </option>
                                 ))}
                             </select>
                         </div>
