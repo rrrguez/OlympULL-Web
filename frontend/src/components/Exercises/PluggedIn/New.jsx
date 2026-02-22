@@ -4,7 +4,7 @@ import { createPluggedInExercise } from "../../../api/pluggedInExercisesApi";
 import { toast } from "react-toastify";
 import * as regex from "../../../utils/regex";
 
-export default function NewExercise() {
+export default function NewPluggedInExercise() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

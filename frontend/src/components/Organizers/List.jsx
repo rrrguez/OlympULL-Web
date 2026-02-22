@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { deleteOrganizer, getAllOrganizers } from "../../api/organizersApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function OrganizerList({refreshKey}) {
+export default function OrganizerAssignationsList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 

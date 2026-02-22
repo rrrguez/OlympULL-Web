@@ -7,7 +7,7 @@ import { getAllPluggedInExercises } from "../../api/pluggedInExercisesApi";
 import { getAllUnpluggedExercises } from "../../api/unpluggedExercisesApi";
 import { getUserByType } from "../../api/usersApi";
 
-export default function NewMonitor() {
+export default function NewMonitorAssignation() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

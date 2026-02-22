@@ -1,0 +1,17 @@
+import { Container } from "react-bootstrap";
+import PageHeader from "../../../components/layouts/PageHeader";
+import EditTeam from "../../../components/Teams/Edit";
+
+export default function EditTeamPage() {
+    return (
+        <Container>
+            <PageHeader
+                title="Editar equipo"
+                backButtonRoute="/admin/teams"
+            />
+
+            <EditTeam />
+        </Container>
+
+    );
+}

@@ -5,7 +5,7 @@ import { getAllRubrics } from "../../../api/rubricsApi";
 import { createUnpluggedExercise } from "../../../api/unpluggedExercisesApi";
 import * as regex from "../../../utils/regex";
 
-export default function NewExercise() {
+export default function NewUnpluggedExercise() {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({

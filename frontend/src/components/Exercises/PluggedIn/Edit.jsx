@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import * as regex from "../../../utils/regex";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
-export default function NewExercise() {
+export default function EditPluggedInExercise() {
     const { id } = useParams();
     const navigate = useNavigate();
 

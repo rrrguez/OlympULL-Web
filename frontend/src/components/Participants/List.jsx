@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { deleteParticipant, getAllParticipants } from "../../api/participantsApi";
 import OlympULLIconButton from "../buttons/OlympULLIconButton";
 
-export default function ParticipantsList({refreshKey}) {
+export default function ParticipantAssignationsList({refreshKey}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
 

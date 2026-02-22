@@ -1,12 +1,12 @@
 import { Container } from "react-bootstrap";
-import AssignationsList from "../../components/Exercises/Assignations/List";
-import PageHeader from "../../components/layouts/PageHeader";
+import PageHeader from "../../../../components/layouts/PageHeader";
+import ImportModal from "../../../../components/modals/ImportModal";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import ImportModal from "../../components/modals/ImportModal";
-import { importAssignations, exportAssignations } from "../../api/assignationsApi";
+import ExerciseAssignationsList from "../../../../components/Exercises/Assignations/List";
+import { importAssignations, exportAssignations } from "../../../../api/assignationsApi";
 
-export default function AssignationsPage() {
+export default function ExerciseAssignationsListPage() {
     const [importOpen, setImportOpen] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
 
@@ -42,7 +42,7 @@ export default function AssignationsPage() {
                 backButtonRoute="/admin"
             />
 
-            <AssignationsList refreshKey={refreshKey}/>
+            <ExerciseAssignationsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}

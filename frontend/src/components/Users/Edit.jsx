@@ -84,6 +84,7 @@ export default function EditUser() {
                 value={formData.username}
                 onChange={handleChange}
                 required
+                pattern={regex.idPattern}
             />
             </div>
 
@@ -96,6 +97,11 @@ export default function EditUser() {
                 value={formData.password}
                 onChange={handleChange}
                 required
+                pattern={regex.namePattern}
+                onInvalid={e =>
+                    e.target.setCustomValidity(regex.onInvalidName)
+                }
+                onInput={e => e.target.setCustomValidity("")}
             />
             </div>
 

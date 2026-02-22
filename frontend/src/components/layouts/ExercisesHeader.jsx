@@ -1,6 +1,14 @@
 import OlympULLIconButton from "../buttons/OlympULLIconButton"
 
-export default function ExercisesHeader({ title, newButton = 0, importButton = 0, exportButton = 0, newButtonText="", newButtonRoute="", importButtonOnClick="", exportButtonOnClick=""}) {
+export default function ExercisesHeader({
+    title,
+    newButton = 0,
+    importButton = 0,
+    exportButton = 0,
+    newButtonText="",
+    newButtonRoute="",
+    importButtonOnClick="",
+    exportButtonOnClick=""}) {
     return (
         <>
             <div className="page-header-layout exercises-header">

@@ -1,25 +1,25 @@
 import { Container } from "react-bootstrap";
-import AssignationsList from "../../components/Exercises/Assignations/List";
-import PageHeader from "../../components/layouts/PageHeader";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import ImportModal from "../../components/modals/ImportModal";
-import { importAssignations, exportAssignations } from "../../api/assignationsApi";
+import PageHeader from "../../../components/layouts/PageHeader";
+import ImportModal from "../../../components/modals/ImportModal";
+import ParticipantAssignationsList from "../../../components/Participants/List";
+import { importParticipants, exportParticipants } from "../../../api/participantsApi";
 
-export default function AssignationsPage() {
+export default function ParticipantAssignationsListPage() {
     const [importOpen, setImportOpen] = useState(false);
     const [refreshKey, setRefreshKey] = useState(0);
 
-    const exportAssignationsFunction = async () => {
+    const exportParticipantsFunction = async () => {
         try {
-            const res = await exportAssignations();
+            const res = await exportParticipants();
 
             const blob = new Blob([res.data], { type: "text/csv" });
             const url = window.URL.createObjectURL(blob);
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "exercise-assignations.csv";
+            a.download = "participants.csv";
             a.click();
 
             window.URL.revokeObjectURL(url);
@@ -31,28 +31,27 @@ export default function AssignationsPage() {
     return (
         <Container>
             <PageHeader
-                title="Gestión de asignaciones"
+                title="Gestión de participantes"
                 newButton={1}
                 importButton={1}
                 exportButton={1}
                 newButtonText="Nueva asignación"
-                newButtonRoute="/admin/assignations/new"
+                newButtonRoute="/admin/participants/new"
                 importButtonOnClick={() => setImportOpen(true)}
-                exportButtonOnClick={exportAssignationsFunction}
+                exportButtonOnClick={exportParticipantsFunction}
                 backButtonRoute="/admin"
             />
 
-            <AssignationsList refreshKey={refreshKey}/>
+            <ParticipantAssignationsList refreshKey={refreshKey}/>
 
             <ImportModal
                 open={importOpen}
                 onClose={() => setImportOpen(false)}
-                onImport={importAssignations}
+                onImport={importParticipants}
                 title="Importar asignaciones"
                 successMessage="Asignaciones importadas con éxito"
                 onSuccess={() => setRefreshKey(prev => prev + 1)}
             />
         </Container>
-
     );
 }
