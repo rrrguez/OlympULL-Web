@@ -5,12 +5,12 @@ import * as model from "../../models/monitorsModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
-  try {
-    const result = await model.getAll();
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const result = await model.getAll();
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // GET: obtener una por código
