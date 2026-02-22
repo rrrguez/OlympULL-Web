@@ -67,6 +67,24 @@ export const getItineraries = (data) =>
         WHERE EXERCISE=$1 AND a.OLYMPIAD=$2`, [data.exercise, data.olympiad]
     );
 
+export const getItinerariesForOrganizer = (organizer) =>
+    pool.query(
+        `
+        SELECT
+            i.id AS itinerary_id, i.name AS itinerary_name,
+            o.id AS olympiad_id, o.name AS olympiad_name
+        FROM t_itineraries i
+        JOIN t_olympiads o
+            ON i.olympiad = o.id
+        WHERE i.id IN (
+            SELECT
+                itinerary
+            FROM t_organizers
+            WHERE id = $1
+        )
+        `, [organizer]
+    );
+
 // Crear uno nuevo
 export const create = async (data) =>
     pool.query(

@@ -1,6 +1,6 @@
 // src/routes/olympiadsRoutes.js
 import express from "express";
-import { default as olympController, default as olympiadsController } from "../../controllers/olympiadsController.js";
+import { default as olympController, default as olympiadsController } from "../../controllers/admin/olympiadsController.js";
 import upload from "../../middlewares/uploadCsv.js";
 
 const router = express.Router();

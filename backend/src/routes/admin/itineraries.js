@@ -1,5 +1,5 @@
 import express from "express";
-import itinerariesController from "../../controllers/itinerariesController.js";
+import itinerariesController from "../../controllers/admin/itinerariesController.js";
 import upload from "../../middlewares/uploadCsv.js";
 
 const router = express.Router();

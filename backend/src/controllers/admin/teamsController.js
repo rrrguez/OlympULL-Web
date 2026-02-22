@@ -1,4 +1,4 @@
-import * as model from "../models/participantsModel.js";
+import * as model from "../../models/teamsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
 import pool from "../db.js";
@@ -17,10 +17,10 @@ export const getAll = async (req, res) => {
 export const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getByid(id);
+    const result = await model.getById(id);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Participante no encontrado" });
+      return res.status(404).json({ message: "Equipo no encontrado" });
     }
 
     res.json(result.rows[0]);
@@ -37,9 +37,14 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_participants_pkey') {
+            if (err.constraint === 't_teams_pkey') {
                 res.status(400).json({
-                    error: "El 'Participante' seleccionado ya está asignado al 'Itinerario' elegido",
+                    error: "Ya existe un equipo con el 'ID' proporcionado",
+                    code: err.code
+                });
+            } else if (err.constraint === 't_teams_id_itinerary_key') {
+                res.status(400).json({
+                    error: "Ya existe un equipo con el 'Nombre' proporcionado en el 'Itinerario' elegido",
                     code: err.code
                 });
             }
@@ -61,13 +66,13 @@ export const update = async (req, res) => {
 
 // DELETE
 export const remove = async (req, res) => {
-    try {
-        const { id, school, itinerary } = req.params;
-        await model.remove({id, school, itinerary});
-        res.json({ message: "Eliminado correctamente" });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const { id } = req.params;
+    await model.remove(id);
+    res.json({ message: "Eliminado correctamente" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // POST: Importar datos desde CSV
@@ -82,26 +87,26 @@ export const importCsv = async (req, res) => {
     const results = [];
 
     fs.createReadStream(req.file.path)
-        .pipe(csv())
-        .on("data", (data) => {
-            console.log(data);
-            results.push(data);
+        .pipe(csv({ separator: ',', quote: '"' }))
+        .on("data", (row) => {
+            console.log(row);
+            results.push(row);
         })
         .on("end", async () => {
             const client = await pool.connect();
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.school || !o.itinerary) {
+                    if (!o.id || !o.name || !o.school || !o.itinerary) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_participants (id, school, itinerary)
-                        VALUES ($1,$2,$3)
-                        ON CONFLICT (id, itinerary) DO NOTHING`,
+                        `INSERT INTO t_teams (id, name, school, itinerary)
+                        VALUES ($1,$2,$3,$4)`,
                         [
                             o.id,
+                            o.name,
                             o.school,
                             o.itinerary,
                         ]
@@ -121,16 +126,16 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_participants");
+    const { rows } = await pool.query("SELECT * FROM t_teams");
 
-    let csv = "id,school,itinerary\n";
+    let csv = "id,name,school,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.school},${o.itinerary}\n`;
+        csv += `${o.id},${o.name},${o.school},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=participants.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=teams.csv");
     res.send(csv);
 };
 

@@ -1,7 +1,7 @@
-import * as model from "../models/teamsModel.js";
-import csv from "csv-parser";
-import fs from "fs";
+import * as model from "../../models/schoolsModel.js";
 import pool from "../db.js";
+import fs from "fs";
+import csv from "csv-parser";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
@@ -20,7 +20,7 @@ export const getById = async (req, res) => {
     const result = await model.getById(id);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Equipo no encontrado" });
+      return res.status(404).json({ message: "Escuela no encontrada" });
     }
 
     res.json(result.rows[0]);
@@ -37,14 +37,14 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_teams_pkey') {
+            if (err.constraint === 't_schools_pkey') {
                 res.status(400).json({
-                    error: "Ya existe un equipo con el 'ID' proporcionado",
+                    error: "Ya existe una escuela con el 'ID' proporcionado",
                     code: err.code
                 });
-            } else if (err.constraint === 't_teams_id_itinerary_key') {
+            } else if (err.constraint === 't_schools_name_town_key') {
                 res.status(400).json({
-                    error: "Ya existe un equipo con el 'Nombre' proporcionado en el 'Itinerario' elegido",
+                    error: "Ya existe una escuela con el 'Nombre' proporcionado en el 'Municipio' establecido",
                     code: err.code
                 });
             }
@@ -55,13 +55,13 @@ export const create = async (req, res) => {
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE
@@ -87,28 +87,30 @@ export const importCsv = async (req, res) => {
     const results = [];
 
     fs.createReadStream(req.file.path)
-        .pipe(csv({ separator: ',', quote: '"' }))
-        .on("data", (row) => {
-            console.log(row);
-            results.push(row);
+        .pipe(csv())
+        .on("data", (data) => {
+            console.log(data);
+            results.push(data);
         })
         .on("end", async () => {
             const client = await pool.connect();
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name || !o.school || !o.itinerary) {
+                    if (!o.id || !o.name) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_teams (id, name, school, itinerary)
-                        VALUES ($1,$2,$3,$4)`,
+                        `INSERT INTO t_schools (id, name, town)
+                        VALUES ($1,$2,$3)
+                        ON CONFLICT (id) DO UPDATE SET
+                            name=EXCLUDED.name,
+                            town=EXCLUDED.town`,
                         [
                             o.id,
                             o.name,
-                            o.school,
-                            o.itinerary,
+                            o.town || null
                         ]
                     );
                 }
@@ -126,16 +128,16 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_teams");
+    const { rows } = await pool.query("SELECT * FROM t_schools");
 
-    let csv = "id,name,school,itinerary\n";
+    let csv = "id,name,town\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},${o.school},${o.itinerary}\n`;
+        csv += `${o.id},${o.name},${o.town}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=teams.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
     res.send(csv);
 };
 

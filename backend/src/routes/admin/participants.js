@@ -1,5 +1,5 @@
 import express from "express";
-import participantsController from "../../controllers/participantsController.js";
+import participantsController from "../../controllers/admin/participantsController.js";
 import upload from "../../middlewares/uploadCsv.js";
 
 const router = express.Router();

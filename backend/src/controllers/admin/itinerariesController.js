@@ -1,9 +1,9 @@
-import * as model from "../models/schoolsModel.js";
+import * as model from "../../models/itinerariesModel.js";
 import pool from "../db.js";
-import fs from "fs";
 import csv from "csv-parser";
+import fs from "fs";
 
-// GET: obtener todas
+// GET: obtener todos
 export const getAll = async (req, res) => {
   try {
     const result = await model.getAll();
@@ -13,14 +13,14 @@ export const getAll = async (req, res) => {
   }
 };
 
-// GET: obtener una por código
-export const getById = async (req, res) => {
+// GET: obtener uno por código
+export const getOne = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await model.getById(id);
+    const result = await model.getByid(id);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Escuela no encontrada" });
+      return res.status(404).json({ message: "Itinerario no encontrado"});
     }
 
     res.json(result.rows[0]);
@@ -29,39 +29,50 @@ export const getById = async (req, res) => {
   }
 };
 
-// POST: crear nueva
-export const create = async (req, res) => {
+// GET: obtener uno por olimpiada
+export const getByOlympiad = async (req, res) => {
     try {
-        const data = await model.create(req.body);
-        res.status(201).json(data.rows[0]);
+      const { olympiadId } = req.params;
+      const data = await model.getByOlympiad(olympiadId);
+      res.json(data.rows);
     } catch (err) {
-        console.log(err);
-        if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_schools_pkey') {
-                res.status(400).json({
-                    error: "Ya existe una escuela con el 'ID' proporcionado",
-                    code: err.code
-                });
-            } else if (err.constraint === 't_schools_name_town_key') {
-                res.status(400).json({
-                    error: "Ya existe una escuela con el 'Nombre' proporcionado en el 'Municipio' establecido",
-                    code: err.code
-                });
-            }
-        }
-        res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
+  };
+
+// POST: crear nuevo
+export const create = async (req, res) => {
+  try {
+    const data = await model.create(req.body);
+    res.status(201).json(data.rows[0]);
+  } catch (err) {
+    console.log(err);
+    if (err.code === '23505') { // Duplicate key
+        if (err.constraint === 't_itineraries_pkey') {
+            res.status(400).json({
+                error: "Ya existe un itinerario con el 'ID' proporcionado",
+                code: err.code
+            });
+        } else if (err.constraint === 't_itineraries_name_olympiad_key') {
+            res.status(400).json({
+                error: "Ya existe un itinerario con el 'Nombre' proporcionado en la 'Olimpiada' seleccionada",
+                code: err.code
+            });
+        }
+    }
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // PUT: actualizar
 export const update = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const data = await model.update({ id, ...req.body });
-        res.json(data.rows[0]);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    const { id } = req.params;
+    const data = await model.update({ id, ...req.body });
+    res.json(data.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 // DELETE
@@ -97,20 +108,22 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name) {
+                    if (!o.id || !o.name || !o.olympiad) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_schools (id, name, town)
-                        VALUES ($1,$2,$3)
+                        `INSERT INTO t_itineraries (id, name, description, olympiad)
+                        VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
                             name=EXCLUDED.name,
-                            town=EXCLUDED.town`,
+                            description=EXCLUDED.description,
+                            olympiad=EXCLUDED.olympiad`,
                         [
                             o.id,
                             o.name,
-                            o.town || null
+                            o.description || null,
+                            o.olympiad,
                         ]
                     );
                 }
@@ -128,22 +141,23 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_schools");
+    const { rows } = await pool.query("SELECT * FROM t_itineraries");
 
-    let csv = "id,name,town\n";
+    let csv = "id,name,description,olympiad\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},${o.town}\n`;
+        csv += `${o.id},${o.name},"${o.description}",${o.olympiad}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=olimpiadas.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=itineraries.csv");
     res.send(csv);
 };
 
 export default {
     getAll,
-    getById,
+    getOne,
+    getByOlympiad,
     create,
     update,
     remove,

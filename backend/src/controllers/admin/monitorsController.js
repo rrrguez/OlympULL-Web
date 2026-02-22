@@ -1,4 +1,4 @@
-import * as model from "../models/rubricsModel.js";
+import * as model from "../../models/monitorsModel.js";
 import csv from "csv-parser";
 import fs from "fs";
 import pool from "../db.js";
@@ -14,19 +14,19 @@ export const getAll = async (req, res) => {
 };
 
 // GET: obtener una por código
-export const getOne = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getById(id);
+export const getById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const result = await model.getById(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Rúbrica no encontrada" });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
 // POST: crear nueva
@@ -37,9 +37,9 @@ export const create = async (req, res) => {
     } catch (err) {
         console.log(err);
         if (err.code === '23505') { // Duplicate key
-            if (err.constraint === 't_rubrics_pkey') {
+            if (err.constraint === 't_monitors_pkey') {
                 res.status(400).json({
-                    error: "Ya existe una rúbrica con el 'ID' proporcionado",
+                    error: "El 'Monitor' seleccionado ya está asignado al 'Ejercicio' elegido en ese 'Itinerario'",
                     code: err.code
                 });
             }
@@ -50,24 +50,24 @@ export const create = async (req, res) => {
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.remove(id);
-    res.json({ message: "Rúbrica eliminada correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id, exercise, olympiad, itinerary } = req.params;
+        await model.remove({id, exercise, olympiad, itinerary});
+        res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
@@ -92,24 +92,19 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name) {
+                    if (!o.id || !o.exercise || !o.itinerary || !o.olympiad) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_rubrics (id, name, description, points, labels)
-                        VALUES ($1,$2,$3,$4,$5)
-                        ON CONFLICT (id) DO UPDATE SET
-                            name=EXCLUDED.name,
-                            description=EXCLUDED.description,
-                            points=EXCLUDED.points,
-                            labels=EXCLUDED.labels`,
+                        `INSERT INTO t_monitors (id,exercise,itinerary,olympiad)
+                        VALUES ($1,$2,$3,$4)
+                        ON CONFLICT (id,exercise,itinerary,olympiad) DO NOTHING`,
                         [
                             o.id,
-                            o.name || null,
-                            o.description || null,
-                            o.points,
-                            o.labels || null,
+                            o.exercise,
+                            o.itinerary,
+                            o.olympiad,
                         ]
                     );
                 }
@@ -127,22 +122,22 @@ export const importCsv = async (req, res) => {
   };
 
 export const exportCsv = async (req, res) => {
-    const { rows } = await pool.query("SELECT * FROM t_rubrics");
+    const { rows } = await pool.query("SELECT * FROM t_monitors");
 
-    let csv = "id,name,description,points,labels\n";
+    let csv = "id,exercise,itinerary,olympiad\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},"${o.description}","${o.points}","${o.labels}"\n`;
+        csv += `${o.id},${o.exercise},${o.itinerary},${o.olympiad}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
-    res.setHeader("Content-Disposition", "attachment; filename=rubrics.csv");
+    res.setHeader("Content-Disposition", "attachment; filename=monitors.csv");
     res.send(csv);
 };
 
 export default {
     getAll,
-    getOne,
+    getById,
     create,
     update,
     remove,
