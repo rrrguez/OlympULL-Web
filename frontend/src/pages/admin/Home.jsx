@@ -6,7 +6,7 @@ export default function AdminHome() {
     const navigate = useNavigate();
     return (
         <div className="container mt-5">
-            <h1>¡Bienvenido, {username}!</h1>
+            <h1>¡Hola, {username}!</h1>
             <h2 className="section-title">Gestión de olimpiadas</h2>
             <div className="grid-admin">
                 <OlympULLButton

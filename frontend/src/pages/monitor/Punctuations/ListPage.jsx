@@ -5,7 +5,7 @@ export default function PunctuationsListPage() {
     return (
         <Container>
             <PageHeader
-                title="Puntuaciones de equipos"
+                title="Gestión de puntuaciones"
                 backButtonRoute={"/monitor/"}
             />
 

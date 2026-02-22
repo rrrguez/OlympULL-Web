@@ -6,11 +6,11 @@ export default function MonitorHome() {
     const navigate = useNavigate();
     return (
         <div className="container mt-5">
-            <h1>¡Bienvenido, {username}!</h1>
+            <h1>¡Hola, {username}!</h1>
             <h2 className="section-title">Gestiones</h2>
             <div className="grid-admin">
                 <OlympULLButton
-                    text="Puntuaciones de equipos"
+                    text="Puntuar equipos"
                     onClickAction={() => navigate("/monitor/punctuations")}
                 />
             </div>
