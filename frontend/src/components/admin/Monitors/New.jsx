@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAssignationsItineraries, getAssignationsOlympiads } from "../../../api/assignationsApi";
-import { createMonitor } from "../../../api/monitorsApi";
-import { getAllPluggedInExercises } from "../../../api/pluggedInExercisesApi";
-import { getAllUnpluggedExercises } from "../../../api/unpluggedExercisesApi";
-import { getUserByType } from "../../../api/usersApi";
+import { getAssignationsItineraries, getAssignationsOlympiads } from "../../../api/admin/assignationsApi";
+import { createMonitor } from "../../../api/admin/monitorsApi";
+import { getAllPluggedInExercises } from "../../../api/admin/pluggedInExercisesApi";
+import { getAllUnpluggedExercises } from "../../../api/admin/unpluggedExercisesApi";
+import { getUserByType } from "../../../api/admin/usersApi";
 
 export default function NewMonitorAssignation() {
     const navigate = useNavigate();

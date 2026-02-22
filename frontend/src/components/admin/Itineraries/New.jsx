@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createItinerary } from "../../../api/itinerariesApi";
-import { getAllOlympiads } from "../../../api/olympiadsApi";
+import { createItinerary } from "../../../api/admin/itinerariesApi";
+import { getAllOlympiads } from "../../../api/admin/olympiadsApi";
 import * as regex from "../../../utils/regex";
 
 export default function NewItinerary() {

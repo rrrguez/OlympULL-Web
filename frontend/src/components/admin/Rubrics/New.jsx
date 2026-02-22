@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createRubric } from "../../../api/rubricsApi";
-import * as regex from "../../../utils/regex";
 import { toast } from "react-toastify";
+import { createRubric } from "../../../api/admin/rubricsApi";
+import * as regex from "../../../utils/regex";
 
 export default function NewRubric() {
     const navigate = useNavigate();

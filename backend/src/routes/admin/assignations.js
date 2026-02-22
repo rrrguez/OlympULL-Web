@@ -1,6 +1,6 @@
 import express from "express";
-import exerciseAssignationsController from "../controllers/exerciseAssignationsController.js";
-import upload from "../middlewares/uploadCsv.js";
+import exerciseAssignationsController from "../../controllers/exerciseAssignationsController.js";
+import upload from "../../middlewares/uploadCsv.js";
 
 const router = express.Router();
 

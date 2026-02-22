@@ -1,10 +1,10 @@
-import { Container } from "react-bootstrap";
 import { useState } from "react";
+import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { exportSchools, importSchools } from "../../../api/admin/schoolsApi";
+import SchoolsList from "../../../components/admin/Schools/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import SchoolsList from "../../../components/admin/Schools/List";
-import { importSchools, exportSchools } from "../../../api/schoolsApi";
 
 export default function SchoolsListPage() {
     const [importOpen, setImportOpen] = useState(false);

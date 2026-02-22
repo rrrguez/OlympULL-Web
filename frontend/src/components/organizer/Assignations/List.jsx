@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteAssignation, getAllAssignations } from "../../../../api/admin/assignationsApi";
-import OlympULLIconButton from "../../../buttons/OlympULLIconButton";
+import { deleteAssignation, getAllAssignationsForOrganizer } from "../../../api/organizer/assignationsApi";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function ExerciseAssignationsList({refreshKey}) {
     const [data, setData] = useState([]);
@@ -14,10 +14,15 @@ export default function ExerciseAssignationsList({refreshKey}) {
 
     const load = async () => {
         async function loadData() {
-            setLoading(true);
-            const res = await getAllAssignations();
-            setData(res.data);
-            setLoading(false);
+            try {
+                setLoading(true);
+                const res = await getAllAssignationsForOrganizer(localStorage.getItem("id"));
+                setData(res.data);
+            } catch (err) {
+                console.log(err)
+            } finally {
+                setLoading(false);
+            }
         }
         loadData();
     };

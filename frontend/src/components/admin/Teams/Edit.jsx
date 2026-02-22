@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getItineraryByOlympiad } from "../../../api/itinerariesApi";
-import { getAllOlympiads } from "../../../api/olympiadsApi";
-import { getAllSchools } from "../../../api/schoolsApi";
-import { getTeam, updateTeam } from "../../../api/teamsApi";
+import { getItineraryByOlympiad } from "../../../api/admin/itinerariesApi";
+import { getAllOlympiads } from "../../../api/admin/olympiadsApi";
+import { getAllSchools } from "../../../api/admin/schoolsApi";
+import { getTeam, updateTeam } from "../../../api/admin/teamsApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditTeam() {

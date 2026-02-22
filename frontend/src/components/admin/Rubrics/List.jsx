@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createRubric, deleteRubric, getAllRubrics } from "../../../api/rubricsApi";
+import { createRubric, deleteRubric, getAllRubrics } from "../../../api/admin/rubricsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function RubricsList({refreshKey}) {

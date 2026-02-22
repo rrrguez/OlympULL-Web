@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createTeam, deleteTeam, getAllTeams } from "../../../api/teamsApi";
+import { createTeam, deleteTeam, getAllTeams } from "../../../api/admin/teamsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function TeamsList({refreshKey}) {

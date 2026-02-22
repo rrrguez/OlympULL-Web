@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createPluggedInExercise, deletePluggedInExercise, exportPluggedInExercises, getAllPluggedInExercises, importPluggedInExercises } from "../../../../api/pluggedInExercisesApi";
+import { createPluggedInExercise, deletePluggedInExercise, exportPluggedInExercises, getAllPluggedInExercises, importPluggedInExercises } from "../../../../api/admin/pluggedInExercisesApi";
 import translateCategory from "../../../../utils/categories";
 import OlympULLIconButton from "../../../buttons/OlympULLIconButton";
 import ExercisesHeader from "../../../layouts/ExercisesHeader";

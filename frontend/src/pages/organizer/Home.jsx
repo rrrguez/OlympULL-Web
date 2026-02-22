@@ -11,7 +11,7 @@ export default function OrganizerHome() {
             <div className="grid-admin">
                 <OlympULLButton
                     text="Gestión de itinerarios"
-                    onClickAction={() => navigate("/organizer/itineraries")}
+                    onClickAction={() => navigate("/organizer/assignations")}
                 />
             </div>
         </div>

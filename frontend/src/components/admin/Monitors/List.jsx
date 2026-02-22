@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteAssignation, getAllMonitors } from "../../../api/monitorsApi";
+import { deleteAssignation, getAllMonitors } from "../../../api/admin/monitorsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function MonitorAssignationsList({refreshKey}) {

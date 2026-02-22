@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPluggedInExercise, updatePluggedInExercise } from "../../../../api/pluggedInExercisesApi";
 import { toast } from "react-toastify";
+import { getPluggedInExercise, updatePluggedInExercise } from "../../../../api/admin/pluggedInExercisesApi";
 import * as regex from "../../../../utils/regex";
 import OlympULLIconButton from "../../../buttons/OlympULLIconButton";
 

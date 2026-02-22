@@ -22,11 +22,13 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        if (error.response?.status === 401) {
             document.body.style.cursor = "wait";
             logout();
             toast.info("La sesión ha expirado. Vuelve a iniciar sesión.");
             redirectToLogin();
+        } else if (error.response?.status === 403) {
+            toast.info("No tienes permisos para acceder a esta información")
         }
         return Promise.reject(error);
     }

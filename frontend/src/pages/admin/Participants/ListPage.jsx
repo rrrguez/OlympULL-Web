@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportParticipants, importParticipants } from "../../../api/admin/participantsApi";
+import ParticipantAssignationsList from "../../../components/admin/Participants/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import ParticipantAssignationsList from "../../../components/admin/Participants/List";
-import { importParticipants, exportParticipants } from "../../../api/participantsApi";
 
 export default function ParticipantAssignationsListPage() {
     const [importOpen, setImportOpen] = useState(false);

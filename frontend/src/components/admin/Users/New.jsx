@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { createUser } from "../../../api/usersApi";
+import { createUser } from "../../../api/admin/usersApi";
 import * as regex from "../../../utils/regex";
 
 export default function NewUser() {

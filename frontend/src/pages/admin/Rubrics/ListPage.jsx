@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportRubrics, importRubrics } from "../../../api/admin/rubricsApi";
+import RubricsList from "../../../components/admin/Rubrics/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import RubricsList from "../../../components/admin/Rubrics/List";
-import { importRubrics, exportRubrics } from "../../../api/rubricsApi";
 
 export default function RubricsListPage() {
     const [importOpen, setImportOpen] = useState(false);

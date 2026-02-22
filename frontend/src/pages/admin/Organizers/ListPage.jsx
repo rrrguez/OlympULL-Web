@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportOrganizers, importOrganizers } from "../../../api/admin/organizersApi";
+import OrganizerAssignationsList from "../../../components/admin/Organizers/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import OrganizerAssignationsList from "../../../components/admin/Organizers/List";
-import { importOrganizers, exportOrganizers } from "../../../api/organizersApi";
 
 export default function OrganizerAssignationsListPage() {
     const [importOpen, setImportOpen] = useState(false);

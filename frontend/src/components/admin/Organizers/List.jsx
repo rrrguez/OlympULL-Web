@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteOrganizer, getAllOrganizers } from "../../../api/organizersApi";
+import { deleteOrganizer, getAllOrganizers } from "../../../api/admin/organizersApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function OrganizerAssignationsList({refreshKey}) {

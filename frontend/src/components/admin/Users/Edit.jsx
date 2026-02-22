@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getUser, updateUser } from "../../../api/usersApi";
 import { toast } from "react-toastify";
+import { getUser, updateUser } from "../../../api/admin/usersApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditUser() {

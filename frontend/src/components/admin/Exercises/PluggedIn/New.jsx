@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPluggedInExercise } from "../../../../api/pluggedInExercisesApi";
 import { toast } from "react-toastify";
+import { createPluggedInExercise } from "../../../../api/admin/pluggedInExercisesApi";
 import * as regex from "../../../../utils/regex";
 
 export default function NewPluggedInExercise() {

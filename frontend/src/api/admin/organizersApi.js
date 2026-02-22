@@ -1,6 +1,6 @@
-import apiClient from "./apiClient";
+import apiClient from "../apiClient";
 
-const API = "http://localhost:3000/api/organizers";
+const API = "http://localhost:3000/api/admin/organizers";
 
 function authHeaders() {
     const token = localStorage.getItem("token");

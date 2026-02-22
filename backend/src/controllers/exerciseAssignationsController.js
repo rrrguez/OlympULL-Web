@@ -15,7 +15,8 @@ export const getAll = async (req, res) => {
 
 export const getAllForOrganizer = async (req, res) => {
     try {
-        const result = await model.getAllForOrganizer();
+        const { organizer } = req.params;
+        const result = await model.getAllForOrganizer(organizer);
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message })
@@ -138,6 +139,7 @@ export const exportCsv = async (req, res) => {
 
 export default {
     getAll,
+    getAllForOrganizer,
     getOlympiads,
     getItineraries,
     create,

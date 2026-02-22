@@ -1,6 +1,6 @@
-import apiClient from "./apiClient";
+import apiClient from "../apiClient";
 
-const API = "http://localhost:3000/api/unplugged-exercises";
+const API = "http://localhost:3000/api/admin/itineraries";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
@@ -9,26 +9,28 @@ function authHeaders() {
     };
 }
 
-// Ejercicios desenchufados
-export const getAllUnpluggedExercises = () =>
+export const getAllItineraries = () =>
     apiClient.get(API, authHeaders());
 
-export const getUnpluggedExercise = (id) =>
+export const getItinerary = (id) =>
     apiClient.get(`${API}/${id}`, authHeaders());
 
-export const createUnpluggedExercise = (data) =>
+export const getItineraryByOlympiad = (olympiadId) =>
+    apiClient.get(`${API}/olympiad/${olympiadId}`, authHeaders());
+
+export const createItinerary = (data) =>
     apiClient.post(API, data, authHeaders());
 
-export const updateUnpluggedExercise = (id, data) =>
+export const updateItinerary = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 
-export const deleteUnpluggedExercise = (id) =>
+export const deleteItinerary = (id) =>
     apiClient.delete(`${API}/${id}`, authHeaders());
 
-export const importUnpluggedExercises = (formData) =>
+export const importItineraries = (formData) =>
     apiClient.post(`${API}/import`, formData, authHeaders());
 
-export const exportUnpluggedExercises = () =>
+export const exportItineraries = () =>
     apiClient.get(`${API}/export`, {
         ...authHeaders(),
         responseType: "blob",

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createOlympiad } from "../../../api/olympiadsApi";
 import { toast } from "react-toastify";
+import { createOlympiad } from "../../../api/admin/olympiadsApi";
 import * as regex from "../../../utils/regex";
 
 export default function NewOlympiad() {

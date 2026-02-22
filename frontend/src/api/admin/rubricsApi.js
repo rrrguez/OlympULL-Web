@@ -1,40 +1,34 @@
-import apiClient from "./apiClient";
+import apiClient from "../apiClient";
 
-const API = "http://localhost:3000/api/users";
+const API = "http://localhost:3000/api/admin/rubrics";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
-
     return {
         headers: { Authorization: `Bearer ${token}` }
     };
 }
 
-export const getAllUsers = () =>
+// Ejercicios enchufados
+export const getAllRubrics = () =>
     apiClient.get(API, authHeaders());
 
-export const getUser = (id) =>
+export const getRubric = (id) =>
     apiClient.get(`${API}/${id}`, authHeaders());
 
-export const getUserByType = (type) =>
-    apiClient.get(`${API}/type/${type}`, authHeaders());
-
-export const createUser = (data) =>
+export const createRubric = (data) =>
     apiClient.post(API, data, authHeaders());
 
-export const updateUser = (id, data) =>
+export const updateRubric = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 
-export const updateUserPassword = (id, data) =>
-    apiClient.put(`${API}/${id}/password`, data, authHeaders());
-
-export const deleteUser = (id) =>
+export const deleteRubric = (id) =>
     apiClient.delete(`${API}/${id}`, authHeaders());
 
-export const importUsers = (formData) =>
+export const importRubrics = (formData) =>
     apiClient.post(`${API}/import`, formData, authHeaders());
 
-export const exportUsers = () =>
+export const exportRubrics = () =>
     apiClient.get(`${API}/export`, {
         ...authHeaders(),
         responseType: "blob",

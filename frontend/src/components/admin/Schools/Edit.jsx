@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getSchool, updateSchool } from "../../../api/schoolsApi";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { getSchool, updateSchool } from "../../../api/admin/schoolsApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditSchool() {

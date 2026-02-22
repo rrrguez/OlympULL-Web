@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getOlympiad, updateOlympiad } from "../../../api/olympiadsApi";
 import { toast } from "react-toastify";
+import { getOlympiad, updateOlympiad } from "../../../api/admin/olympiadsApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditOlympiad() {

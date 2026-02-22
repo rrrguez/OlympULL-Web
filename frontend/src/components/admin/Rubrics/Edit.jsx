@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRubric, updateRubric } from "../../../api/rubricsApi";
 import { toast } from "react-toastify";
+import { getRubric, updateRubric } from "../../../api/admin/rubricsApi";
 import * as regex from "../../../utils/regex";
 
 export default function EditRubric() {

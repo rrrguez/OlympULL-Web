@@ -1,34 +1,33 @@
-import apiClient from "./apiClient";
+import apiClient from "../apiClient";
 
-const API = "http://localhost:3000/api/olympiads";
+const API = "http://localhost:3000/api/admin/schools";
 
 function authHeaders() {
     const token = localStorage.getItem("token");
-
     return {
         headers: { Authorization: `Bearer ${token}` }
     };
 }
 
-export const getAllOlympiads = () =>
+export const getAllSchools = () =>
     apiClient.get(API, authHeaders());
 
-export const getOlympiad = (id) =>
+export const getSchool = (id) =>
     apiClient.get(`${API}/${id}`, authHeaders());
 
-export const createOlympiad = (data) =>
+export const createSchool = (data) =>
     apiClient.post(API, data, authHeaders());
 
-export const updateOlympiad = (id, data) =>
+export const updateSchool = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 
-export const deleteOlympiad = (id) =>
+export const deleteSchool = (id) =>
     apiClient.delete(`${API}/${id}`, authHeaders());
 
-export const importOlympiads = (formData) =>
+export const importSchools = (formData) =>
     apiClient.post(`${API}/import`, formData, authHeaders());
 
-export const exportOlympiads = () =>
+export const exportSchools = () =>
     apiClient.get(`${API}/export`, {
         ...authHeaders(),
         responseType: "blob",

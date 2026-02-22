@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportOlympiads, importOlympiads } from "../../../api/admin/olympiadsApi";
+import OlympiadsList from "../../../components/admin/Olympiads/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import OlympiadsList from "../../../components/admin/Olympiads/List";
-import { importOlympiads, exportOlympiads } from "../../../api/olympiadsApi";
 
 export default function OlympiadsListPage() {
     const [importOpen, setImportOpen] = useState(false);

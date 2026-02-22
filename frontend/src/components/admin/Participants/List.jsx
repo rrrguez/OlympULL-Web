@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteParticipant, getAllParticipants } from "../../../api/participantsApi";
+import { deleteParticipant, getAllParticipants } from "../../../api/admin/participantsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function ParticipantAssignationsList({refreshKey}) {

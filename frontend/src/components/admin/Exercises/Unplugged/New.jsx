@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllRubrics } from "../../../../api/rubricsApi";
-import { createUnpluggedExercise } from "../../../../api/unpluggedExercisesApi";
+import { getAllRubrics } from "../../../../api/admin/rubricsApi";
+import { createUnpluggedExercise } from "../../../../api/admin/unpluggedExercisesApi";
 import * as regex from "../../../../utils/regex";
 
 export default function NewUnpluggedExercise() {

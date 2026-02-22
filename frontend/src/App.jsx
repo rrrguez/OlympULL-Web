@@ -66,6 +66,8 @@ import AdminNewParticipantAssignationPage from "./pages/admin/Participants/NewPa
 
 // ORGANIZER PAGES -----------------------------------------------------------------------------------------------------
 import OrganizerHome from "./pages/organizer/Home";
+import OrganizerExerciseAssignationsListPage from "./pages/organizer/Assignations/ListPage";
+import OrganizerNewExerciseAssignation from "./components/organizers/Assignations/New";
 
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
@@ -383,6 +385,24 @@ export default function App() {
                         element={
                             <PrivateRoute type="ORGANIZER">
                                 <OrganizerHome />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/organizer/assignations"
+                        element={
+                            <PrivateRoute type="ORGANIZER">
+                                <OrganizerExerciseAssignationsListPage />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/organizer/assignations/new"
+                        element={
+                            <PrivateRoute type="ORGANIZER">
+                                <OrganizerNewExerciseAssignation />
                             </PrivateRoute>
                         }
                     />

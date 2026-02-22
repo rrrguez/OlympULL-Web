@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createOlympiad, deleteOlympiad, getAllOlympiads } from "../../../api/olympiadsApi";
+import { createOlympiad, deleteOlympiad, getAllOlympiads } from "../../../api/admin/olympiadsApi";
 import formatDate from "../../../utils/dates";
 import getOlympiadStatus from "../../../utils/olympiads";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";

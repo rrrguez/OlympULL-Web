@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getItineraryByOlympiad } from "../../../api/itinerariesApi";
-import { getAllOlympiads } from "../../../api/olympiadsApi";
-import { createParticipant } from "../../../api/participantsApi";
-import { getAllSchools } from "../../../api/schoolsApi";
-import { getUserByType } from "../../../api/usersApi";
+import { getItineraryByOlympiad } from "../../../api/admin/itinerariesApi";
+import { getAllOlympiads } from "../../../api/admin/olympiadsApi";
+import { createParticipant } from "../../../api/admin/participantsApi";
+import { getAllSchools } from "../../../api/admin/schoolsApi";
+import { getUserByType } from "../../../api/admin/usersApi";
 
 export default function NewParticipantAssignation() {
     const navigate = useNavigate();

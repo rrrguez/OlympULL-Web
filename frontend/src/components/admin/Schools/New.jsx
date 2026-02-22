@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createSchool } from "../../../api/schoolsApi";
 import { toast } from "react-toastify";
+import { createSchool } from "../../../api/admin/schoolsApi";
 import * as regex from "../../../utils/regex";
 
 export default function NewSchool() {

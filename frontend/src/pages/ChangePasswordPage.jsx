@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { updateUserPassword } from "../api/usersApi";
 import { toast } from "react-toastify";
+import { updateUserPassword } from "../api/admin/usersApi";
 import PageHeader from "../components/layouts/PageHeader";
 
 export default function ChangePasswordPage() {

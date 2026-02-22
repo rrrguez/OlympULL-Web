@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createItinerary, deleteItinerary, getAllItineraries } from "../../../api/itinerariesApi";
+import { createItinerary, deleteItinerary, getAllItineraries } from "../../../api/admin/itinerariesApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function ItinerariesList({refreshKey}) {

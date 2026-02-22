@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportUsers, importUsers } from "../../../api/admin/usersApi";
+import UsersList from "../../../components/admin/Users/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import UsersList from "../../../components/admin/Users/List";
-import { importUsers, exportUsers } from "../../../api/usersApi";
 
 export default function UsersListPage() {
     const [importOpen, setImportOpen] = useState(false);

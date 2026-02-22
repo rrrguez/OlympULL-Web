@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { useState } from "react";
+import { exportMonitors, importMonitors } from "../../../api/admin/monitorsApi";
+import MonitorAssignationsList from "../../../components/admin/Monitors/List";
 import PageHeader from "../../../components/layouts/PageHeader";
 import ImportModal from "../../../components/modals/ImportModal";
-import MonitorAssignationsList from "../../../components/admin/Monitors/List";
-import { importMonitors, exportMonitors } from "../../../api/monitorsApi";
 
 export default function MonitorAssignationsListPage() {
     const [importOpen, setImportOpen] = useState(false);

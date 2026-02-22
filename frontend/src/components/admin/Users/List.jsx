@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { deleteUser, getAllUsers } from "../../../api/usersApi";
-import OlympULLIconButton from "../../buttons/OlympULLIconButton";
+import { deleteUser, getAllUsers } from "../../../api/admin/usersApi";
 import translateUserType from "../../../utils/users";
+import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function UsersList({refreshKey}) {
     const [data, setData] = useState([]);
