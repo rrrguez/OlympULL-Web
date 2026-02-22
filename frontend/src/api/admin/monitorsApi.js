@@ -20,8 +20,8 @@ export const createMonitor = (data) =>
 
 //export const updateMonitor = (id, data) => axios.put(`${API}/${id}`, data, authHeaders());
 
-export const deleteAssignation = (id, exercise, olympiad, itinerary) =>
-    apiClient.delete(`${API}/${id}/${exercise}/${olympiad}/${itinerary}`, authHeaders());
+export const deleteAssignation = (id, exercise, itinerary) =>
+    apiClient.delete(`${API}/${id}/${exercise}/${itinerary}`, authHeaders());
 
 export const importMonitors = (formData) =>
     apiClient.post(`${API}/import`, formData, authHeaders());

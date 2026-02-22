@@ -31,10 +31,8 @@ export default function NewMonitorAssignation() {
 
     const monitorDisabled = monitors.length === 0;
     const exerciseDisabled = exercises.length === 0;
-    const olympiadDisabled =
-    !formData.exercise || loadingOlympiads || olympiads.length === 0;
-    const itineraryDisabled =
-    !formData.olympiad || loadingItineraries || itineraries.length === 0;
+    const olympiadDisabled = !formData.exercise || loadingOlympiads || olympiads.length === 0;
+    const itineraryDisabled = !formData.olympiad || loadingItineraries || itineraries.length === 0;
 
     function handleChange(e) {
         setFormData({
@@ -176,7 +174,12 @@ export default function NewMonitorAssignation() {
                             disabled={monitorDisabled}
                             >
                             <option value="">
-                                {loadingMonitors ? "Cargando monitores..." : monitorDisabled ? "No hay monitores disponibles" : "-- Selecciona un monitor --"}
+                                {loadingMonitors
+                                    ? "Cargando monitores..."
+                                    : monitorDisabled
+                                    ? "No hay monitores disponibles"
+                                    : "-- Selecciona un monitor --"
+                                }
                             </option>
                             {monitors.map((o) => (
                                 <option key={o.id} value={o.id}>
@@ -196,7 +199,12 @@ export default function NewMonitorAssignation() {
                             disabled={exerciseDisabled}
                             >
                             <option value="">
-                                {loadingExercises ? "Cargando ejercicios..." : exerciseDisabled ? "No hay ejercicios disponibles" : "-- Selecciona un ejercicio --"}
+                                {loadingExercises
+                                ? "Cargando ejercicios..."
+                                : exerciseDisabled
+                                ? "No hay ejercicios disponibles"
+                                : "-- Selecciona un ejercicio --"
+                                }
                             </option>
                             {exercises.map((o) => (
                                 <option key={o.id} value={o.id}>

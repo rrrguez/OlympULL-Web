@@ -62,8 +62,8 @@ export const update = async (req, res) => {
 // DELETE
 export const remove = async (req, res) => {
     try {
-        const { id, exercise, olympiad, itinerary } = req.params;
-        await model.remove({id, exercise, olympiad, itinerary});
+        const { id, exercise, itinerary } = req.params;
+        await model.remove({id, exercise, itinerary});
         res.json({ message: "Eliminado correctamente" });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -92,19 +92,18 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.exercise || !o.itinerary || !o.olympiad) {
+                    if (!o.id || !o.exercise || !o.itinerary) {
                         console.warn("Fila inválida: ", o);
                         continue;
                     }
                     await pool.query(
-                        `INSERT INTO t_monitors (id,exercise,itinerary,olympiad)
-                        VALUES ($1,$2,$3,$4)
-                        ON CONFLICT (id,exercise,itinerary,olympiad) DO NOTHING`,
+                        `INSERT INTO t_monitors (id,exercise,itinerary)
+                        VALUES ($1,$2,$3)
+                        ON CONFLICT (id,exercise,itinerary) DO NOTHING`,
                         [
                             o.id,
                             o.exercise,
                             o.itinerary,
-                            o.olympiad,
                         ]
                     );
                 }
@@ -124,10 +123,10 @@ export const importCsv = async (req, res) => {
 export const exportCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM t_monitors");
 
-    let csv = "id,exercise,itinerary,olympiad\n";
+    let csv = "id,exercise,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.exercise},${o.itinerary},${o.olympiad}\n`;
+        csv += `${o.id},${o.exercise},${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

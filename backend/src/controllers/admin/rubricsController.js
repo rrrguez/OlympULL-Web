@@ -106,10 +106,10 @@ export const importCsv = async (req, res) => {
                             labels=EXCLUDED.labels`,
                         [
                             o.id,
-                            o.name || null,
+                            o.name || "",
                             o.description || "",
                             o.points,
-                            o.labels || null,
+                            o.labels || "",
                         ]
                     );
                 }

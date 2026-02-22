@@ -110,7 +110,7 @@ export const importCsv = async (req, res) => {
                         [
                             o.id,
                             o.name,
-                            o.town || null
+                            o.town || ""
                         ]
                     );
                 }

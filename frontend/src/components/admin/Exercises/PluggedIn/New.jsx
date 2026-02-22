@@ -55,7 +55,7 @@ export default function NewPluggedInExercise() {
             const fd = new FormData();
             fd.append("id", formData.id);
             fd.append("name", formData.name);
-            fd.append("description", formData.description || null);
+            fd.append("description", formData.description || "");
             fd.append("category", formData.category);
             fd.append("resources", formData.resources);
             fd.append("inputs", formData.inputs);

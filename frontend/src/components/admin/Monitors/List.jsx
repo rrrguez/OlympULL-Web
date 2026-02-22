@@ -22,9 +22,9 @@ export default function MonitorAssignationsList({refreshKey}) {
         loadData();
     };
 
-    const remove = async (id, exercise, olympiad, itinerary) => {
+    const remove = async (id, exercise, itinerary) => {
         try {
-            await deleteAssignation(id, exercise, olympiad, itinerary);
+            await deleteAssignation(id, exercise, itinerary);
             toast.success("Asignación eliminada con éxito");
             load();
         } catch (err) {
@@ -68,7 +68,7 @@ export default function MonitorAssignationsList({refreshKey}) {
                                 text="Eliminar"
                                 title="Eliminar"
                                 buttonClass="table-button"
-                                onClick={() => remove(o.id, o.exercise, o.olympiad, o.itinerary)}
+                                onClick={() => remove(o.id, o.exercise, o.itinerary)}
                                 icon="fa-regular fa-trash-can"
                             />
                             </div>

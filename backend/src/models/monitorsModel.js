@@ -14,8 +14,8 @@ export const getAll = () =>
         JOIN t_itineraries i
             ON m.itinerary = i.id
         JOIN t_olympiads o
-            ON m.olympiad = o.id
-        ORDER BY m.id
+            ON i.olympiad = o.id
+        ORDER BY m.id, exercise_name, olympiad_name, itinerary_name
         `
     );
 
@@ -24,8 +24,8 @@ export const getById = ( id ) =>
 
 export const create = ( data ) =>
     pool.query(
-        "INSERT INTO t_monitors (id, exercise, itinerary, olympiad) VALUES ($1, $2, $3, $4) RETURNING *",
-        [data.id, data.exercise, data.itinerary, data.olympiad]
+        "INSERT INTO t_monitors (id, exercise, itinerary) VALUES ($1, $2, $3) RETURNING *",
+        [data.id, data.exercise, data.itinerary]
     );
 
 export const update = (data) =>
@@ -41,7 +41,6 @@ export const remove = (data) =>
         FROM t_monitors
         WHERE id=$1
           AND exercise=$2
-          AND olympiad=$3
-          AND itinerary=$4
-        `, [data.id, data.exercise, data.olympiad, data.itinerary]
+          AND itinerary=$3
+        `, [data.id, data.exercise, data.itinerary]
     );
