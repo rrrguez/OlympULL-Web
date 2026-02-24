@@ -441,7 +441,7 @@ export default function App() {
                     />
 
                     <Route
-                        path="/monitor/punctuations/new"
+                        path="/monitor/punctuations/edit/:team/:exercise/:itinerary"
                         element={
                             <PrivateRoute type="MONITOR">
                                 <MonitorEditPunctuationPage />

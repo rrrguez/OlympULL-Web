@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllExercises, getAllTeams, getRubric } from "../../../api/monitor/monitorApi";
+import { getAllExercises, getAllTeams, getRubric, punctuateTeam } from "../../../api/monitor/monitorApi";
 
 export default function NewPunctuationList() {
     const navigate = useNavigate();
@@ -9,9 +9,8 @@ export default function NewPunctuationList() {
     const [formData, setFormData] = useState({
         team: "",
         exercise: "",
-        olympiad: "",
         itinerary: "",
-        score: null,
+        score: "",
     });
 
     const [teams, setTeams] = useState([]);
@@ -44,72 +43,65 @@ export default function NewPunctuationList() {
     }, [])
 
     useEffect(() => {
-        if (formData.exercise) {
-            const selected = exercises.find(
-                i => i.exercise_id === formData.exercise
-            );
-
-            if (selected) {
-                setFormData(prev => ({
-                    ...prev,
-                    itinerary: selected.itinerary_id
-                }));
-            }
-        }
-    }, [formData.exercise, exercises])
-
-    useEffect(() => {
-        if (formData.exercise) {
-            async function loadTeams(itinerary) {
-                try {
-                    setLoadingTeams(true)
-                    const res = await getAllTeams(itinerary);
-                    setTeams(res.data);
-                } catch (err) {
-                    console.error("Error cargando los equipos", err);
-                    toast.error("Error cargando los equipos");
-                } finally {
-                    setLoadingTeams(false)
-                }
-            }
-            loadTeams(formData.itinerary);
-
-            async function loadScores(exercise) {
-                try {
-                    setLoadingScores(true)
-                    const res = await getRubric(exercise);
-
-                    const pointsArray = res.data[0].points.split(",").map(p => p.trim());
-                    const labelsArray = res.data[0].labels.split(",").map(l => l.trim());
-
-                    setScores(
-                        pointsArray.map((point, index) => ({
-                            value: point,
-                            label: labelsArray[index] || ""
-                        }))
-                    );
-
-                } catch (err) {
-                    if (err.type === "error") {
-                        toast.error(err.message)
-                        return
-                    }
-                    console.error("Error cargando la rúbrica", err);
-                    toast.error("Error cargando la rúbrica");
-                } finally {
-                    setLoadingScores(false)
-                }
-            }
-            loadScores(formData.exercise)
-        }
-    }, [formData.exercise])
-
-    useEffect(() => {
         if (!formData.exercise) {
+            setTeams([]);
             setScores([]);
+
+            setFormData(prev => ({
+                ...prev,
+                team: "",
+                score: ""
+            }));
+
             return;
         }
-    }, [formData.exercise]);
+
+        const selected = exercises.find(
+            i => i.exercise_id === formData.exercise
+        );
+
+        if (!selected) return;
+
+        const itineraryId = selected.itinerary_id;
+
+        setFormData(prev => ({
+            ...prev,
+            itinerary: itineraryId
+        }));
+
+        async function loadData() {
+            try {
+                setLoadingTeams(true);
+                setLoadingScores(true);
+
+                const [teamsRes, rubricRes] = await Promise.all([
+                    getAllTeams(itineraryId),
+                    getRubric(selected.exercise_id)
+                ]);
+
+                setTeams(teamsRes.data);
+
+                const pointsArray = rubricRes.data[0].points.split(",").map(p => p.trim());
+                const labelsArray = rubricRes.data[0].labels.split(",").map(l => l.trim());
+
+                setScores(
+                    pointsArray.map((point, index) => ({
+                        value: point,
+                        label: labelsArray[index] || ""
+                    }))
+                );
+
+            } catch (err) {
+                toast.error("Error cargando datos");
+            } finally {
+                setLoadingTeams(false);
+                setLoadingScores(false);
+            }
+        }
+
+        loadData();
+
+    }, [formData.exercise, exercises]);
 
     function handleChange(e) {
         setFormData({
@@ -122,7 +114,37 @@ export default function NewPunctuationList() {
         e.preventDefault();
         setLoading(true);
 
-        //TODO
+        try {
+            if (exerciseDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un ejercicio"
+                }
+            }
+            if (teamDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar un equipo"
+                }
+            }
+            if (scoreDisabled) {
+                throw {
+                    type: "warn",
+                    message: "Se debe seleccionar una puntuación"
+                }
+            }
+            await punctuateTeam(formData);
+            navigate("/monitor/punctuations");
+            toast.success("Equipo '" + formData.team + "' puntuado con éxito en el ejercicio '" + formData.exercise + "'")
+        } catch (err) {
+            if (err.type === "warn") {
+                toast.warning(err.message);
+                return
+            }
+            toast.error(err.response?.data?.error || "Error al puntuar al equipo");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
@@ -175,7 +197,7 @@ export default function NewPunctuationList() {
                                 disabled={teamDisabled}
                                 >
                                     <option value="">
-                                        {loadingExercises ? "Cargando equipos" : !formData.exercise ? "-- Selecciona primero un ejercicio --" : exerciseDisabled ?
+                                        {loadingTeams ? "Cargando equipos" : !formData.exercise ? "-- Selecciona primero un ejercicio --" : exerciseDisabled ?
                                             "No hay equipos disponibles" : "-- Selecciona un equipo --"
                                         }
                                     </option>

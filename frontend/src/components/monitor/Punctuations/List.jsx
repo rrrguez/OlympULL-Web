@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { getAllPunctuations } from "../../../api/monitor/monitorApi.js"
+import { getAllPunctuations, removePunctuation } from "../../../api/monitor/monitorApi.js";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function PunctuationsList() {
@@ -27,12 +27,13 @@ export default function PunctuationsList() {
         loadData();
     };
 
-    const remove = async (team, exercise, itinerary, olympiad) => {
+    const remove = async (team, exercise, itinerary) => {
         try {
-            // TODO
+            await removePunctuation(team, exercise, itinerary);
+            toast.success("Puntuación eliminada con éxito");
             load();
         } catch (err) {
-            toast.error(err)
+            toast.error(err.response?.data?.error || "Error al eliminar");
         }
     };
 
@@ -42,10 +43,10 @@ export default function PunctuationsList() {
                 <table className="table table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>Equipo</th>
-                            <th>Ejercicio</th>
-                            <th>Olimpiada</th>
                             <th>Itinerario</th>
+                            <th>Ejercicio</th>
+                            <th>Equipo</th>
+                            <th>Puntuación</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -62,17 +63,24 @@ export default function PunctuationsList() {
                         ))
                         : data.map((o) => (
                         <tr key={`${o.team}-${o.exercise}-${o.olympiad}-${o.itinerary}`}>
-                            <td>{o.team}</td>
-                            <td>{o.exercise}</td>
-                            <td>{o.olympiad}</td>
-                            <td>{o.itinerary}</td>
+                            <td>{o.itinerary_name} ({o.olympiad})</td>
+                            <td>{o.exercise_name}</td>
+                            <td>{o.team_name}</td>
+                            <td>{o.score}</td>
                             <td>
-                                <div className="table-button-container only-delete">
+                                <div className="table-button-container">
+                                    <OlympULLIconButton
+                                        text="Editar"
+                                        title="Editar"
+                                        buttonClass="table-button"
+                                        route={`/monitor/punctuations/edit/${o.team}/${o.exercise}/${o.itinerary}`}
+                                        icon="fa-solid fa-pen-to-square"
+                                    />
                                     <OlympULLIconButton
                                         text="Eliminar"
                                         title="Eliminar"
                                         buttonClass="table-button"
-                                        onClick={() => remove(o.exercise, o.olympiad, o.itinerary)}
+                                        onClick={() => remove(o.team, o.exercise, o.itinerary)}
                                         icon="fa-regular fa-trash-can"
                                     />
                                 </div>
