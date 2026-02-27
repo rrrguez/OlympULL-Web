@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 dotenv.config();
 
 // Login
@@ -28,11 +29,15 @@ import monitorRoutes from "./routes/monitor/routes.js"
 import { authenticateToken } from "./middlewares/auth.js";
 import { authorize } from "./middlewares/authorize.js";
 
+const __dirname = path.resolve();
+
 const app = express();
 
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:5173", credentials: true})); // Puerto React
-app.use("/wordings", express.static("wordings"));
+app.use("/uploads/wordings", express.static(path.join(__dirname, "uploads/wordings")));
+app.use("/uploads/inputs", express.static(path.join(__dirname, "uploads/inputs")));
+app.use("/uploads/outputs", express.static(path.join(__dirname, "uploads/outputs")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/olympiads", authenticateToken, authorize("ADMIN"), adminOlympiadsRoutes);

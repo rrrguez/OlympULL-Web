@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { createPluggedInExercise } from "../../../../api/admin/pluggedInExercisesApi";
@@ -17,6 +17,8 @@ export default function NewPluggedInExercise() {
         time_limit: null,
         testcase_value: null,
         wording_file: null,
+        input_files: [],
+        output_files: []
     });
 
     const [loading, setLoading] = useState(false);
@@ -52,6 +54,23 @@ export default function NewPluggedInExercise() {
                 };
             }
 
+            const expected = parseInt(formData.inputs, 10);
+            if (expected > 0) {
+                if (formData.input_files.length !== expected) {
+                    throw {
+                        type: "warn",
+                        message: `Se deben subir exactamente ${expected} archivos de entrada.`
+                    };
+                }
+
+                if (formData.output_files.length !== expected) {
+                    throw {
+                        type: "warn",
+                        message: `Se deben subir exactamente ${expected} archivos de salida.`
+                    };
+                }
+            }
+
             const fd = new FormData();
             fd.append("id", formData.id);
             fd.append("name", formData.name);
@@ -68,6 +87,14 @@ export default function NewPluggedInExercise() {
             if (formData.wording_file) {
                 fd.append("wording_file", formData.wording_file);
             }
+
+            formData.input_files.forEach(file => {
+                fd.append("input_files", file);
+            });
+
+            formData.output_files.forEach(file => {
+                fd.append("output_files", file);
+            });
 
             await createPluggedInExercise(fd);
             navigate("/admin/exercises");
@@ -236,6 +263,42 @@ export default function NewPluggedInExercise() {
                         required
                     />
                 </div>
+                {Number(formData.inputs) > 0 ?
+                    <>
+                    <div>
+                    <label className="form-label">Archivos de entrada (inputs) </label>
+                        <input
+                            type="file"
+                            multiple
+                            className="form-control file-input"
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    input_files: Array.from(e.target.files)
+                                })
+                            }
+                            accept=".txt"
+                            required={Number(formData.inputs) > 0}
+                        />
+                    </div>
+                    <div>
+                    <label className="form-label">Archivos de salida (outputs)</label>
+                        <input
+                            type="file"
+                            multiple
+                            className="form-control file-output"
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    output_files: Array.from(e.target.files)
+                                })
+                            }
+                            accept=".txt"
+                            required={Number(formData.inputs) > 0}
+                        />
+                    </div>
+                    </>
+                : ""}
             </div>
 
             <div>

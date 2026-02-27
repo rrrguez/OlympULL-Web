@@ -23,6 +23,8 @@ export default function EditPluggedInExercise() {
         time_limit: null,
         testcase_value: null,
         wording_file: null,
+        input_files: [],
+        output_files: []
     });
 
     const [showCurrentWording, setShowCurrentWording] = useState(true);
@@ -40,7 +42,17 @@ export default function EditPluggedInExercise() {
 
     function toggleWording() {
         setShowCurrentWording(prev => !prev);
-      }
+    }
+
+    useEffect(() => {
+        if (!Number(formData.inputs) > 0) {
+            setFormData(prev => ({
+                ...prev,
+                input_files: [],
+                output_files: []
+            }));
+        }
+    }, [formData.inputs]);
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -66,6 +78,24 @@ export default function EditPluggedInExercise() {
                 };
             }
 
+            const expected = Number(formData.inputs);
+
+            if (expected > 0) {
+                if (formData.input_files.length !== expected) {
+                    throw {
+                        type: "warn",
+                        message: `Se deben subir exactamente ${expected} archivos de entrada.`
+                    };
+                }
+
+                if (formData.output_files.length !== expected) {
+                    throw {
+                        type: "warn",
+                        message: `Se deben subir exactamente ${expected} archivos de salida.`
+                    };
+                }
+            }
+
             const fd = new FormData();
             fd.append("id", formData.id);
             fd.append("name", formData.name);
@@ -81,6 +111,14 @@ export default function EditPluggedInExercise() {
             if (selectedFile) {
                 fd.append("wording_file", selectedFile);
             }
+
+            formData.input_files.forEach(file => {
+                fd.append("input_files", file);
+            });
+
+            formData.output_files.forEach(file => {
+                fd.append("output_files", file);
+            });
 
             await updatePluggedInExercise(id, fd);
             navigate("/admin/exercises");
@@ -254,7 +292,7 @@ export default function EditPluggedInExercise() {
                                 <i className="fa-regular fa-file"/>
                                 Enunciado actual:
                                 <a
-                                    href={`http://localhost:3000/wordings/${formData.wording_file}`}
+                                    href={`http://localhost:3000/uploads/wordings/${formData.wording_file}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -295,8 +333,43 @@ export default function EditPluggedInExercise() {
                     )}
 
                 </div>
+                {Number(formData.inputs) > 0 ?
+                    <>
+                    <div>
+                    <label className="form-label">Archivos de entrada (inputs) </label>
+                        <input
+                            type="file"
+                            multiple
+                            className="form-control file-input"
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    input_files: Array.from(e.target.files)
+                                })
+                            }
+                            accept=".txt"
+                            required={Number(formData.inputs) > 0}
+                        />
+                    </div>
+                    <div>
+                    <label className="form-label">Archivos de salida (outputs)</label>
+                        <input
+                            type="file"
+                            multiple
+                            className="form-control file-output"
+                            onChange={(e) =>
+                                setFormData({
+                                    ...formData,
+                                    output_files: Array.from(e.target.files)
+                                })
+                            }
+                            accept=".txt"
+                            required={Number(formData.inputs) > 0}
+                        />
+                    </div>
+                    </>
+                : ""}
             </div>
-
             <div>
             <label className="form-label">Descripción<span className="optional"> - Opcional</span></label>
             <textarea
