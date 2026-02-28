@@ -149,10 +149,10 @@ export const createPluggedIn = async (data) => {
 
         // 2. Insertar en T_PLUGGED_IN_EXERCISES
         const PluggedInRes = await client.query(
-            `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value, wording_file)
-            VALUES ($1, $2, $3, $4, $5)
+            `INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, testcase_value, wording_file, input_files, output_files)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *`,
-            [exerciseRes.rows[0].id, inputs, timeLimit, value, data.wording_file]
+            [exerciseRes.rows[0].id, inputs, timeLimit, value, data.wording_file, data.input_files, data.output_files]
         );
 
         await client.query("COMMIT");
@@ -201,14 +201,18 @@ export const updatePluggedIn = async (data) => {
             SET inputs = $1,
                 time_limit = $2,
                 testcase_value = $3,
-                wording_file = COALESCE($4, wording_file)
-            WHERE id = $5 RETURNING *
+                wording_file = COALESCE($4, wording_file),
+                input_files = COALESCE($5, input_files),
+                output_files = COALESCE($6, output_files)
+            WHERE id = $7 RETURNING *
             `,
             [
                 data.inputs,
                 data.time_limit,
                 data.testcase_value,
                 data.wording_file,
+                data.input_files,
+                data.output_files,
                 data.id
             ]
         );

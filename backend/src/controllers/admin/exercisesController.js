@@ -181,12 +181,19 @@ export const getOnePluggedIn = async (req, res) => {
 // POST: crear nuevo
 export const createPluggedIn = async (req, res) => {
     try {
-        const wordingFile = req.file ? req.file.filename : null;
+        const wordingFile = req.files?.wording_file ? req.files.wording_file[0].filename : null;
+
+        const inputFiles  = req.files?.input_files ? req.files.input_files[0].filename : null;
+
+        const outputFiles = req.files?.output_files ? req.files.output_files[0].filename : null;
 
         const data = await model.createPluggedIn({
             ...req.body,
-            wording_file: wordingFile
-    });
+            wording_file: wordingFile,
+            input_files: inputFiles,
+            output_files: outputFiles
+        });
+
         res.status(201).json(data);
     } catch (err) {
         console.log(err);
@@ -212,17 +219,22 @@ export const updatePluggedIn = async (req, res) => {
     try {
         const { id } = req.params;
 
-        const wordingFile = req.file
-            ? req.file.filename
-            : req.body.wording_file || null;
+        const wordingFile = req.files?.wording_file ? req.files.wording_file[0].filename : null;
+
+        const inputFiles  = req.files?.input_files ? req.files.input_files[0].filename : null;
+
+        const outputFiles = req.files?.output_files ? req.files.output_files[0].filename : null;
 
         const data = await model.updatePluggedIn({
-            id,
-            ...req.body,
-            wording_file: wordingFile
+        id,
+        ...req.body,
+        wording_file: wordingFile,
+        input_files: inputFiles,
+        output_files: outputFiles
         });
 
         res.json(data.rows[0]);
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -231,11 +243,27 @@ export const updatePluggedIn = async (req, res) => {
 // DELETE
 export const removePluggedIn = async (req, res) => {
     try {
-    const { id } = req.params;
-    await model.removePluggedIn(id);
-    res.json({ message: "Eliminado correctamente" });
+        const { id } = req.params;
+        const wordingPath = path.join("uploads/wordings", id);
+        const inputsPath  = path.join("uploads/inputs", id);
+        const outputsPath = path.join("uploads/outputs", id);
+
+        if (fs.existsSync(wordingPath)) {
+            fs.rmSync(wordingPath, { recursive: true, force: true });
+        }
+
+        if (fs.existsSync(inputsPath)) {
+            fs.rmSync(inputsPath, { recursive: true, force: true });
+        }
+
+        if (fs.existsSync(outputsPath)) {
+            fs.rmSync(outputsPath, { recursive: true, force: true });
+        }
+
+        await model.removePluggedIn(id);
+        res.json({ message: "Eliminado correctamente" });
     } catch (err) {
-    res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 

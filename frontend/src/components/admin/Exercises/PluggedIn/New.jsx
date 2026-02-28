@@ -17,8 +17,8 @@ export default function NewPluggedInExercise() {
         time_limit: null,
         testcase_value: null,
         wording_file: null,
-        input_files: [],
-        output_files: []
+        input_files: null,
+        output_files: null
     });
 
     const [loading, setLoading] = useState(false);
@@ -54,19 +54,18 @@ export default function NewPluggedInExercise() {
                 };
             }
 
-            const expected = parseInt(formData.inputs, 10);
-            if (expected > 0) {
-                if (formData.input_files.length !== expected) {
+            if (Number(formData.inputs) > 0) {
+                if (!formData.input_files) {
                     throw {
                         type: "warn",
-                        message: `Se deben subir exactamente ${expected} archivos de entrada.`
+                        message: "Se deben subir los archivos de entrada en formato ZIP."
                     };
                 }
 
-                if (formData.output_files.length !== expected) {
+                if (!formData.output_files) {
                     throw {
                         type: "warn",
-                        message: `Se deben subir exactamente ${expected} archivos de salida.`
+                        message: "Se deben subir los archivos de salida en formato ZIP."
                     };
                 }
             }
@@ -88,13 +87,13 @@ export default function NewPluggedInExercise() {
                 fd.append("wording_file", formData.wording_file);
             }
 
-            formData.input_files.forEach(file => {
-                fd.append("input_files", file);
-            });
+            if (formData.input_files) {
+                fd.append("input_files", formData.input_files);
+            }
 
-            formData.output_files.forEach(file => {
-                fd.append("output_files", file);
-            });
+            if (formData.output_files) {
+                fd.append("output_files", formData.output_files);
+            }
 
             await createPluggedInExercise(fd);
             navigate("/admin/exercises");
@@ -263,42 +262,42 @@ export default function NewPluggedInExercise() {
                         required
                     />
                 </div>
-                {Number(formData.inputs) > 0 ?
+
+                {Number(formData.inputs) > 0 && (
                     <>
-                    <div>
-                    <label className="form-label">Archivos de entrada (inputs) </label>
-                        <input
-                            type="file"
-                            multiple
-                            className="form-control file-input"
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    input_files: Array.from(e.target.files)
-                                })
-                            }
-                            accept=".txt"
-                            required={Number(formData.inputs) > 0}
-                        />
-                    </div>
-                    <div>
-                    <label className="form-label">Archivos de salida (outputs)</label>
-                        <input
-                            type="file"
-                            multiple
-                            className="form-control file-output"
-                            onChange={(e) =>
-                                setFormData({
-                                    ...formData,
-                                    output_files: Array.from(e.target.files)
-                                })
-                            }
-                            accept=".txt"
-                            required={Number(formData.inputs) > 0}
-                        />
-                    </div>
+                        <div>
+                            <label className="form-label">Archivos de entrada (inputs)</label>
+                            <input
+                                type="file"
+                                className="form-control file-input"
+                                accept=".zip"
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        input_files: e.target.files[0]
+                                    })
+                                }
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="form-label">Archivo de salida (outputs)</label>
+                            <input
+                                type="file"
+                                className="form-control file-input"
+                                accept=".zip"
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        output_files: e.target.files[0]
+                                    })
+                                }
+                                required
+                            />
+                        </div>
                     </>
-                : ""}
+                )}
             </div>
 
             <div>
