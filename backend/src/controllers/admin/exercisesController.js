@@ -244,22 +244,6 @@ export const updatePluggedIn = async (req, res) => {
 export const removePluggedIn = async (req, res) => {
     try {
         const { id } = req.params;
-        const wordingPath = path.join("uploads/wordings", id);
-        const inputsPath  = path.join("uploads/inputs", id);
-        const outputsPath = path.join("uploads/outputs", id);
-
-        if (fs.existsSync(wordingPath)) {
-            fs.rmSync(wordingPath, { recursive: true, force: true });
-        }
-
-        if (fs.existsSync(inputsPath)) {
-            fs.rmSync(inputsPath, { recursive: true, force: true });
-        }
-
-        if (fs.existsSync(outputsPath)) {
-            fs.rmSync(outputsPath, { recursive: true, force: true });
-        }
-
         await model.removePluggedIn(id);
         res.json({ message: "Eliminado correctamente" });
     } catch (err) {

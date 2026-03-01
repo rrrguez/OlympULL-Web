@@ -20,6 +20,7 @@ import adminUsersRoutes from "./routes/admin/users.js";
 import adminMonitorsRoutes from "./routes/admin/monitors.js";
 import adminOrganizersRoutes from "./routes/admin/organizers.js";
 import adminParticipantsRoutes from "./routes/admin/participants.js"
+import adminCMSRoutes from "./routes/admin/cms.js"
 
 import organizerAssignationsRoutes from "./routes/organizer/assignations.js"
 import organizerExercisesRoutes from "./routes/organizer/exercises.js"
@@ -50,6 +51,7 @@ app.use("/api/admin/users", authenticateToken, authorize("ADMIN"), adminUsersRou
 app.use("/api/admin/monitors", authenticateToken, authorize("ADMIN"), adminMonitorsRoutes);
 app.use("/api/admin/organizers", authenticateToken, authorize("ADMIN"), adminOrganizersRoutes);
 app.use("/api/admin/participants", authenticateToken, authorize("ADMIN"), adminParticipantsRoutes);
+app.use("/api/admin/cms", authenticateToken, authorize("ADMIN"), adminCMSRoutes);
 
 app.use("/api/organizer/assignations", authenticateToken, authorize("ORGANIZER"), organizerAssignationsRoutes);
 app.use("/api/organizer/exercises", authenticateToken, authorize("ORGANIZER"), organizerExercisesRoutes);

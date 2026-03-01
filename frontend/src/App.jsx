@@ -64,6 +64,9 @@ import AdminNewOrganizerAssignationPage from "./pages/admin/Organizers/NewPage";
 import AdminParticipantAssignationsListPage from "./pages/admin/Participants/ListPage";
 import AdminNewParticipantAssignationPage from "./pages/admin/Participants/NewPage";
 
+// CMS
+import AdminCMSPage from "./pages/admin/CMSPage";
+
 // ORGANIZER PAGES -----------------------------------------------------------------------------------------------------
 import OrganizerHome from "./pages/organizer/Home";
 import OrganizerExerciseAssignationsListPage from "./pages/organizer/Assignations/ListPage";
@@ -382,6 +385,15 @@ export default function App() {
                         element={
                             <PrivateRoute type="ADMIN">
                                 <AdminNewParticipantAssignationPage />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/cms"
+                        element={
+                            <PrivateRoute type="ADMIN">
+                                <AdminCMSPage />
                             </PrivateRoute>
                         }
                     />

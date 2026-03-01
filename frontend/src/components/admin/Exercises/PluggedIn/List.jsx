@@ -92,7 +92,6 @@ export default function PluggedInExercisesList() {
                 <th>Categoría</th>
                 <th>Inputs</th>
                 <th>Tiempo (segundos)</th>
-                <th>Puntos por testcase</th>
                 <th>Acciones</th>
                 </tr>
             </thead>
@@ -100,7 +99,7 @@ export default function PluggedInExercisesList() {
                     {loading
                         ? Array.from({ length: 5 }).map((_, i) => (
                             <tr key={i} className="skeleton-row">
-                            {Array.from({ length: 6 }).map((_, j) => (
+                            {Array.from({ length: 5 }).map((_, j) => (
                                 <td key={j}>
                                 <div className="skeleton-cell"></div>
                                 </td>
@@ -113,7 +112,6 @@ export default function PluggedInExercisesList() {
                         <td>{translateCategory(o.category)}</td>
                         <td>{o.inputs}</td>
                         <td>{o.time_limit}</td>
-                        <td>{o.testcase_value}</td>
                     <td>
                         <div className="table-button-container with-duplicate">
                             <OlympULLIconButton

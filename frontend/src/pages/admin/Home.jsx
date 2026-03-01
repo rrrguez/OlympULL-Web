@@ -68,7 +68,7 @@ export default function AdminHome() {
             <div className="grid-admin">
                 <OlympULLButton
                     text="Conexión con CMS"
-                    onClickAction={() => navigate("admin/cms")}
+                    onClickAction={() => navigate("/admin/cms")}
                 />
             </div>
         </div>

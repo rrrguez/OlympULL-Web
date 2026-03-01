@@ -23,6 +23,7 @@ services:
       - ./backend:/app
       - /app/node_modules
       - ./uploads:/app/uploads
+      - ./secrets:/app/keys:ro
     environment:
       - DB_HOST=db
       - DB_PORT=5432

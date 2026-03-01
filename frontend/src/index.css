@@ -552,6 +552,7 @@ tr {
     font-family: "Argentum Sans Light";
     display: inline-flex;
     align-items: center;
+    margin-bottom: 3.95%;
 }
 
 .current-wording * {

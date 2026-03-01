@@ -17,6 +17,7 @@ export const getPluggedInExercise = (id) =>
     apiClient.get(`${API}/${id}`, authHeaders());
 
 export const createPluggedInExercise = (data) => {
+    console.log(data)
     if (data instanceof FormData) {
         return apiClient.post(API, data, {
             headers: {

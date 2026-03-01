@@ -88,6 +88,22 @@ export default function EditPluggedInExercise() {
                 };
             }
 
+            if (Number(formData.inputs) > 0) {
+                if (!formData.input_files) {
+                    throw {
+                        type: "warn",
+                        message: "Se deben subir los archivos de entrada en formato ZIP."
+                    };
+                }
+
+                if (!formData.output_files) {
+                    throw {
+                        type: "warn",
+                        message: "Se deben subir los archivos de salida en formato ZIP."
+                    };
+                }
+            }
+
             const fd = new FormData();
             fd.append("id", formData.id);
             fd.append("name", formData.name);
@@ -104,11 +120,11 @@ export default function EditPluggedInExercise() {
                 fd.append("wording_file", selectedFile);
             }
 
-            if (formData.input_files.length > 0) {
+            if (formData.input_files && formData.input_files.length > 0) {
                 fd.append("input_files", formData.input_files[0]);
             }
 
-            if (formData.output_files.length > 0) {
+            if (formData.output_files && formData.output_files.length > 0) {
                 fd.append("output_files", formData.output_files[0]);
             }
 
@@ -120,8 +136,8 @@ export default function EditPluggedInExercise() {
                 toast.warn(err.message);
                 return;
             }
-            //console.error("Error completo:", err);
-            toast.error(err.response?.data?.error || "Error al crear el ejercicio");
+            console.error("Error completo:", err);
+            toast.error(err.response?.data?.error || "Error al editar el ejercicio");
         } finally {
             setLoading(false);
         }
@@ -258,23 +274,115 @@ export default function EditPluggedInExercise() {
                         onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
-
                 <div>
-                    <label className="form-label">Puntos por cada testcase superado</label>
-                    <input
-                        type="number"
-                        step="0.01"
-                        name="testcase_value"
-                        className="form-control"
-                        value={formData.testcase_value}
-                        onChange={handleChange}
-                        required
-                        pattern={regex.numericPattern}
-                        onInvalid={e =>
-                            e.target.setCustomValidity(regex.onInvalidNumeric)
-                        }
-                        onInput={e => e.target.setCustomValidity("")}
-                    />
+                    <label className="form-label">Archivos de entrada (inputs) </label>
+                    {formData.input_files && showCurrentInputsZip && typeof formData.input_files === "string" ? (
+                        <div className="wording-div">
+                            <div className="current-wording">
+                                <i className="fa-regular fa-file-zipper"/>
+                                ZIP actual:
+                                <a
+                                    href={`http://localhost:3000/uploads/inputs/${formData.input_files}`}
+                                    download={formData.input_files}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {formData.input_files}
+                                </a>
+                            </div>
+                            <OlympULLIconButton
+                                text="Cambiar"
+                                title="Cambiar"
+                                type="button"
+                                buttonClass="table-button"
+                                onClick={toggleInputZip}
+                                icon="fa-solid fa-arrows-rotate"
+                            />
+                        </div>
+                    ) : (
+                        <div className="wording-div">
+                            <input
+                                type="file"
+                                multiple
+                                className="form-control file-input"
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        input_files: [e.target.files[0]]
+                                    })
+                                }
+                                accept=".zip"
+                                required={!formData.input_files}
+                            />
+
+                            {!showCurrentInputsZip && typeof formData.input_files === "string" ? (
+                                <OlympULLIconButton
+                                    text="Cancelar"
+                                    title="Cancelar"
+                                    type="button"
+                                    buttonClass="table-button"
+                                    onClick={toggleInputZip}
+                                    icon="fa-solid fa-xmark"
+                                />
+                            ) : (<></>)}
+
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <label className="form-label">Archivos de salida (outputs) </label>
+                    {formData.output_files && showCurrentOutputsZip && typeof formData.output_files === "string" ? (
+                        <div className="wording-div">
+                            <div className="current-wording">
+                                <i className="fa-regular fa-file-zipper"/>
+                                ZIP actual:
+                                <a
+                                    href={`http://localhost:3000/uploads/outputs/${formData.output_files}`}
+                                    download={formData.output_files}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {formData.output_files}
+                                </a>
+                            </div>
+                            <OlympULLIconButton
+                                text="Cambiar"
+                                title="Cambiar"
+                                type="button"
+                                buttonClass="table-button"
+                                onClick={toggleOutputZip}
+                                icon="fa-solid fa-arrows-rotate"
+                            />
+                        </div>
+                    ) : (
+                        <div className="wording-div">
+                            <input
+                                type="file"
+                                multiple
+                                className="form-control file-input"
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        output_files: [e.target.files[0]]
+                                    })
+                                }
+                                accept=".zip"
+                                required={!formData.output_files}
+                            />
+
+                            {!showCurrentOutputsZip && typeof formData.output_files === "string" ? (
+                                <OlympULLIconButton
+                                    text="Cancelar"
+                                    title="Cancelar"
+                                    type="button"
+                                    buttonClass="table-button"
+                                    onClick={toggleOutputZip}
+                                    icon="fa-solid fa-xmark"
+                                />
+                            ) : (<></>)}
+
+                        </div>
+                    )}
                 </div>
                 <div>
                     <label className="form-label">Enunciado</label>
@@ -325,118 +433,7 @@ export default function EditPluggedInExercise() {
                     )}
 
                 </div>
-                {Number(formData.inputs) > 0 ?
-                    <>
-                    <div>
-                        <label className="form-label">Archivos de entrada (inputs) </label>
-                        {formData.input_files && showCurrentInputsZip ? (
-                            <div className="wording-div">
-                                <div className="current-wording">
-                                    <i className="fa-regular fa-file-zipper"/>
-                                    ZIP actual:
-                                    <a
-                                        href={`http://localhost:3000/uploads/inputs/${formData.input_files}`}
-                                        download={formData.input_files}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {formData.input_files}
-                                    </a>
-                                </div>
-                                <OlympULLIconButton
-                                    text="Cambiar"
-                                    title="Cambiar"
-                                    type="button"
-                                    buttonClass="table-button"
-                                    onClick={toggleInputZip}
-                                    icon="fa-solid fa-arrows-rotate"
-                                />
-                            </div>
-                        ) : (
-                            <div className="wording-div">
-                                <input
-                                    type="file"
-                                    multiple
-                                    className="form-control file-input"
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            input_files: [e.target.files[0]]
-                                        })
-                                    }
-                                    accept=".zip"
-                                />
 
-                                {formData.input_files ? (
-                                    <OlympULLIconButton
-                                        text="Cancelar"
-                                        title="Cancelar"
-                                        type="button"
-                                        buttonClass="table-button"
-                                        onClick={toggleInputZip}
-                                        icon="fa-solid fa-xmark"
-                                    />
-                                ) : (<></>)}
-
-                            </div>
-                        )}
-                    </div>
-                    <div>
-                        <label className="form-label">Archivos de salida (outputs) </label>
-                        {formData.input_files && showCurrentOutputsZip ? (
-                            <div className="wording-div">
-                                <div className="current-wording">
-                                    <i className="fa-regular fa-file-zipper"/>
-                                    ZIP actual:
-                                    <a
-                                        href={`http://localhost:3000/uploads/outputs/${formData.output_files}`}
-                                        download={formData.output_files}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {formData.output_files}
-                                    </a>
-                                </div>
-                                <OlympULLIconButton
-                                    text="Cambiar"
-                                    title="Cambiar"
-                                    type="button"
-                                    buttonClass="table-button"
-                                    onClick={toggleOutputZip}
-                                    icon="fa-solid fa-arrows-rotate"
-                                />
-                            </div>
-                        ) : (
-                            <div className="wording-div">
-                                <input
-                                    type="file"
-                                    multiple
-                                    className="form-control file-input"
-                                    onChange={(e) =>
-                                        setFormData({
-                                            ...formData,
-                                            input_files: [e.target.files[0]]
-                                        })
-                                    }
-                                    accept=".zip"
-                                />
-
-                                {formData.input_files ? (
-                                    <OlympULLIconButton
-                                        text="Cancelar"
-                                        title="Cancelar"
-                                        type="button"
-                                        buttonClass="table-button"
-                                        onClick={toggleOutputZip}
-                                        icon="fa-solid fa-xmark"
-                                    />
-                                ) : (<></>)}
-
-                            </div>
-                        )}
-                    </div>
-                    </>
-                : ""}
             </div>
             <div>
             <label className="form-label">Descripción<span className="optional"> - Opcional</span></label>

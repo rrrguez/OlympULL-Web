@@ -227,22 +227,35 @@ export default function NewPluggedInExercise() {
                         onInput={e => e.target.setCustomValidity("")}
                     />
                 </div>
+                <div>
+                    <label className="form-label">Archivos de entrada (inputs)</label>
+                    <input
+                        type="file"
+                        className="form-control file-input"
+                        accept=".zip"
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                input_files: e.target.files[0]
+                            })
+                        }
+                        required
+                    />
+                </div>
 
                 <div>
-                    <label className="form-label">Puntos por cada testcase superado</label>
+                    <label className="form-label">Archivo de salida (outputs)</label>
                     <input
-                        type="number"
-                        step="0.01"
-                        name="testcase_value"
-                        className="form-control"
-                        value={formData.testcase_value}
-                        onChange={handleChange}
-                        required
-                        pattern={regex.numericPattern}
-                        onInvalid={e =>
-                            e.target.setCustomValidity(regex.onInvalidNumeric)
+                        type="file"
+                        className="form-control file-input"
+                        accept=".zip"
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                output_files: e.target.files[0]
+                            })
                         }
-                        onInput={e => e.target.setCustomValidity("")}
+                        required
                     />
                 </div>
                 <div>
@@ -262,42 +275,6 @@ export default function NewPluggedInExercise() {
                         required
                     />
                 </div>
-
-                {Number(formData.inputs) > 0 && (
-                    <>
-                        <div>
-                            <label className="form-label">Archivos de entrada (inputs)</label>
-                            <input
-                                type="file"
-                                className="form-control file-input"
-                                accept=".zip"
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        input_files: e.target.files[0]
-                                    })
-                                }
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <label className="form-label">Archivo de salida (outputs)</label>
-                            <input
-                                type="file"
-                                className="form-control file-input"
-                                accept=".zip"
-                                onChange={(e) =>
-                                    setFormData({
-                                        ...formData,
-                                        output_files: e.target.files[0]
-                                    })
-                                }
-                                required
-                            />
-                        </div>
-                    </>
-                )}
             </div>
 
             <div>
