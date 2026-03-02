@@ -21,12 +21,13 @@ export async function buildCmsData(olympiadId) {
             name: exercise.id,
             title: `[${exercise.itinerary_name}] ${exercise.name}`,
             nInput: exercise.inputs,
-            timeLimit: exercise.timeLimit,
+            timeLimit: exercise.time_limit,
+            memoryLimit: 256,
 
             // NOT for YAML
-            statementFile: exercise.statementFile,
-            inputsPath: exercise.inputsPath,
-            outputsPath: exercise.outputsPath
+            statementFile: exercise.wording_file,
+            inputsPath: exercise.input_files,
+            outputsPath: exercise.output_files
         };
     });
 

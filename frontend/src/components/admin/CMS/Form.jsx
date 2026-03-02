@@ -46,7 +46,7 @@ export default function CmsForm() {
 
         try {
             await deployToCms(formData.commandVariant, formData.olympiad);
-            toast.success("Olimpiada '" + formData.name + "' creada en CMS con éxito");
+            toast.success("Olimpiada '" + formData.olympiad + "' creada en CMS con éxito");
         } catch (err) {
             if (err.type === "warn") {
                 toast.warn(err.message);

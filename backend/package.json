@@ -21,7 +21,8 @@
         "jsonwebtoken": "^9.0.2",
         "multer": "^2.0.2",
         "pg": "^8.16.3",
-        "ssh2": "^1.17.0"
+        "ssh2": "^1.17.0",
+        "unzipper": "^0.12.3"
     },
     "devDependencies": {
         "@eslint/js": "^9.33.0",

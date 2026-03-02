@@ -7,6 +7,7 @@ export function createTaskYaml(taskDir, exercise) {
     name: exercise.name, // T_EXERCISES.ID
     title: exercise.title, // T_EXERCISES.NAME
     time_limit: exercise.timeLimit, // T_PLUGGED_IN_EXERCISES.TIME_LIMIT
+    memory_limit: 256,
     n_input: exercise.nInput, // T_PLUGGED_IN_EXERCISES.INPUTS
     token_mode: "disabled",
     score_mode: "max"

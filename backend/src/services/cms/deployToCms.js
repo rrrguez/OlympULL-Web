@@ -43,7 +43,7 @@ function uploadDirectory(sftp, localDir, remoteDir) {
 
 export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant) {
     // Create the local directory
-    const contestDir = prepareCmsDirectory(cmsData);
+    const contestDir = await prepareCmsDirectory(cmsData);
     const remoteContestPath = path.posix.join(remoteDir, cmsData.name);
 
     const conn = new Client();
@@ -64,9 +64,10 @@ export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant)
             stream.on('close', resolve);
         });
     });
+    */
 
     console.log("Check made")
-    */
+
 
     // Upload the directory
     const sftp = await new Promise((resolve, reject) => {
