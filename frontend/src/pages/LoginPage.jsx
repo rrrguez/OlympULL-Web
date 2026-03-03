@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import { toast } from "react-toastify";
+import PageHeader from "../components/layouts/PageHeader";
 
 export default function LoginPage() {
     document.body.style.cursor = "default";
@@ -35,7 +36,7 @@ export default function LoginPage() {
 
     return (
         <div>
-            <h1>Inicio de sesión</h1>
+            <PageHeader title={"Inicio de sesión"} backButtonRoute={"/"}/>
 
             <div className="login-container">
                 <form className="login-form" onSubmit={handleSubmit}>

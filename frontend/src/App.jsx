@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import NotFoundPage from "./pages/404";
 import LoginPage from "./pages/LoginPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import LandingPage from "./pages/LandingPage";
 
 // ADMIN PAGES ---------------------------------------------------------------------------------------------------------
 import AdminHome from "./pages/admin/Home";
@@ -97,6 +98,7 @@ export default function App() {
             <ToastContainer/>
             <Router>
             <Routes>
+                <Route path="/" element={<LandingPage />} />
                 <Route element={<MainLayout />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/change-password" element={<ChangePasswordPage/>}/>

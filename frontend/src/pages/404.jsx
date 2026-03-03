@@ -6,9 +6,10 @@ export default function NotFoundPage() {
             return "/admin"
         } else if (localStorage.getItem("type") === "ORGANIZER") {
             return "/organizer"
-        }
-        else {
-            return "/login"
+        } else if (localStorage.getItem("type") === "MONITOR") {
+            return "/monitor"
+        } else {
+            return "/"
         }
     }
     return (
