@@ -18,6 +18,9 @@ export const getTeam = (id) =>
 export const createTeam = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateTeam = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateTeam = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

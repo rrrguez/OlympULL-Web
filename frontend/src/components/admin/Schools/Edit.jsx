@@ -27,7 +27,6 @@ export default function EditSchool() {
         const load = async () => {
             try {
                 const res = await getSchool(id);
-                console.log(res);
                 const o = res.data;
 
                 setFormData({

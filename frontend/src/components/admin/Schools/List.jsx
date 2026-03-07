@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createSchool, deleteSchool, getAllSchools } from "../../../api/admin/schoolsApi";
+import { duplicateSchool, deleteSchool, getAllSchools } from "../../../api/admin/schoolsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function SchoolsList({refreshKey}) {
@@ -34,13 +34,7 @@ export default function SchoolsList({refreshKey}) {
 
     const duplicate = async (school) => {
         try {
-            const newSchool = {
-                ...school,
-                id: school.id + "-copia",
-                name: school.name + "-copia",
-            };
-
-            await createSchool(newSchool);
+            await duplicateSchool(school.id);
             toast.success("Escuela '" + school.name + "' duplicada con éxito");
             load();
         } catch (err) {

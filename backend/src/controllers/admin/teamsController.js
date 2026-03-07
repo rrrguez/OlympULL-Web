@@ -53,6 +53,16 @@ export const create = async (req, res) => {
     }
 };
 
+// PUT duplicar
+export const duplicate = async (req, res) => {
+    try {
+        const team = await model.duplicate(req.params.id);
+        res.json(team);
+    } catch (err) {
+        res.status(500).json({ error: "Error duplicando la olimpiada"});
+    }
+}
+
 // PUT: actualizar
 export const update = async (req, res) => {
     try {
@@ -149,6 +159,7 @@ export default {
     getAll,
     getById,
     create,
+    duplicate,
     update,
     remove,
     importCsv,

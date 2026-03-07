@@ -8,6 +8,7 @@ router.get("/", schoolsController.getAll);
 router.get("/export", schoolsController.exportCsv);
 router.get("/:id", schoolsController.getById);
 router.post("/", schoolsController.create);
+router.post("/:id/duplicate", schoolsController.duplicate);
 router.put("/:id", schoolsController.update);
 router.delete("/:id", schoolsController.remove);
 router.post("/import", upload.single("file"), schoolsController.importCsv);

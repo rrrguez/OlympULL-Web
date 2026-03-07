@@ -11,6 +11,38 @@ export const create = (data) =>
         [data.id, data.name, data.town]
     );
 
+export const duplicate = async (id) => {
+    const { rows } = await pool.query(
+        `
+        SELECT COALESCE(
+            MAX((regexp_match(id, $1 || '-([0-9]+)$'))[1]::int),
+            0
+        ) + 1 AS next_copy
+        FROM t_schools
+        WHERE id ~ ('^' || $1 || '-[0-9]+$');
+        `,
+        [id]
+    );
+
+    const next = rows[0].next_copy;
+    const newId = `${id}-${next}`;
+
+    const result = await pool.query(
+        `
+        INSERT INTO t_schools (id, name, town)
+        SELECT
+            $1,
+            name || ' (copia ' || $2 || ')',
+            town
+        FROM t_schools
+        WHERE id = $3
+        RETURNING *
+        `,
+        [newId, next, id]
+    );
+    return result.rows[0];
+};
+
 export const update = (data) =>
     pool.query(
         "UPDATE t_schools SET name=$1, town=$2 WHERE id=$3 RETURNING *",

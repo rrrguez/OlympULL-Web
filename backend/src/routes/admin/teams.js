@@ -9,6 +9,7 @@ router.get("/export", teamsController.exportCsv);
 router.get("/:id", teamsController.getById);
 router.post("/", teamsController.create);
 router.put("/:id", teamsController.update);
+router.post("/:id/duplicate", teamsController.duplicate);
 router.delete("/:id", teamsController.remove);
 router.post("/import", upload.single("file"), teamsController.importCsv);
 

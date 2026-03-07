@@ -16,6 +16,7 @@ export default function EditTeam() {
         name: "",
         school: "",
         itinerary: "",
+        olympiad: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -72,7 +73,7 @@ export default function EditTeam() {
             }
         }
         loadOlympiads();
-    })
+    }, [])
 
     async function loadItineraries(olympiadId) {
         try {
@@ -91,10 +92,9 @@ export default function EditTeam() {
 
     useEffect(() => {
         if (formData.olympiad) {
-        loadItineraries(formData.olympiad);
-        setFormData(prev => ({ ...prev, itinerary: "" }));
+            loadItineraries(formData.olympiad);
         } else {
-        setItineraries([]);
+            setItineraries([]);
         }
     }, [formData.olympiad]);
 

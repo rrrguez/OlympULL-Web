@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createTeam, deleteTeam, getAllTeams } from "../../../api/admin/teamsApi";
+import { duplicateTeam, deleteTeam, getAllTeams } from "../../../api/admin/teamsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function TeamsList({refreshKey}) {
@@ -34,13 +34,7 @@ export default function TeamsList({refreshKey}) {
 
     const duplicate = async (team) => {
         try {
-            const newTeam = {
-                ...team,
-                id: team.id + "-copia",
-                name: team.name + "-copia",
-            };
-
-            await createTeam(newTeam);
+            await duplicateTeam(team.id);
             toast.success("Equipo '" + team.name + "' duplicado con éxito");
             load();
         } catch (err) {

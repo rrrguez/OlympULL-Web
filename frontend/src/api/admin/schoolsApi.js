@@ -18,6 +18,9 @@ export const getSchool = (id) =>
 export const createSchool = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateSchool = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateSchool = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

@@ -35,6 +35,7 @@ export const getByOlympiad = (olympiadId) =>
         JOIN t_olympiads o
             ON i.olympiad=o.id
         WHERE i.olympiad = $1
+        ORDER BY i.id
         `, [olympiadId]
     );
 
