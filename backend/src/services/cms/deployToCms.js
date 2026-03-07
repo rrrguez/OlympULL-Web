@@ -88,7 +88,7 @@ export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant)
         } else if (commandVariant === "importUsers") {
             command = `cmsImportUser -A ${remoteContestPath}`;
         } else if (commandVariant === "updateContest") {
-            command = `cmsImportContest --import-task --update-contest ${remoteContestPath}`;
+            command = `cmsImportContest --import-task --update-contest --update-tasks ${remoteContestPath}`;
         } else {
             return reject(new Error("Invalid command variant"));
         }

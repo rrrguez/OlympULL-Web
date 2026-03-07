@@ -46,7 +46,7 @@ export async function prepareCmsDirectory(cmsData) {
 
         // Copiar y descomprimir inputs
         if (exercise.inputsPath) {
-            const zipName = path.basename(`${exercise.name}.zip`);
+            const zipName = path.basename(exercise.inputsPath);
             const zipSource = path.join(INPUTS_DIR, zipName);
             const tempZipPath = path.join(inputDir, zipName);
 
@@ -67,7 +67,7 @@ export async function prepareCmsDirectory(cmsData) {
 
         if (exercise.outputsPath) {
 
-            const zipName = path.basename(`${exercise.name}.zip`);
+            const zipName = path.basename(exercise.outputsPath);
             const zipSource = path.join(OUTPUTS_DIR, zipName);
             const tempZipPath = path.join(outputDir, zipName);
 

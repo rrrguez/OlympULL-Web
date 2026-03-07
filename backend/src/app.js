@@ -58,4 +58,13 @@ app.use("/api/organizer/exercises", authenticateToken, authorize("ORGANIZER"), o
 
 app.use("/api/monitor", authenticateToken, authorize("MONITOR"), monitorRoutes);
 
+// Error handler
+app.use((err, req, res, next) => {
+    console.error(err);
+
+    return res.status(400).json({
+        error: err.message || "Ha ocurrido un error inesperado"
+    });
+});
+
 export default app;

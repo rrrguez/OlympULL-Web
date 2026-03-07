@@ -59,7 +59,7 @@ export default function ParticipantAssignationsList({refreshKey}) {
                     : data.map((o) => (
                         <tr key={`${o.id}-${o.itinerary}`}>
                         <td>{o.id}</td>
-                        <td>{o.school_name}</td>
+                        <td>{o.school_name} {o.school_town && ` (${o.school_town})`}</td>
                         <td>{o.olympiad_name}</td>
                         <td>{o.itinerary_name}</td>
                         <td>

@@ -46,7 +46,7 @@ export default function NewPluggedInExercise() {
                 };
             } else if (formData.description.length > 200) {
                 throw {
-                    type: "warn",
+                    type: "error",
                     message:
                     `
                     La descripción debe tener un máximo de 100 caracteres.
@@ -54,18 +54,32 @@ export default function NewPluggedInExercise() {
                 };
             }
 
+            if (formData.inputs <= 0) {
+                throw {
+                    type: "warn",
+                    message: "'Número de inputs' debe ser mayor que 0"
+                };
+            }
+
+            if (formData.time_limit && formData.time_limit <= 0) {
+                throw {
+                    type: "warn",
+                    message: "'Límite de tiempo (segundos)' debe ser mayor que 0"
+                };
+            }
+
             if (Number(formData.inputs) > 0) {
                 if (!formData.input_files) {
                     throw {
                         type: "warn",
-                        message: "Se deben subir los archivos de entrada en formato ZIP."
+                        message: "Se deben subir los archivos de entrada en formato ZIP"
                     };
                 }
 
                 if (!formData.output_files) {
                     throw {
                         type: "warn",
-                        message: "Se deben subir los archivos de salida en formato ZIP."
+                        message: "Se deben subir los archivos de salida en formato ZIP"
                     };
                 }
             }
@@ -102,6 +116,9 @@ export default function NewPluggedInExercise() {
             if (err.type === "warn") {
                 toast.warn(err.message);
                 return;
+            }
+            if (err.type === "error") {
+                toast.error(err.message);
             }
             //console.error("Error completo:", err);
             toast.error(err.response?.data?.error || "Error al crear el ejercicio");

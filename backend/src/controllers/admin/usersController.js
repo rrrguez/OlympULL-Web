@@ -5,28 +5,28 @@ import * as model from "../../models/usersModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
-  try {
-    const result = await model.getAll();
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const result = await model.getAll();
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // GET: obtener una por código
 export const getById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getById(id);
+    try {
+        const { id } = req.params;
+        const result = await model.getById(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Usuario no encontrado" });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
 // GET: obtener una por código
@@ -61,13 +61,13 @@ export const create = async (req, res) => {
 
 // PUT: actualizar
 export const update = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = await model.update({ id, ...req.body });
-    res.json(data.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        const data = await model.update({ id, ...req.body });
+        res.json(data.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // PUT: actualizar
@@ -79,29 +79,28 @@ export const updatePassword = async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-  };
+};
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.remove(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        await model.remove(id);
+        res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
 export const importCsv = async (req, res) => {
-    console.log(req.file);
     if (!req.file) {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    // console.log("CSV: ", req.file);
-
     const results = [];
+    const invalidRows = [];
+    let inserted = 0;
 
     fs.createReadStream(req.file.path)
         .pipe(csv())
@@ -115,10 +114,10 @@ export const importCsv = async (req, res) => {
                 await client.query("BEGIN");
                 for (const o of results) {
                     if (!o.id || !o.username || !o.password || !o.type) {
-                        console.warn("Fila inválida: ", o);
+                        invalidRows.push(o);
                         continue;
                     }
-                    await pool.query(
+                    const result = await pool.query(
                         `INSERT INTO t_users (id, username, password, type)
                         VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
@@ -132,12 +131,20 @@ export const importCsv = async (req, res) => {
                             o.type,
                         ]
                     );
+                    if (result.rowCount > 0) ++inserted;
                 }
 
                 await client.query("COMMIT");
 
-                res.json({ imported: results.length });
+                res.json({
+                    imported: inserted,
+                    invalid: invalidRows.length,
+                    total: results.length,
+                    invalidRows
+                });
+
             } catch (err) {
+                await client.query("ROLLBACK");
                 res.status(500).json({ error: "Error procesando el CSV" });
             } finally {
                 client.release();

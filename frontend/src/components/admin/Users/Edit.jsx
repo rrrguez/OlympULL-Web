@@ -84,7 +84,7 @@ export default function EditUser() {
                 value={formData.username}
                 onChange={handleChange}
                 required
-                pattern={regex.idPattern}
+                pattern={regex.usernamePattern}
             />
             </div>
 

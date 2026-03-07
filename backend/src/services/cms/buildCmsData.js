@@ -18,7 +18,7 @@ export async function buildCmsData(olympiadId) {
 
     const cmsExercises = exercises.map(exercise => {
         return {
-            name: exercise.id,
+            name: `${exercise.itinerary_id}_${exercise.id}`,
             title: `[${exercise.itinerary_name}] ${exercise.name}`,
             nInput: exercise.inputs,
             timeLimit: exercise.time_limit,

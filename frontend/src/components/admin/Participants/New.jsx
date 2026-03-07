@@ -181,7 +181,7 @@ export default function NewParticipantAssignation() {
                             </option>
                             {schools.map((o) => (
                                 <option key={o.id} value={o.id}>
-                                {o.id} - {o.name}
+                                {o.id} - {o.name} {o.town && `(${o.town})`}
                                 </option>
                             ))}
                         </select>

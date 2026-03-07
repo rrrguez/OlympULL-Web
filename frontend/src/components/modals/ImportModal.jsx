@@ -19,9 +19,13 @@ export default function ImportModal({ open, onClose, onImport, title ="Importar 
 
         try {
             setLoading(true);
-            await onImport(formData);
-            toast.success(successMessage);
+            const res = await onImport(formData);
             if (onSuccess) onSuccess();
+            if (res.data.invalid > 0) {
+                toast.warn(`Filas importadas. Se han ignorado ${res.data.invalid} filas inválidas.`);
+            } else {
+                toast.success(`Se han importado ${res.data.imported} filas con éxito`);
+            }
             onClose();
         } catch (err) {
             toast.error(

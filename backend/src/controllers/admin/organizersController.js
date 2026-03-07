@@ -5,12 +5,12 @@ import * as model from "../../models/organizersModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
-  try {
-    const result = await model.getAll();
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const result = await model.getAll();
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // GET: obtener una por código
@@ -72,19 +72,17 @@ export const remove = async (req, res) => {
 
 // POST: Importar datos desde CSV
 export const importCsv = async (req, res) => {
-    console.log(req.file);
     if (!req.file) {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    //console.log("CSV: ", req.file);
-
     const results = [];
+    const invalidRows = [];
+    let inserted = 0;
 
     fs.createReadStream(req.file.path)
         .pipe(csv())
         .on("data", (data) => {
-            console.log(data);
             results.push(data);
         })
         .on("end", async () => {
@@ -93,10 +91,10 @@ export const importCsv = async (req, res) => {
                 await client.query("BEGIN");
                 for (const o of results) {
                     if (!o.id || !o.itinerary) {
-                        console.warn("Fila inválida: ", o);
+                        invalidRows.push(o);
                         continue;
                     }
-                    await pool.query(
+                    const result = await pool.query(
                         `INSERT INTO t_organizers (id, itinerary)
                         VALUES ($1,$2)
                         ON CONFLICT (id, itinerary) DO NOTHING`,
@@ -105,12 +103,20 @@ export const importCsv = async (req, res) => {
                             o.itinerary,
                         ]
                     );
+                    if (result.rowCount > 0) ++inserted;
                 }
 
                 await client.query("COMMIT");
 
-                res.json({ imported: results.length });
+                res.json({
+                    imported: inserted,
+                    invalid: invalidRows.length,
+                    total: results.length,
+                    invalidRows
+                });
+
             } catch (err) {
+                await client.query("ROLLBACK");
                 res.status(500).json({ error: "Error procesando el CSV" });
             } finally {
                 client.release();

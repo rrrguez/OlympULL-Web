@@ -5,28 +5,28 @@ import * as model from "../../models/schoolsModel.js";
 
 // GET: obtener todas
 export const getAll = async (req, res) => {
-  try {
-    const result = await model.getAll();
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const result = await model.getAll();
+        res.json(result.rows);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // GET: obtener una por código
 export const getById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const result = await model.getById(id);
+    try {
+        const { id } = req.params;
+        const result = await model.getById(id);
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Escuela no encontrada" });
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: "Escuela no encontrada" });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
 };
 
 // POST: crear nueva
@@ -66,30 +66,28 @@ export const update = async (req, res) => {
 
 // DELETE
 export const remove = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await model.remove(id);
-    res.json({ message: "Eliminado correctamente" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const { id } = req.params;
+        await model.remove(id);
+        res.json({ message: "Eliminado correctamente" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // POST: Importar datos desde CSV
 export const importCsv = async (req, res) => {
-    console.log(req.file);
     if (!req.file) {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    // console.log("CSV: ", req.file);
-
     const results = [];
+    const invalidRows = [];
+    let inserted = 0;
 
     fs.createReadStream(req.file.path)
         .pipe(csv())
         .on("data", (data) => {
-            console.log(data);
             results.push(data);
         })
         .on("end", async () => {
@@ -98,10 +96,10 @@ export const importCsv = async (req, res) => {
                 await client.query("BEGIN");
                 for (const o of results) {
                     if (!o.id || !o.name) {
-                        console.warn("Fila inválida: ", o);
+                        invalidRows.push(o);
                         continue;
                     }
-                    await pool.query(
+                    const result = await pool.query(
                         `INSERT INTO t_schools (id, name, town)
                         VALUES ($1,$2,$3)
                         ON CONFLICT (id) DO UPDATE SET
@@ -113,12 +111,20 @@ export const importCsv = async (req, res) => {
                             o.town || ""
                         ]
                     );
+                    if (result.rowCount > 0) ++inserted;
                 }
 
                 await client.query("COMMIT");
 
-                res.json({ imported: results.length });
+                res.json({
+                    imported: inserted,
+                    invalid: invalidRows.length,
+                    total: results.length,
+                    invalidRows
+                });
+
             } catch (err) {
+                await client.query("ROLLBACK");
                 res.status(500).json({ error: "Error procesando el CSV" });
             } finally {
                 client.release();

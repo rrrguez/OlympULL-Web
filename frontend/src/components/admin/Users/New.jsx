@@ -70,9 +70,9 @@ export default function NewUser() {
                 value={formData.username}
                 onChange={handleChange}
                 required
-                pattern={regex.idPattern}
+                pattern={regex.usernamePattern}
                 onInvalid={e =>
-                    e.target.setCustomValidity(regex.onInvalidId)
+                    e.target.setCustomValidity(regex.onInvalidUsername)
                 }
                 onInput={e => e.target.setCustomValidity("")}
             />

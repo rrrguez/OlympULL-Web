@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
         const id = req.body.id || req.params.id;
 
         if (!id) {
-            return cb(new Error("Se requiere de un ID de ejercicio para la subida de archivos"));
+            return cb(new Error("Se requiere de un ID de ejercicio para la subida de archivos"), false);
         }
 
         let uploadPath = "";
@@ -50,13 +50,13 @@ export const uploadExerciseFiles = multer({
     storage,
     fileFilter: (req, file, cb) => {
         if (file.fieldname === "wording_file" && file.mimetype !== "application/pdf") {
-            return cb(new Error("Solo se permiten archivos PDF para los enunciados"));
+            return cb(new Error("Solo se permiten archivos PDF para los enunciados"), null);
         }
 
         if (
             (file.fieldname === "input_files" || file.fieldname === "output_files") && !file.originalname.endsWith(".zip")
         ) {
-            return cb(new Error("Solo se permiten archivos ZIP para los inputs y outputs"))
+            return cb(new Error("Solo se permiten archivos ZIP para los inputs y outputs"), null)
         }
 
         cb(null, true)

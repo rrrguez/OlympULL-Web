@@ -73,19 +73,17 @@ export const removeUnplugged = async (req, res) => {
 
 // POST: Importar datos desde CSV
 export const importUnpluggedCsv = async (req, res) => {
-    console.log(req.file);
     if (!req.file) {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    // console.log("CSV: ", req.file);
-
     const results = [];
+    const invalidRows = [];
+    let inserted = 0;
 
     fs.createReadStream(req.file.path)
         .pipe(csv())
         .on("data", (data) => {
-            console.log(data);
             results.push(data);
         })
         .on("end", async () => {
@@ -94,7 +92,7 @@ export const importUnpluggedCsv = async (req, res) => {
                 await client.query("BEGIN");
                 for (const o of results) {
                     if (!o.id || !o.name || !o.category || !o.resources || !o.rubric) {
-                        console.warn("Fila inválida: ", o);
+                        invalidRows.push(o);
                         continue;
                     }
                     await pool.query(
@@ -113,7 +111,7 @@ export const importUnpluggedCsv = async (req, res) => {
                             o.resources,
                         ]
                     );
-                    await pool.query(
+                    const result = await pool.query(
                         `INSERT INTO t_unplugged_exercises (id, rubric)
                         VALUES ($1,$2)
                         ON CONFLICT (id) DO UPDATE SET
@@ -123,12 +121,20 @@ export const importUnpluggedCsv = async (req, res) => {
                             o.rubric
                         ]
                     );
+                    if (result.rowCount > 0) ++inserted;
                 }
 
                 await client.query("COMMIT");
 
-                res.json({ imported: results.length });
+                res.json({
+                    imported: inserted,
+                    invalid: invalidRows.length,
+                    total: results.length,
+                    invalidRows
+                });
+
             } catch (err) {
+                await client.query("ROLLBACK");
                 res.status(500).json({ error: "Error procesando el CSV" });
             } finally {
                 client.release();
@@ -155,10 +161,10 @@ export const exportUnpluggedCsv = async (req, res) => {
 // GET: obtener todos
 export const getAllPluggedIn = async (req, res) => {
     try {
-    const result = await model.getAllPluggedIn();
-    res.json(result.rows);
+        const result = await model.getAllPluggedIn();
+        res.json(result.rows);
     } catch (err) {
-    res.status(500).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -253,19 +259,17 @@ export const removePluggedIn = async (req, res) => {
 
 // POST: Importar datos desde CSV
 export const importPluggedInCsv = async (req, res) => {
-    console.log(req.file);
     if (!req.file) {
         return res.status(400).json({ error: "No se ha enviado ningún archivo" });
     }
 
-    // console.log("CSV: ", req.file);
-
     const results = [];
+    const invalidRows = [];
+    let inserted = 0;
 
     fs.createReadStream(req.file.path)
         .pipe(csv())
         .on("data", (data) => {
-            console.log(data);
             results.push(data);
         })
         .on("end", async () => {
@@ -274,7 +278,7 @@ export const importPluggedInCsv = async (req, res) => {
                 await client.query("BEGIN");
                 for (const o of results) {
                     if (!o.id || !o.name || !o.category || !o.resources || !o.inputs || !o.testcase_value) {
-                        console.warn("Fila inválida: ", o);
+                        invalidRows.push(o);
                         continue;
                     }
                     await pool.query(
@@ -293,7 +297,7 @@ export const importPluggedInCsv = async (req, res) => {
                             o.resources,
                         ]
                     );
-                    await pool.query(
+                    const result = await pool.query(
                         `INSERT INTO t_plugged_in_exercises (id,inputs,time_limit,testcase_value)
                         VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
@@ -307,12 +311,20 @@ export const importPluggedInCsv = async (req, res) => {
                             Number(o.testcase_value)
                         ]
                     );
+                    if (result.rowCount > 0) ++inserted;
                 }
 
                 await client.query("COMMIT");
 
-                res.json({ imported: results.length });
+                res.json({
+                    imported: inserted,
+                    invalid: invalidRows.length,
+                    total: results.length,
+                    invalidRows
+                });
+
             } catch (err) {
+                await client.query("ROLLBACK");
                 res.status(500).json({ error: "Error procesando el CSV" });
             } finally {
                 client.release();

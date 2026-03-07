@@ -88,6 +88,20 @@ export default function EditPluggedInExercise() {
                 };
             }
 
+            if (formData.inputs <= 0) {
+                throw {
+                    type: "warn",
+                    message: "'Número de inputs' debe ser mayor que 0"
+                };
+            }
+
+            if (formData.time_limit && formData.time_limit <= 0) {
+                throw {
+                    type: "warn",
+                    message: "'Límite de tiempo (segundos)' debe ser mayor que 0"
+                };
+            }
+
             if (Number(formData.inputs) > 0) {
                 if (!formData.input_files) {
                     throw {
@@ -135,6 +149,9 @@ export default function EditPluggedInExercise() {
             if (err.type === "warn") {
                 toast.warn(err.message);
                 return;
+            }
+            if (err.type === "error") {
+                toast.error(err.message);
             }
             console.error("Error completo:", err);
             toast.error(err.response?.data?.error || "Error al editar el ejercicio");

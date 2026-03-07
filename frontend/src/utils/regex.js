@@ -9,6 +9,7 @@ export const rubricLabelsPattern = "^[A-Za-z]+(?:, ?[A-Za-z]+)+$";
 export const resourcesPattern    = "^[A-Za-zÀ-ÿ0-9 .,\\-]{1,50}$";
 export const numericPattern      = "^[0-9]{0,10}$";
 export const schoolPattern       = "^[A-Za-zÀ-ÿ0-9 .,\\-]{1,200}$";
+export const usernamePattern     = "^[A-Za-zÀ-ÿ ]{3,30}$";
 
 export const onInvalidId =
     `
@@ -59,3 +60,10 @@ export const onInvalidNumeric =
     Solo se permiten números enteros.
     `
 ;
+export const onInvalidUsername =
+    `
+    Solo se permiten letras y espacios.
+    Debe tener entre 3 y 30 caracteres.
+    `
+;
+

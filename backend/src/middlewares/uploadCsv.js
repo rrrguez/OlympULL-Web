@@ -13,11 +13,12 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage,
     fileFilter: (req, file, cb) => {
-      if (file.mimetype !== "text/csv") {
-            cb(new Error("Solo se permiten archivos CSV"));
-        } else {
-            cb(null, true);
+        if (file.mimetype !== "text/csv") {
+            return cb(new Error(
+                "Los campos 'Archivos de entrada' y 'Archivos de salida' deben ser archivos ZIP"
+            ), false);
         }
+        cb(null, true);
     },
 });
 
