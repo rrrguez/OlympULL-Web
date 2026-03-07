@@ -48,6 +48,16 @@ export const create = async (req, res) => {
     }
 };
 
+// PUT duplicar
+export const duplicate = async (req, res) => {
+    try {
+        const rubric = await model.duplicate(req.params.id);
+        res.json(rubric);
+    } catch (err) {
+        res.status(500).json({ error: "Error duplicando la rúbrica"});
+    }
+}
+
 // PUT: actualizar
 export const update = async (req, res) => {
     try {
@@ -150,6 +160,7 @@ export default {
     getAll,
     getOne,
     create,
+    duplicate,
     update,
     remove,
     importCsv,

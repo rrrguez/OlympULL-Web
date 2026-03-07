@@ -19,6 +19,9 @@ export const getUnpluggedExercise = (id) =>
 export const createUnpluggedExercise = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateUnpluggedExercise = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateUnpluggedExercise = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createRubric, deleteRubric, getAllRubrics } from "../../../api/admin/rubricsApi";
+import { duplicateRubric, deleteRubric, getAllRubrics } from "../../../api/admin/rubricsApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function RubricsList({refreshKey}) {
@@ -34,13 +34,7 @@ export default function RubricsList({refreshKey}) {
 
     const duplicate = async (rubric) => {
         try {
-            const newRubric = {
-                ...rubric,
-                id: rubric.id + "-copia",
-                name: rubric.name + "-copia",
-            };
-
-            await createRubric(newRubric);
+            await duplicateRubric(rubric.id);
             toast.success("Rúbrica '" + rubric.name + "' duplicada con éxito");
             load();
         } catch (err) {

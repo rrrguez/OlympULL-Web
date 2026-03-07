@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createUnpluggedExercise, deleteUnpluggedExercise, exportUnpluggedExercises, getAllUnpluggedExercises, importUnpluggedExercises } from "../../../../api/admin/unpluggedExercisesApi";
+import { duplicateUnpluggedExercise, deleteUnpluggedExercise, exportUnpluggedExercises, getAllUnpluggedExercises, importUnpluggedExercises } from "../../../../api/admin/unpluggedExercisesApi";
 import translateCategory from "../../../../utils/categories";
 import OlympULLIconButton from "../../../buttons/OlympULLIconButton";
 import ExercisesHeader from "../../../layouts/ExercisesHeader";
@@ -48,13 +48,7 @@ export default function UnpluggedExercisesList() {
 
     const duplicate = async (exercise) => {
         try {
-            const newExercise = {
-                ...exercise,
-                id: exercise.id + "-copia",
-                name: exercise.name + "-copia",
-            };
-
-            await createUnpluggedExercise(newExercise);
+            await duplicateUnpluggedExercise(exercise.id);
             toast.success("Ejercicio '" + exercise.name + "' duplicado con éxito");
             load();
         } catch (err) {

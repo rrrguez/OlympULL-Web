@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createItinerary, deleteItinerary, getAllItineraries } from "../../../api/admin/itinerariesApi";
+import { duplicateItinerary, deleteItinerary, getAllItineraries } from "../../../api/admin/itinerariesApi";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
 
 export default function ItinerariesList({refreshKey}) {
@@ -34,13 +34,7 @@ export default function ItinerariesList({refreshKey}) {
 
     const duplicate = async (itinerary) => {
         try {
-            const newItinerary = {
-                ...itinerary,
-                id: itinerary.id + " - copia",
-                name: itinerary.name + " - copia",
-            };
-
-            await createItinerary(newItinerary);
+            await duplicateItinerary(itinerary.id);
             toast.success("Itinerario '" + itinerary.name + "' duplicado con éxito");
             load();
         } catch (err) {

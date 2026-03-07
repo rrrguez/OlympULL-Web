@@ -21,6 +21,9 @@ export const getItineraryByOlympiad = (olympiadId) =>
 export const createItinerary = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateItinerary = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateItinerary = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

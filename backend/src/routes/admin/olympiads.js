@@ -9,6 +9,7 @@ router.get("/", olympController.getAll);
 router.get("/export", olympiadsController.exportCsv);
 router.get("/:id", olympController.getOne);
 router.post("/", olympController.create);
+router.post("/:id/duplicate", olympController.duplicate);
 router.put("/:id", olympController.update);
 router.delete("/:id", olympController.remove);
 router.post("/import", upload.single("file"), olympiadsController.importCsv);

@@ -10,6 +10,7 @@ router.get("/", exercisesController.getAllPluggedIn);
 router.get("/export", exercisesController.exportPluggedInCsv);
 router.get("/:id", exercisesController.getOnePluggedIn);
 router.post("/", uploadExerciseFiles, exercisesController.createPluggedIn);
+router.post("/:id/duplicate", exercisesController.duplicatePluggedInExercise);
 router.put("/:id", uploadExerciseFiles, exercisesController.updatePluggedIn);
 router.delete("/:id", exercisesController.removePluggedIn);
 router.post("/import", upload.single("file"), exercisesController.importPluggedInCsv);

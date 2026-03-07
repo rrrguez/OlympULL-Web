@@ -19,6 +19,9 @@ export const getRubric = (id) =>
 export const createRubric = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateRubric = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateRubric = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

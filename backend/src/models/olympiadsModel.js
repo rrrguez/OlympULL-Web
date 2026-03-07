@@ -11,6 +11,42 @@ export const create = (data) =>
         [data.id, data.name, data.description, data.year, data.start, data.stop, data.timezone]
     );
 
+export const duplicate = async (id) => {
+    const { rows } = await pool.query(
+        `
+        SELECT COALESCE(
+            MAX((regexp_match(id, $1 || '-([0-9]+)$'))[1]::int),
+            0
+        ) + 1 AS next_copy
+        FROM t_olympiads
+        WHERE id ~ ('^' || $1 || '-[0-9]+$');
+        `,
+        [id]
+    );
+
+    const next = rows[0].next_copy;
+    const newId = `${id}-${next}`;
+
+    const result = await pool.query(
+        `
+        INSERT INTO t_olympiads (id, name, description, year, start, stop, timezone)
+        SELECT
+            $1,
+            name || ' (copia ' || $2 || ')',
+            description,
+            year,
+            start,
+            stop,
+            timezone
+        FROM t_olympiads
+        WHERE id = $3
+        RETURNING *
+        `,
+        [newId, next, id]
+    );
+    return result.rows[0];
+}
+
 export const update = (data) =>
     pool.query(
         "UPDATE t_olympiads SET name=$1, description=$2, year=$3, start=$4, stop=$5, timezone=$6 WHERE id=$7 RETURNING *",

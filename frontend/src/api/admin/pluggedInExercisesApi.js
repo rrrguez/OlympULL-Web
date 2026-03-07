@@ -28,6 +28,9 @@ export const createPluggedInExercise = (data) => {
     return apiClient.post(API, data, authHeaders());
 }
 
+export const duplicatePluggedInExercise = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updatePluggedInExercise = (id, data) => {
     if (data instanceof FormData) {
         return apiClient.put(`${API}/${id}`, data, {

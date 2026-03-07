@@ -53,7 +53,7 @@ export const create = async (req, res) => {
                     error: "Ya existe un itinerario con el 'ID' proporcionado",
                     code: err.code
                 });
-            } else if (err.constraint === 't_itineraries_name_olympiad_key') {
+            } else if (err.constraint === 't_itineraries_name_itinerary_key') {
                 res.status(400).json({
                     error: "Ya existe un itinerario con el 'Nombre' proporcionado en la 'Olimpiada' seleccionada",
                     code: err.code
@@ -63,6 +63,16 @@ export const create = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+// PUT duplicar
+export const duplicate = async (req, res) => {
+    try {
+        const itinerary = await model.duplicate(req.params.id);
+        res.json(itinerary);
+    } catch (err) {
+        res.status(500).json({ error: "Error duplicando el itinerario"});
+    }
+}
 
 // PUT: actualizar
 export const update = async (req, res) => {
@@ -106,22 +116,22 @@ export const importCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name || !o.olympiad) {
+                    if (!o.id || !o.name || !o.itinerary) {
                         invalidRows.push(o);
                         continue;
                     }
                     const result = await pool.query(
-                        `INSERT INTO t_itineraries (id, name, description, olympiad)
+                        `INSERT INTO t_itineraries (id, name, description, itinerary)
                         VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
                             name=EXCLUDED.name,
                             description=EXCLUDED.description,
-                            olympiad=EXCLUDED.olympiad`,
+                            itinerary=EXCLUDED.itinerary`,
                         [
                             o.id,
                             o.name,
                             o.description || "",
-                            o.olympiad,
+                            o.itinerary,
                         ]
                     );
                     if (result.rowCount > 0) ++inserted;
@@ -149,10 +159,10 @@ export const importCsv = async (req, res) => {
 export const exportCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT * FROM t_itineraries");
 
-    let csv = "id,name,description,olympiad\n";
+    let csv = "id,name,description,itinerary\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},"${o.description}",${o.olympiad}\n`;
+        csv += `${o.id},${o.name},"${o.description}",${o.itinerary}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");
@@ -165,6 +175,7 @@ export default {
     getOne,
     getByOlympiad,
     create,
+    duplicate,
     update,
     remove,
     importCsv,

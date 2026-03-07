@@ -1,4 +1,6 @@
 import pool from "../db.js";
+import fs from "fs/promises";
+import path from "path";
 
 // EJERCICIOS DESENCHUFADOS
 
@@ -71,6 +73,71 @@ export const createUnplugged = async (data) => {
         client.release();
     }
 };
+
+export const duplicateUnplugged = async (id) => {
+    const client = await pool.connect();
+
+    try {
+        await client.query("BEGIN");
+
+        const { rows } = await pool.query(
+            `
+            SELECT COALESCE(
+                MAX((regexp_match(id, $1 || '-([0-9]+)$'))[1]::int),
+                0
+            ) + 1 AS next_copy
+            FROM t_exercises
+            WHERE id ~ ('^' || $1 || '-[0-9]+$')
+            `,
+            [id]
+        );
+
+        const next = rows[0].next_copy;
+        const newId = `${id}-${rows[0].next_copy}`;
+
+        const exerciseRes = await client.query(
+            `
+            INSERT INTO t_exercises (id, name, description, category, resources)
+            SELECT
+                $1,
+                name || ' (copia ' || $2 || ')',
+                description,
+                category,
+                resources
+            FROM t_exercises
+            WHERE id = $3
+            RETURNING *
+            `,
+            [newId, next, id]
+        );
+
+        const unpluggedRes = await client.query(
+            `
+            INSERT INTO t_unplugged_exercises (id, rubric)
+            SELECT
+                $1,
+                rubric
+            FROM t_unplugged_exercises
+            WHERE id = $2
+            RETURNING *
+            `,
+            [newId, id]
+        );
+
+        await client.query("COMMIT");
+
+        return {
+            ...exerciseRes.rows[0],
+            ...unpluggedRes.rows[0]
+        };
+
+    } catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
+    } finally {
+        client.release();
+    }
+}
 
 // Actualizar un ejercicio
 export const updateUnplugged = async (data) => {
@@ -165,6 +232,114 @@ export const createPluggedIn = async (data) => {
     } catch (error) {
         await client.query("ROLLBACK");
         throw error;
+    } finally {
+        client.release();
+    }
+};
+
+export const duplicatePluggedIn = async (id) => {
+    const base = "uploads";
+
+    const client = await pool.connect();
+
+    try {
+        await client.query("BEGIN");
+
+        const { rows: originalRows } = await client.query(
+            `
+            SELECT e.*, p.inputs, p.time_limit,
+                   p.wording_file, p.input_files, p.output_files
+            FROM t_exercises e
+            JOIN t_plugged_in_exercises p ON e.id = p.id
+            WHERE e.id = $1
+            `,
+            [id]
+        );
+
+        if (originalRows.length === 0) throw new Error("Ejercicio no encontrado");
+        const ex = originalRows[0];
+
+        const { rows } = await client.query(
+            `
+            SELECT COALESCE(
+                MAX((regexp_match(id, $1 || '-([0-9]+)$'))[1]::int),
+                0
+            ) + 1 AS next_copy
+            FROM t_exercises
+            WHERE id ~ ('^' || $1 || '-[0-9]+$')
+            `,
+            [id]
+        );
+
+        const next = rows[0].next_copy;
+        const newId = `${id}-${next}`;
+
+        const files = [
+            { src: path.join(base, "wordings", ex.wording_file), dest: path.join(base, "wordings", `${newId}.pdf`) },
+            { src: path.join(base, "inputs", ex.input_files), dest: path.join(base, "inputs", `${newId}.zip`) },
+            { src: path.join(base, "outputs", ex.output_files), dest: path.join(base, "outputs", `${newId}.zip`) }
+        ];
+
+        for (const f of files) {
+            if (f.src) {
+                try {
+                    await fs.copyFile(f.src, f.dest);
+                } catch (err) {
+                    if (err.code !== "ENOENT") throw err; // ignora si no existe
+                }
+            }
+        }
+
+        // Insertar en t_exercises
+        const exerciseRes = await client.query(
+            `
+            INSERT INTO t_exercises (id, name, description, category, resources)
+            SELECT
+                $1,
+                name || ' (copia ' || $2 || ')',
+                description,
+                category,
+                resources
+            FROM t_exercises
+            WHERE id = $3
+            RETURNING *
+            `, [newId, next, id]
+        );
+
+        // Insertar en t_plugged_in_exercises
+        const pluggedRes = await client.query(
+            `
+            INSERT INTO t_plugged_in_exercises (id, inputs, time_limit, wording_file, input_files, output_files)
+            SELECT
+                $1,
+                inputs,
+                time_limit,
+                $2,
+                $3,
+                $4
+            FROM t_plugged_in_exercises
+            WHERE id = $5
+            RETURNING *
+            `,
+            [
+                newId,
+                `${newId}.pdf`,
+                `${newId}.zip`,
+                `${newId}.zip`,
+                id
+            ]
+        );
+
+        await client.query("COMMIT");
+
+        return {
+            ...exerciseRes.rows[0],
+            ...pluggedRes.rows[0]
+        };
+
+    } catch (err) {
+        await client.query("ROLLBACK");
+        throw err;
     } finally {
         client.release();
     }

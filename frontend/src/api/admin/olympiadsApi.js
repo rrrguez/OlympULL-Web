@@ -19,6 +19,9 @@ export const getOlympiad = (id) =>
 export const createOlympiad = (data) =>
     apiClient.post(API, data, authHeaders());
 
+export const duplicateOlympiad = (id) =>
+    apiClient.post(`${API}/${id}/duplicate`, authHeaders());
+
 export const updateOlympiad = (id, data) =>
     apiClient.put(`${API}/${id}`, data, authHeaders());
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createPluggedInExercise, deletePluggedInExercise, exportPluggedInExercises, getAllPluggedInExercises, importPluggedInExercises } from "../../../../api/admin/pluggedInExercisesApi";
+import { duplicatePluggedInExercise, deletePluggedInExercise, exportPluggedInExercises, getAllPluggedInExercises, importPluggedInExercises } from "../../../../api/admin/pluggedInExercisesApi";
 import translateCategory from "../../../../utils/categories";
 import OlympULLIconButton from "../../../buttons/OlympULLIconButton";
 import ExercisesHeader from "../../../layouts/ExercisesHeader";
@@ -48,13 +48,7 @@ export default function PluggedInExercisesList() {
 
     const duplicate = async (exercise) => {
         try {
-            const newExercise = {
-                ...exercise,
-                id: exercise.id + "-copia",
-                name: exercise.name + "-copia",
-            };
-
-            await createPluggedInExercise(newExercise);
+            await duplicatePluggedInExercise(exercise.id);
             toast.success("Ejercicio '" + exercise.name + "' duplicado con éxito");
             load();
         } catch (err) {

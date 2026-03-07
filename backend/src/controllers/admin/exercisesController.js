@@ -49,6 +49,15 @@ export const createUnplugged = async (req, res) => {
     }
 };
 
+export const duplicateUnpluggedExercise = async (req, res) => {
+    try {
+        const exercise = await model.duplicateUnplugged(req.params.id);
+        res.json(exercise);
+    } catch (err) {
+        res.status(500).json({ error: "Error duplicando el ejercicio"});
+    }
+}
+
 // PUT: actualizar
 export const updateUnplugged = async (req, res) => {
   try {
@@ -220,6 +229,15 @@ export const createPluggedIn = async (req, res) => {
     }
 };
 
+export const duplicatePluggedInExercise = async (req, res) => {
+    try {
+        const exercise = await model.duplicatePluggedIn(req.params.id);
+        res.json(exercise);
+    } catch (err) {
+        res.status(500).json({ error: "Error duplicando el ejercicio"});
+    }
+}
+
 // PUT: actualizar
 export const updatePluggedIn = async (req, res) => {
     try {
@@ -352,6 +370,7 @@ export default {
     getAllUnplugged,
     getOneUnplugged,
     createUnplugged,
+    duplicateUnpluggedExercise,
     updateUnplugged,
     removeUnplugged,
     importUnpluggedCsv,
@@ -361,6 +380,7 @@ export default {
     getAllPluggedIn,
     getOnePluggedIn,
     createPluggedIn,
+    duplicatePluggedInExercise,
     updatePluggedIn,
     removePluggedIn,
     importPluggedInCsv,

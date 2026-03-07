@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { createOlympiad, deleteOlympiad, getAllOlympiads } from "../../../api/admin/olympiadsApi";
+import { duplicateOlympiad, deleteOlympiad, getAllOlympiads } from "../../../api/admin/olympiadsApi";
 import formatDate from "../../../utils/dates";
 import getOlympiadStatus from "../../../utils/olympiads";
 import OlympULLIconButton from "../../buttons/OlympULLIconButton";
@@ -42,13 +42,7 @@ export default function OlympiadsList({refreshKey}) {
 
     const duplicate = async (olympiad) => {
         try {
-            const newOlympiad = {
-                ...olympiad,
-                id: olympiad.id + "-copia",
-                name: olympiad.name + "-copia",
-            };
-
-            await createOlympiad(newOlympiad);
+            await duplicateOlympiad(olympiad.id);
             toast.success("Olimpiada '" + olympiad.name + "' duplicada con éxito");
             load();
         } catch (err) {
