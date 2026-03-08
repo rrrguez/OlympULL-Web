@@ -14,7 +14,10 @@ export function createContestYaml(contestDir, cmsData) {
         token_mode: "disabled",
         start: cmsData.start,
         stop: cmsData.stop,
-        timezone: cmsData.timezone
+        timezone: cmsData.timezone,
+        analysis_enabled: false,
+        analysis_start: new Date(new Date(cmsData.stop).setDate(new Date(cmsData.stop).getDate() + 1)),
+        analysis_stop: new Date(new Date(cmsData.stop).setDate(new Date(cmsData.stop).getDate() + 2)),
     };
 
     const yamlContent = yaml.dump(contestYamlObject, {

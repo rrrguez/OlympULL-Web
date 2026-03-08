@@ -44,6 +44,7 @@ export async function buildCmsData(olympiadId) {
         timezone: olympiad.timezone,
         tokenMode: "disabled",
         scoreMode: "max",
+        analysisEnabled: false,
         users: cmsUsers,
         exercises: cmsExercises
     };

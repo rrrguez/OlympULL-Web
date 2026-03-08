@@ -10,7 +10,9 @@ export function createTaskYaml(taskDir, exercise) {
     memory_limit: 256,
     n_input: exercise.nInput, // T_PLUGGED_IN_EXERCISES.INPUTS
     token_mode: "disabled",
-    score_mode: "max"
+    score_mode: "max",
+    infile: "",
+    outfile: "",
   };
 
   const yamlContent = yaml.dump(taskYamlObject, {

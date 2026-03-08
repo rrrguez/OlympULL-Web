@@ -33,7 +33,7 @@ export default function LandingPage() {
                     <OlympULLButton
                         text="Acceso a rankings"
                         title="Acceso a rankings"
-                        onClickAction={() => navigate("/rankings")}
+                        onClickAction={() => navigate("/ranking")}
                         buttonClass="landing-right-button"
                     />
                 </div>

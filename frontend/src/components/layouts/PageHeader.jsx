@@ -37,7 +37,7 @@ export default function PageHeader({ title, newButton = 0, importButton = 0, exp
                     null
                 )}
                 <OlympULLIconButton
-                    text="Volver"
+                    text="Volver" 
                     buttonClass="icon-button"
                     route={ backButtonRoute }
                     icon="fa-solid fa-angle-left"

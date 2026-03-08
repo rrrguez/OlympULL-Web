@@ -19,14 +19,6 @@
     font-size: medium;
 }
 
-.bi {
-    font-family: "bootstrap-icons" !important;
-    font-style: normal;
-    font-weight: normal;
-    display: inline-block;
-    line-height: 1;
-  }
-
   .bi-plus-circle::before {
     content: "\f4fa";
   }
@@ -331,6 +323,21 @@ button.Toastify__close-button:hover {
     max-width: calc(93% + 4px);
 }
 
+.ranking-controller {
+    margin-top: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2.5%;
+    margin-bottom: 2.5%;
+}
+
+.ranking-controller * {
+    padding: 0;
+}
+
 .element-form {
     display: grid;
     grid-template-columns: 47.5% 47.5%;
@@ -600,6 +607,23 @@ tr {
 
 .read-only-field {
     background-color: #ededed;
+}
+
+.icon-header-cell {
+    display: grid;
+    grid-template-columns: auto 10px;
+}
+
+.header-icon {
+    display: flex;
+    justify-items: end;
+    align-items: center;
+    justify-content: right;
+}
+
+.expand-button {
+    width: auto;
+    padding: 2px;
 }
 
 .read-only-field:hover {

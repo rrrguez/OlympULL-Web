@@ -27,6 +27,8 @@ import organizerExercisesRoutes from "./routes/organizer/exercises.js"
 
 import monitorRoutes from "./routes/monitor/routes.js"
 
+import rankingRoutes from "./routes/ranking.js";
+
 import { authenticateToken } from "./middlewares/auth.js";
 import { authorize } from "./middlewares/authorize.js";
 
@@ -57,6 +59,8 @@ app.use("/api/organizer/assignations", authenticateToken, authorize("ORGANIZER")
 app.use("/api/organizer/exercises", authenticateToken, authorize("ORGANIZER"), organizerExercisesRoutes);
 
 app.use("/api/monitor", authenticateToken, authorize("MONITOR"), monitorRoutes);
+
+app.use("/api/ranking", rankingRoutes);
 
 // Error handler
 app.use((err, req, res, next) => {

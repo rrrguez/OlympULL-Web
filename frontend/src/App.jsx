@@ -79,6 +79,8 @@ import MonitorPunctuationsListPage from "./pages/monitor/Punctuations/ListPage";
 import MonitorNewPunctuationPage from "./pages/monitor/Punctuations/NewPage";
 import MonitorEditPunctuationPage from "./pages/monitor/Punctuations/EditPage";
 
+import RankingPage from "./pages/RankingPage";
+
 import { getToken, getUserType } from "./services/authService";
 import MainLayout from "./components/layouts/MainLayout";
 
@@ -460,6 +462,13 @@ export default function App() {
                             <PrivateRoute type="MONITOR">
                                 <MonitorEditPunctuationPage />
                             </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/ranking"
+                        element={
+                            <RankingPage />
                         }
                     />
 
