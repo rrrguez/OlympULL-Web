@@ -24,10 +24,10 @@ export async function deployOlympiadToCms(req, res) {
 
         await deployToCms(cmsData, sshConfig, remoteDir, commandVariant);
 
-        res.status(200).json({ message: 'Contest deployed successfully to CMS' });
+        res.status(200).json({ message: 'Olimpiada importada con éxito' });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'CMS deployment failed', details: error.message });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message || "Error inesperado" });
     }
 }

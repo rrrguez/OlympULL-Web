@@ -21,7 +21,6 @@ export default function EditPluggedInExercise() {
         resources: "",
         inputs: null,
         time_limit: null,
-        testcase_value: null,
         wording_file: null,
         input_files: null,
         output_files: null
@@ -128,7 +127,6 @@ export default function EditPluggedInExercise() {
             if (formData.time_limit !== "" && formData.time_limit !== null) {
                 fd.append("time_limit", formData.time_limit);
             }
-            fd.append("testcase_value", formData.testcase_value);
 
             if (selectedFile) {
                 fd.append("wording_file", selectedFile);

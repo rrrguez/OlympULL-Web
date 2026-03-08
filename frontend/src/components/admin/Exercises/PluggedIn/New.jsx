@@ -15,7 +15,6 @@ export default function NewPluggedInExercise() {
         resources: "",
         inputs: null,
         time_limit: null,
-        testcase_value: null,
         wording_file: null,
         input_files: null,
         output_files: null
@@ -95,7 +94,6 @@ export default function NewPluggedInExercise() {
             if (formData.time_limit !== "" && formData.time_limit !== null) {
                 fd.append("time_limit", formData.time_limit);
             }
-            fd.append("testcase_value", formData.testcase_value);
 
             if (formData.wording_file) {
                 fd.append("wording_file", formData.wording_file);

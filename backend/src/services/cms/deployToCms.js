@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { Client } from 'ssh2';
 import { prepareCmsDirectory } from './prepareCmsDirectory.js';
-import csvParser from 'csv-parser';
+import { parseCmsError } from '../../utils/cmsErrorParser.js';
 
 // Upload the temp directory via SFTP
 function uploadDirectory(sftp, localDir, remoteDir) {
@@ -36,6 +36,7 @@ function uploadDirectory(sftp, localDir, remoteDir) {
                 resolve();
             } catch (error) {
                 reject(error);
+                console.log(error)
             }
         });
     });
@@ -56,32 +57,29 @@ export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant)
 
     console.log("Connected")
 
-    // Check if the remote dir already exists
-    /**
+    // Create the remote dir
     await new Promise((resolve, reject) => {
         conn.exec(`rm -rf ${remoteContestPath} && mkdir -p ${remoteContestPath}`, (err, stream) => {
             if (err) return reject(err);
-            stream.on('close', resolve);
+
+            stream
+                .on('close', (code) => {
+                    if (code !== 0) reject(new Error(`mkdir failed with code ${code}`));
+                    else resolve();
+                })
+                .on('data', () => {}) // consume stdout
+                .stderr.on('data', () => {}); // consume stderr
         });
     });
-    */
-
-    console.log("Check made")
-
-
-    // Upload the directory
     const sftp = await new Promise((resolve, reject) => {
         conn.sftp((err, sftp) => err ? reject(err) : resolve(sftp));
     });
 
-    console.log("Uploading...")
     await uploadDirectory(sftp, contestDir, remoteContestPath);
 
     // Execute the command
     await new Promise((resolve, reject) => {
         let command;
-
-        console.log(commandVariant)
 
         if (commandVariant === "importContest") {
             command = `cmsImportContest --import-task ${remoteContestPath}`;
@@ -96,13 +94,27 @@ export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant)
         conn.exec(`bash -lc "source ./cms-venv/bin/activate && ${command}"`, (err, stream) => {
             if (err) return reject(err);
 
-            stream
-                .on('close', (code) => {
-                    if (code !== 0) reject(new Error(`Remote command failed with code ${code}`));
-                    else resolve();
-                })
-                .on('data', data => process.stdout.write(data))
-                .stderr.on('data', errData => process.stderr.write(errData));
+            let stdout = "";
+            let stderr = "";
+
+            stream.on("close", (code) => {
+                if (code !== 0) {
+                    // Combinar stdout y stderr
+                    const combined = (stderr || stdout).trim();
+                    const parsedMessage = parseCmsError(combined);
+
+                    return reject(new Error(parsedMessage || `Remote command failed with code ${code}`));
+                }
+                resolve();
+            });
+
+            stream.on("data", data => {
+                stdout += data.toString();
+            });
+
+            stream.stderr.on("data", data => {
+                stderr += data.toString();
+            });
         });
     });
 

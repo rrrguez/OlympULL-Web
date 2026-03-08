@@ -295,7 +295,7 @@ export const importPluggedInCsv = async (req, res) => {
             try {
                 await client.query("BEGIN");
                 for (const o of results) {
-                    if (!o.id || !o.name || !o.category || !o.resources || !o.inputs || !o.testcase_value) {
+                    if (!o.id || !o.name || !o.category || !o.resources || !o.inputs) {
                         invalidRows.push(o);
                         continue;
                     }
@@ -316,17 +316,15 @@ export const importPluggedInCsv = async (req, res) => {
                         ]
                     );
                     const result = await pool.query(
-                        `INSERT INTO t_plugged_in_exercises (id,inputs,time_limit,testcase_value)
+                        `INSERT INTO t_plugged_in_exercises (id,inputs,time_limit)
                         VALUES ($1,$2,$3,$4)
                         ON CONFLICT (id) DO UPDATE SET
                             inputs=EXCLUDED.inputs,
-                            time_limit=EXCLUDED.time_limit,
-                            testcase_value=EXCLUDED.testcase_value`,
+                            time_limit=EXCLUDED.time_limit,`,
                         [
                             o.id,
                             Number(o.inputs),
-                            Number(o.time_limit) || null,
-                            Number(o.testcase_value)
+                            Number(o.time_limit) || null
                         ]
                     );
                     if (result.rowCount > 0) ++inserted;
@@ -354,10 +352,10 @@ export const importPluggedInCsv = async (req, res) => {
 export const exportPluggedInCsv = async (req, res) => {
     const { rows } = await pool.query("SELECT e.*, u.* FROM T_EXERCISES e JOIN T_PLUGGED_IN_EXERCISES u ON e.id = u.id");
 
-    let csv = "id,name,description,category,resources,inputs,time_limit,testcase_value\n";
+    let csv = "id,name,description,category,resources,inputs,time_limit\n";
 
     rows.forEach((o) => {
-        csv += `${o.id},${o.name},"${o.description}",${o.category},${o.resources},${o.inputs},${o.time_limit},${o.testcase_value}\n`;
+        csv += `${o.id},${o.name},"${o.description}",${o.category},${o.resources},${o.inputs},${o.time_limit}\n`;
     });
 
     res.setHeader("Content-Type", "text/csv");

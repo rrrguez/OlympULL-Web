@@ -46,14 +46,21 @@ export default function CmsForm() {
 
         try {
             await deployToCms(formData.commandVariant, formData.olympiad);
-            toast.success("Olimpiada '" + formData.olympiad + "' creada en CMS con éxito");
-        } catch (err) {
-            if (err.type === "warn") {
-                toast.warn(err.message);
-                return;
-            } else {
-                toast.error("Ha ocurrido un error inesperado");
+
+            if (formData.commandVariant === "updateContest") {
+                toast.success("Olimpiada actualizada con éxito");
+            } else if (formData.commandVariant === "importContest") {
+                toast.success("Olimpiada importada con éxito");
+            } else if (formData.commandVariant === "importUsers") {
+                toast.success("Participantes importados con éxito")
             }
+        } catch (err) {
+            const message =
+                err.response?.data?.message ||   // mensaje del backend
+                err.message ||                   // mensaje de axios
+                "Ha ocurrido un error inesperado";
+
+            toast.error(message);
         } finally {
             setLoading(false);
         }
@@ -96,7 +103,7 @@ export default function CmsForm() {
                         <option value="">-- Selecciona una acción --</option>
                         <option value="updateContest">Actualizar olimpiada</option>
                         <option value="importContest">Importar olimpiada</option>
-                        <option value="importUsers">Importar usuarios</option>
+                        <option value="importUsers">Importar participantes</option>
                     </select>
                 </div>
             </div>
