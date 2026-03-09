@@ -30,12 +30,17 @@ export const getPluggedInRanking = async (req, res) => {
         const { itinerary } = req.params;
         const result = await pool.query(
             `
-            SELECT *
-            FROM t_p_ranking
+            SELECT
+                r.*,
+                e.name as ex_name, e.category as ex_category
+            FROM t_p_ranking r
+            JOIN t_exercises e
+                ON e.id = r.exercise
             WHERE itinerary = $1
-            ORDER BY team, itinerary, exercise;
+            ORDER BY r.participant, r.itinerary, r.exercise;
             `
         , [itinerary])
+
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -45,19 +50,20 @@ export const getPluggedInRanking = async (req, res) => {
 export const checkExercises = async (req,res) => {
     try {
         const { itineraryId } = req.params;
-        console.log(itineraryId)
         const result = await pool.query(
             `
             SELECT
                 EXISTS (
                     SELECT 1
-                    FROM T_U_RANKING
-                    WHERE ITINERARY = $1
+                    FROM T_EXERCISES_OLYMPIAD_ITINERARY A
+                    JOIN T_UNPLUGGED_EXERCISES U ON A.EXERCISE = U.ID
+                    WHERE A.ITINERARY = $1
                 ) AS unplugged,
                 EXISTS (
                     SELECT 1
-                    FROM T_P_RANKING
-                    WHERE ITINERARY = $1
+                    FROM T_EXERCISES_OLYMPIAD_ITINERARY A
+                    JOIN T_PLUGGED_IN_EXERCISES P ON A.EXERCISE = P.ID
+                    WHERE A.ITINERARY = $1
                 ) AS pluggedIn;
             `
         , [itineraryId])

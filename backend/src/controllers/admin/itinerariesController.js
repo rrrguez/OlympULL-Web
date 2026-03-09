@@ -33,7 +33,6 @@ export const getOne = async (req, res) => {
 export const getByOlympiad = async (req, res) => {
     try {
         const { olympiadId } = req.params;
-        console.log(olympiadId)
         const data = await model.getByOlympiad(olympiadId);
         res.json(data.rows);
     } catch (err) {

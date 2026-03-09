@@ -27,7 +27,7 @@ export default function Ranking() {
 
     const [exerciseTypes, setExerciseTypes] = useState({
         unplugged: false,
-        pluggedIn: false
+        pluggedin: false
     });
 
     const [sortColumn, setSortColumn] = useState("total");
@@ -59,7 +59,6 @@ export default function Ranking() {
 
         const loadItineraries = async () => {
             setLoadingItineraries(true);
-            console.log(selectedOlympiad)
             try {
                 const res = await getItineraries(selectedOlympiad);
                 setItineraries(res.data);
@@ -83,7 +82,6 @@ export default function Ranking() {
             setLoadingExercises(true);
             try {
                 const res = await checkExercises(itineraryId);
-                console.log(res.data)
                 setExerciseTypes(res.data);
 
                 setSelectedExType("");
@@ -108,12 +106,15 @@ export default function Ranking() {
 
             if (selectedExType === "unplugged") {
                 res = await getUnpluggedRanking(itineraryId);
-            } else if (selectedExType === "pluggedIn") {
+            } else if (selectedExType === "pluggedin") {
                 await retrieveDataFromCms(itineraryId);
+                console.log("Terminada la recogida de datos")
                 res = await getPluggedInRanking(itineraryId);
             }
+            console.log(res.data)
 
             setData(res.data);
+            console.log("Se sale de setData")
             processRanking(res.data);
 
         } catch (err) {
@@ -142,35 +143,38 @@ export default function Ranking() {
     }, [selectedItinerary, selectedExType]);
 
     const processRanking = (rows) => {
+        console.log(rows);
 
         const exerciseSet = new Set();
-        const teamsMap = {};
+        const entitiesMap = {};
 
         rows.forEach(r => {
-
-            //const exLabel = `${r.ex_name}(${translateCategory(r.ex_category)})`;
-
             exerciseSet.add(r.ex_name);
 
-            if (!teamsMap[r.team_name]) {
-                teamsMap[r.team_name] = {
-                    team: r.team_name,
+            console.log(r.team_name);
+            console.log(r.participant);
+
+            const key = selectedExType === "unplugged" ? r.team_name : selectedExType === "pluggedin" ? r.participant : "";
+
+            if (!entitiesMap[key]) {
+                entitiesMap[key] = {
+                    name: key,
                     scores: {},
                     total: 0
                 };
             }
 
-            teamsMap[r.team_name].scores[r.ex_name] = Number(r.score);
-            teamsMap[r.team_name].total += Number(r.score);
+            entitiesMap[key].scores[r.ex_name] = Number(r.score);
+            entitiesMap[key].total += Number(r.score);
         });
 
         const exercisesArray = Array.from(exerciseSet).sort();
 
-        const teamsArray = Object.values(teamsMap)
+        const entitiesArray = Object.values(entitiesMap)
             .sort((a, b) => b.total - a.total);
 
         setExercises(exercisesArray);
-        setTeams(teamsArray);
+        setTeams(entitiesArray);
     };
 
     const sortedTeams = [...teams].sort((a, b) => {
@@ -255,7 +259,7 @@ export default function Ranking() {
                     className="form-control"
                         value={selectedExType}
                         onChange={(e) => setSelectedExType(e.target.value)}
-                        disabled={(!exerciseTypes.unplugged && !exerciseTypes.pluggedIn) || !itineraries.length || loadingExercises}
+                        disabled={(!exerciseTypes.unplugged && !exerciseTypes.pluggedin) || !itineraries.length || loadingExercises}
                     >
                         <option value="">
                             {
@@ -265,7 +269,7 @@ export default function Ranking() {
                                 ? "-- Selecciona primero un itinerario --"
                                 : !itineraries.length ?
                                 "-- No hay ejercicios disponibles --"
-                                : (!exerciseTypes.unplugged && !exerciseTypes.pluggedIn) ?
+                                : (!exerciseTypes.unplugged && !exerciseTypes.pluggedin) ?
                                 "-- No hay ejercicios disponibles --"
                                 : "-- Selecciona el tipo de ejercicio --"
                             }
@@ -275,8 +279,8 @@ export default function Ranking() {
                                 Ejercicios desenchufados
                             </option>
                         )}
-                        {exerciseTypes.pluggedIn && (
-                            <option value={"pluggedIn"}>
+                        {exerciseTypes.pluggedin && (
+                            <option value={"pluggedin"}>
                                 Ejercicios enchufados
                             </option>
                         )}
@@ -288,7 +292,7 @@ export default function Ranking() {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Equipo</th>
+                            <th>{selectedExType === "unplugged" ? "Equipo" : selectedExType === "pluggedin" ? "Participante" : ""}</th>
 
                             {exercises.map(exName => {
                                 const exCategory = data.find(r => r.ex_name === exName)?.ex_category ?? "";
@@ -341,20 +345,20 @@ export default function Ranking() {
                             </tr>
                         ))
 
-                        : sortedTeams.map((team, index) => (
-                            <tr key={team.team}>
+                        : sortedTeams.map((entity, index) => (
+                            <tr key={entity.name}>
 
                                 <td>{index + 1}</td>
 
-                                <td>{team.team}</td>
+                                <td>{entity.name}</td>
 
                                 {exercises.map(exName => (
                                     <td key={exName}>
-                                        {team.scores[exName] ?? 0}
+                                        {entity.scores[exName] ?? 0}
                                     </td>
                                 ))}
 
-                                <td><b>{team.total}</b></td>
+                                <td><b>{entity.total}</b></td>
 
                             </tr>
                         ))}

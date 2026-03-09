@@ -17,6 +17,6 @@ router.get("/itineraries/:olympiadId", getItineraries);
 
 router.get("/types/:itineraryId", checkExercises);
 
-router.get("/retrieve-plugged-in/:itinerary", retrieveDataFromCms)
+router.get("/retrieve-plugged-in/:itineraryId", retrieveDataFromCms)
 
 export default router;

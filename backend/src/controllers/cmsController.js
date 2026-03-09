@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { buildCmsData } from '../services/cms/buildCmsData.js';
 import { deployToCms } from '../services/cms/deployToCms.js';
-import { Pool } from 'pg';
+import { cmsPool, pool as olympullPool } from '../db.js';
 
 export async function deployOlympiadToCms(req, res) {
     try {
@@ -33,17 +33,11 @@ export async function deployOlympiadToCms(req, res) {
     }
 }
 
-export async function retrieveDataFromCms(itineraryId) {
+export const retrieveDataFromCms = async (req, res) => {
     try {
-        const cmsPool = new Pool({
-            user: 'postgres',
-            host: '10.6.131.206', // IP de la MV CMS
-            database: 'cmsdb',
-            password: fs.readFileSync('/app/keys/cms_db_password', 'utf8').trim(),
-            port: 5432
-        });
+        const { itineraryId } = req.params;
 
-        const res = await cmsPool.query(
+        const result = await cmsPool.query(
             `
             select
                 u.username as username,
@@ -64,18 +58,24 @@ export async function retrieveDataFromCms(itineraryId) {
             `, [itineraryId]
         );
 
-        const rows = res.rows;
+        const rows = result.rows;
 
         for (const row of rows) {
-        await olympullPool.query(`
-            INSERT INTO t_p_ranking (participant, itinerary, exercise, score)
-            VALUES ($1, $2, $3, $4)
-            ON CONFLICT (participant, itinerary, exercise)
-            DO UPDATE SET score = EXCLUDED.score;
-        `, [row.participant, row.itinerary, row.exercise, row.score]);
+            await olympullPool.query(`
+                INSERT INTO t_p_ranking (participant, itinerary, exercise, score)
+                SELECT $1, $2, $3, $4
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM t_participants p
+                    WHERE p.id = $5
+                    AND p.itinerary = $6
+                )
+                ON CONFLICT (participant, itinerary, exercise)
+                DO UPDATE SET score = EXCLUDED.score;
+            `, [row.username, row.itinerary, row.exercise, row.score, row.username, row.itinerary]);
         }
 
-        console.log('Ranking sincronizado correctamente');
+        res.status(200).json({ message: 'Ranking sincronizado con éxito' });
 
     } catch (err) {
         console.error('Error sincronizando ranking:', err);
