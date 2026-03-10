@@ -24,7 +24,7 @@ export default function Header() {
             src="/olympull-web_logo.png"
             alt="OlympULL Web logo"
         />
-            {location.pathname != "/login" &&
+            {(location.pathname != "/login" && location.pathname != "/ranking") &&
             <div className="user-menu-wrapper">
                 <div
                     className={`user-menu ${open ? "open" : ""}`}
