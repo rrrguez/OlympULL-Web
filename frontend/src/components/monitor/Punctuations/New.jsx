@@ -135,7 +135,7 @@ export default function NewPunctuationList() {
             }
             await punctuateTeam(formData);
             navigate("/monitor/punctuations");
-            toast.success("Equipo '" + formData.team + "' puntuado con éxito en el ejercicio '" + formData.exercise + "'")
+            toast.success("Equipo puntuado con éxito")
         } catch (err) {
             if (err.type === "warn") {
                 toast.warning(err.message);

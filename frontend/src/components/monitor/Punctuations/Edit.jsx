@@ -152,7 +152,7 @@ export default function EditPunctuation() {
                                 </option>
                                 {scores.map(opt => (
                                     <option key={opt.value} value={opt.value}>
-                                        {opt.value} - {opt.label}
+                                        {opt.value} {opt.label ? ` - ${opt.label}` : ""}
                                     </option>
                                 ))}
                             </select>

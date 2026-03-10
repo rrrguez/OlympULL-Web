@@ -149,7 +149,7 @@ export const editPunctuation = async (req, res) => {
     try {
         const { team, exercise, itinerary } = req.params;
         const { score } = req.body;
-        const intScore = parseInt(score, 10);
+        const intScore = Number(score);
         const result = await pool.query(
             `
             UPDATE t_u_ranking SET score=$1 WHERE team=$2 AND exercise=$3 AND itinerary=$4 RETURNING *;

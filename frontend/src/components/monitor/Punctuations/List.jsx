@@ -66,7 +66,7 @@ export default function PunctuationsList() {
                             <td>{o.itinerary_name} ({o.olympiad})</td>
                             <td>{o.exercise_name}</td>
                             <td>{o.team_name}</td>
-                            <td>{o.score}</td>
+                            <td>{Number(o.score)}</td>
                             <td>
                                 <div className="table-button-container">
                                     <OlympULLIconButton
