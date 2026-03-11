@@ -1,6 +1,6 @@
 import apiClient from "./apiClient";
 
-const API = "http://localhost:3000/api/ranking";
+const API = `${import.meta.env.VITE_BACKEND_URL}/ranking`;
 
 export const getUnpluggedRanking = (itinerary) =>
     apiClient.get(`${API}/unplugged/${itinerary}`);

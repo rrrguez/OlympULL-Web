@@ -30,7 +30,7 @@ services:
       - DB_USER=admin
       - DB_PASSWORD=admin
       - DB_NAME=olympull
-      - JWT_SECRET=superclaveultrasecreta123
+      - JWT_SECRET=olympULL-cms1234
     depends_on:
       - db
 

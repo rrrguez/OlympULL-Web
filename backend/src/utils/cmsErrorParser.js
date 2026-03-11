@@ -24,6 +24,7 @@ export function parseCmsError(raw) {
     }
 
     else {
+        console.log(lastTwoLines)
         friendlyMessage = "Error al importar o actualizar. Comprueba que la olimpiada tiene ejercicios y participantes asignados."
     }
 

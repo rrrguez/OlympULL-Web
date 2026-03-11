@@ -35,7 +35,7 @@ import { authorize } from "./middlewares/authorize.js";
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true})); // Puerto React
+app.use(cors({ origin: true, credentials: true})); // Puerto React - DEV http://localhost:5173
 app.use("/uploads/wordings", express.static(path.join(process.cwd(), "uploads/wordings")));
 app.use("/uploads/inputs", express.static(path.join(process.cwd(), "uploads/inputs")));
 app.use("/uploads/outputs", express.static(path.join(process.cwd(), "uploads/outputs")));

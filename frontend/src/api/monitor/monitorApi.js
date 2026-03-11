@@ -1,6 +1,6 @@
 import apiClient from "../apiClient";
 
-const API = "http://localhost:3000/api/monitor";
+const API = `${import.meta.env.VITE_BACKEND_URL}/monitor`;
 
 function authHeaders() {
     const token = localStorage.getItem("token");

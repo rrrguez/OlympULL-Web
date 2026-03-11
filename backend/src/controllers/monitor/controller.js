@@ -87,6 +87,7 @@ export const getAllPunctuations = async (req, res) => {
                 SELECT m.exercise FROM t_monitors m
                 WHERE m.id = $1
             )
+            ORDER BY i.name, e.name, t.name;
             `
         , [monitor])
         res.json(result.rows);

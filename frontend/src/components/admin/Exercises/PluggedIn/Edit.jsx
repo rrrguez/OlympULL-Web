@@ -297,7 +297,7 @@ export default function EditPluggedInExercise() {
                                 <i className="fa-regular fa-file-zipper"/>
                                 ZIP actual:
                                 <a
-                                    href={`http://localhost:3000/uploads/inputs/${formData.input_files}`}
+                                    href={`/uploads/inputs/${formData.input_files}`} // http://localhost:3000/uploads/inputs/${formData.input_files}
                                     download={formData.input_files}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -352,7 +352,7 @@ export default function EditPluggedInExercise() {
                                 <i className="fa-regular fa-file-zipper"/>
                                 ZIP actual:
                                 <a
-                                    href={`http://localhost:3000/uploads/outputs/${formData.output_files}`}
+                                    href={`/uploads/outputs/${formData.output_files}`} // http://localhost:3000/uploads/outputs/${formData.output_files}
                                     download={formData.output_files}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -407,7 +407,7 @@ export default function EditPluggedInExercise() {
                                 <i className="fa-regular fa-file"/>
                                 Enunciado actual:
                                 <a
-                                    href={`http://localhost:3000/uploads/wordings/${formData.wording_file}`}
+                                    href={`/uploads/wordings/${formData.wording_file}`} // http://localhost:3000/uploads/wordings/${formData.wording_file}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
