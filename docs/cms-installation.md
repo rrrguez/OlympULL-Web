@@ -18,7 +18,7 @@ echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/isolate.asc] http://www.ucw.cz
 curl https://www.ucw.cz/isolate/debian/signing-key.asc | sudo tee /etc/apt/keyrings/isolate.asc
 apt update && apt install isolate
 ```
-> [!INFO]
+> [!NOTE]
 > Isolate es una herramienta de aislamiento de procesos (*sandbox*) cuyo objetivo es ejecutar programas no confiables de forma segura y controlada, limitando los recursos que pueden usar y evitando que afecten al sistema anfitrión.
 >
 > CMS utiliza Isolate para ejecutar las soluciones enviadas por los participantes dentro de entornos seguros y aislados, durante la fase de compilación y evaluación de los problemas.
