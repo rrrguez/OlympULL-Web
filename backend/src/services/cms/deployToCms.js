@@ -55,8 +55,6 @@ export async function deployToCms(cmsData, sshConfig, remoteDir, commandVariant)
             .connect(sshConfig);
     });
 
-    console.log("Connected")
-
     // Create the remote dir
     await new Promise((resolve, reject) => {
         conn.exec(`rm -rf ${remoteContestPath} && mkdir -p ${remoteContestPath}`, (err, stream) => {

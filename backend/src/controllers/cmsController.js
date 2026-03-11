@@ -57,6 +57,7 @@ export const retrieveDataFromCms = async (req, res) => {
             group by username, itinerary, exercise;
             `, [itineraryId]
         );
+        console.log("Se termina de traer los datos")
 
         const rows = result.rows;
 

@@ -90,7 +90,6 @@ export default function NewPluggedInExercise() {
             fd.append("category", formData.category);
             fd.append("resources", formData.resources);
             fd.append("inputs", formData.inputs);
-            console.log(formData.time_limit);
             if (formData.time_limit !== "" && formData.time_limit !== null) {
                 fd.append("time_limit", formData.time_limit);
             }
@@ -228,7 +227,7 @@ export default function NewPluggedInExercise() {
                 </div>
 
                 <div>
-                    <label className="form-label">Límite de tiempo (segundos)<span className="optional"> - Opcional</span></label>
+                    <label className="form-label">Límite de tiempo (segundos)</label>
                     <input
                         type="number"
                         name="time_limit"
@@ -240,6 +239,7 @@ export default function NewPluggedInExercise() {
                             e.target.setCustomValidity(regex.onInvalidNumeric)
                         }
                         onInput={e => e.target.setCustomValidity("")}
+                        required
                     />
                 </div>
                 <div>

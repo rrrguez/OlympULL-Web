@@ -152,13 +152,14 @@ export default function NewOlympiad() {
             </div>
 
             <div>
-            <label className="form-label">Zona horaria<span className="optional"> - Opcional</span></label>
+            <label className="form-label">Zona horaria</label>
             <input
                 type="text"
                 name="timezone"
                 className="form-control"
                 value={formData.timezone}
                 onChange={handleChange}
+                required
             />
             </div>
 

@@ -111,10 +111,8 @@ export default function Ranking() {
                 console.log("Terminada la recogida de datos")
                 res = await getPluggedInRanking(itineraryId);
             }
-            console.log(res.data)
 
             setData(res.data);
-            console.log("Se sale de setData")
             processRanking(res.data);
 
         } catch (err) {
@@ -143,16 +141,12 @@ export default function Ranking() {
     }, [selectedItinerary, selectedExType]);
 
     const processRanking = (rows) => {
-        console.log(rows);
 
         const exerciseSet = new Set();
         const entitiesMap = {};
 
         rows.forEach(r => {
             exerciseSet.add(r.ex_name);
-
-            console.log(r.team_name);
-            console.log(r.participant);
 
             const key = selectedExType === "unplugged" ? r.team_name : selectedExType === "pluggedin" ? r.participant : "";
 

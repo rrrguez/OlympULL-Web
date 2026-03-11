@@ -27,8 +27,6 @@ export default function NewUser() {
         e.preventDefault();
         setLoading(true);
 
-        console.log(formData);
-
         try {
             await createUser(formData);
             navigate("/admin/users");
