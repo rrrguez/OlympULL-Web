@@ -1,4 +1,4 @@
-![Logo OlympULL Web](/frontend/public/olympull-web_logo.png)
+![Logo OlympULL Web](/frontend/public/olympull-web_logo_purple.png)
 
 # OlympULL Web: Herramienta para la integración de torneos en la enseñanza-aprendizaje del pensamiento computacional
 ![Node](https://img.shields.io/badge/node-20-green)
